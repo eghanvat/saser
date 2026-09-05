@@ -10,10 +10,8 @@
     };
   });
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
 async function checkAuth(){
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await sb.auth.getSession();
   if (!session) {
     window.location.href = 'login.html?redirect=kitchen.html';
     return null;
