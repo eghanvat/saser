@@ -13,7 +13,7 @@
 async function checkAuth(){
   const { data: { session } } = await sb.auth.getSession();
   if (!session) {
-    window.location.href = 'login.html?redirect=kitchen.html';
+    window.location.href = '/auth/login.html?redirect=' + encodeURIComponent(window.location.pathname);
     return null;
   }
   return session;
