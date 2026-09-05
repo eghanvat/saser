@@ -69,6 +69,18 @@
     color:#6b6656;
   }
 
+    .back-to-top{
+  display:inline-block;
+  margin-top:18px;
+  font-size:0.82rem;
+  color:var(--brass);
+  text-decoration:none;
+  border-bottom:1px solid var(--brass);
+  padding-bottom:1px;
+  cursor:pointer;
+}
+.back-to-top:hover{ color:var(--pine); border-color:var(--pine); }
+
   .category{ margin-top:38px; }
   .category h2{
     font-family:'Fraunces', serif;
@@ -260,6 +272,13 @@ html{ scroll-behavior:smooth; }
       `;
       section.appendChild(row);
     });
+    // Add this after the items.forEach loop, still inside the categories.forEach loop:
+    const backLink = document.createElement('a');
+    backLink.className = 'back-to-top';
+    backLink.textContent = '↑ Back';
+    backLink.onclick = () => document.getElementById('category-nav').scrollIntoView({behavior:'smooth', block:'start'});
+    section.appendChild(backLink);
+
     root.appendChild(section);
   });
 }
