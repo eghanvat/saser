@@ -23,10 +23,11 @@
 
   <div class="status-card" id="status-card">
     <div class="spinner" id="spinner"></div>
-    <p class="status-label" id="status-label">Preparing your order</p>
-    <p class="status-sub" id="status-sub">The kitchen has your ticket</p>
-    <p class="countdown" id="countdown">--:--</p>
+    <p class="status-label" id="status-label">Waiting for kitchen</p>
+    <p class="status-sub" id="status-sub">Your order has been sent through</p>
+    <p class="countdown" id="countdown" style="display:none;">--:--</p>
     <button class="cancel-btn" id="cancel-btn">Cancel order</button>
+    <button class="cancel-btn" id="bring-btn" style="display:none; border-color:var(--pine); color:var(--pine);">Bring it now</button>
   </div>
 
   <div class="items">
