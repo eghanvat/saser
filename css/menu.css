@@ -256,8 +256,9 @@ html{ scroll-behavior:smooth; }
   align-items:center;
 }
 #cart-bar > span{ justify-self:start; }
-#cart-bar .order-btn{ justify-self:end; }
 #cart-bar .btn-group{ justify-self:center; }
+#cart-bar .order-btn{ justify-self:end; }
+
 
 
 #cart-bar .view-btn{
