@@ -92,7 +92,6 @@
 
   const items = order.order_items || [];
   const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
-  const items = order.order_items || [];
   const canCancelItems = order.status === 'placed';
   const activeItems = items.filter(i => !i.cancelled);
   const total = activeItems.reduce((s, i) => s + i.price * i.quantity, 0);
