@@ -107,11 +107,13 @@
   .peak-frame{
     background:var(--paper-soft);
     border:1px solid var(--line);
-    padding:30px 26px 22px;
+    padding:0 0 22px;
+    overflow:hidden;
   }
   .peak-frame svg{ width:100%; height:auto; display:block; }
+  .peak-frame img {border-bottom:1px solid var(--line);}
   .peak-caption{
-    margin-top:16px;
+    margin:16px 26px 0;
     font-size:0.82rem;
     color:#6b6656;
     line-height:1.5;
@@ -172,7 +174,7 @@
 <body>
 
 <nav class="wrap">
-  <div class="brand">Saser</div>
+  <div class="brand"><img src="img/saser_logo.png" alt="Saser" style="height:28px; display:block;"></div>
   <div class="nav-links">
     <a href="/menu/">Menu</a>
     <a href="mailto:hello@saser.in">Contact</a>
@@ -189,15 +191,10 @@
     </div>
   </div>
 
-  <div class="peak-frame">
-    <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" fill="none">
-      <path d="M0 190 L70 95 L110 140 L160 60 L215 150 L260 100 L320 175 L400 130 L400 220 L0 220 Z"
-            fill="none" stroke="#33463A" stroke-width="2.5" stroke-linejoin="round"/>
-      <path d="M150 78 L160 60 L170 78 Z" fill="#EFEADA" stroke="#33463A" stroke-width="2"/>
-      <circle cx="335" cy="55" r="18" fill="none" stroke="#AD803B" stroke-width="2"/>
-    </svg>
-    <p class="peak-caption"><b>Saser La</b> — a 5,300m pass on the old caravan route through Ladakh. The name stays; the climb gets easier.</p>
-  </div>
+<div class="peak-frame">
+  <img src="img/saser_main.jpg" alt="Saser La, Ladakh" style="width:100%; height:auto; display:block;">
+  <p class="peak-caption"><b>Saser La</b> — a 5,300m pass on the old caravan route through Ladakh. The name stays; the climb gets easier.</p>
+</div>
 </header>
 
 <section class="features wrap">
