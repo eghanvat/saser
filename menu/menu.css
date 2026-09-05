@@ -232,6 +232,10 @@ html{ scroll-behavior:smooth; }
 }
 
   #category-nav{ scroll-margin-top:70px; }
+
+
+/**Cart Bar **/
+
   #cart-bar{
     display:none;
     position:fixed;
@@ -246,14 +250,18 @@ html{ scroll-behavior:smooth; }
     font-size:0.9rem;
   }
   
-#cart-bar.visible{ display:flex; }
+  #cart-bar.visible{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:center;
+  }
 
-  #cart-bar .btn-group{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  position:relative;
-}
+  #cart-bar > span { justify-self: start }
+
+  #cart-bar .btn-group {
+    justify-self: end
+  }
+
 #cart-bar .view-btn{
   background:none;
   border:1px solid var(--paper);
