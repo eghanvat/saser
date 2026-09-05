@@ -33,7 +33,6 @@ async function init(){
   setInterval(loadOrders, 8000);
 }
 
-init();
 
   async function loadOrders(){
     try {
@@ -115,5 +114,4 @@ init();
     }
   }
 
-  loadOrders();
-setInterval(loadOrders, 8000);
+init();
