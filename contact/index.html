@@ -68,29 +68,33 @@
   }
   .photo-frame{
     width:180px;
-    height:180px;
-    border-radius:50%;
-    background:var(--paper-soft);
     border:1px solid var(--line);
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    background:var(--paper-soft);
     overflow:hidden;
+    cursor:pointer;
+    position:relative;
   }
   .photo-frame img{
     width:100%;
-    height:100%;
+    height:220px;
     object-fit:cover;
+    object-position:center 18%;
     display:block;
+    transition:transform .25s ease;
   }
-  .photo-placeholder{
-    font-family:'Fraunces', serif;
-    font-size:0.82rem;
-    color:#8a8570;
+  .photo-frame:hover img{ transform:scale(1.04); }
+  .photo-hint{
+    position:absolute;
+    bottom:0; left:0; right:0;
+    background:rgba(36,33,25,0.55);
+    color:var(--paper);
+    font-size:0.7rem;
     text-align:center;
-    padding:0 20px;
-    line-height:1.5;
+    padding:5px 0;
+    opacity:0;
+    transition:opacity .2s ease;
   }
+  .photo-frame:hover .photo-hint{ opacity:1; }
 
   .details h2{
     font-family:'Fraunces', serif;
@@ -107,7 +111,7 @@
   .detail-row{
     display:flex;
     gap:14px;
-    align-items:baseline;
+    align-items:center;
     padding:14px 0;
     border-bottom:1px solid var(--line);
   }
@@ -126,6 +130,18 @@
   }
   .detail-value a:hover{ color:var(--pine); border-color:var(--pine); }
 
+  .insta-link{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    text-decoration:none;
+    font-size:1.02rem;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:1px;
+  }
+  .insta-link:hover{ color:var(--pine); border-color:var(--pine); }
+  .insta-link svg{ flex-shrink:0; }
+
   footer{
     border-top:1px solid var(--line);
     margin-top:56px;
@@ -134,19 +150,52 @@
     color:#6b6656;
   }
 
+  /* ---- Lightbox ---- */
+  .lightbox{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(20,18,13,0.88);
+    z-index:100;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    cursor:zoom-out;
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+    box-shadow:0 20px 50px rgba(0,0,0,0.4);
+  }
+  .lightbox-close{
+    position:absolute;
+    top:22px; right:28px;
+    color:var(--paper);
+    font-size:1.6rem;
+    font-family:'Work Sans', sans-serif;
+    background:none;
+    border:none;
+    cursor:pointer;
+    line-height:1;
+  }
+
   @media (max-width:560px){
     .contact-card{ grid-template-columns:1fr; justify-items:center; text-align:center; }
     .detail-row{ justify-content:center; }
+    .photo-frame{ width:220px; }
+    .photo-frame img{ height:270px; }
   }
 </style>
 </head>
 <body>
 
 <nav class="wrap">
-  <div class="brand"><img src="img/saser_logo.png" alt="Saser"></div>
+  <div class="brand"><img src="../img/saser_logo.png" alt="Saser"></div>
   <div class="nav-links">
     <a href="/menu/">Menu</a>
-    <a href="/contact.html">Contact</a>
+    <a href="/contact/index.html">Contact</a>
   </div>
 </nav>
 
@@ -157,9 +206,9 @@
   </header>
 
   <div class="contact-card">
-    <div class="photo-frame">
-      <!-- Replace this placeholder with: <img src="proprietor.jpg" alt="Sonam Tundup"> -->
-      <div class="photo-placeholder">Photo coming soon</div>
+    <div class="photo-frame" onclick="openLightbox()">
+      <img src="../img/sonam.jpg" alt="Sonam Tundup">
+      <div class="photo-hint">Tap to enlarge</div>
     </div>
 
     <div class="details">
@@ -174,6 +223,19 @@
         <span class="detail-label">Email</span>
         <span class="detail-value"><a href="mailto:tundup534@gmail.com">tundup534@gmail.com</a></span>
       </div>
+      <div class="detail-row">
+        <span class="detail-label">Instagram</span>
+        <span class="detail-value">
+          <a class="insta-link" href="https://www.instagram.com/sotnamdhundup" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.6"/>
+              <circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="1.6"/>
+              <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor"/>
+            </svg>
+            @sotnamdhundup
+          </a>
+        </span>
+      </div>
     </div>
   </div>
 </div>
@@ -181,6 +243,24 @@
 <footer class="wrap">
   <span>Saser</span>
 </footer>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox(event)">&times;</button>
+  <img src="proprietor.jpg" alt="Sonam Tundup — full photo">
+</div>
+
+<script>
+  function openLightbox(){
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox(e){
+    if (e) e.stopPropagation();
+    document.getElementById('lightbox').classList.remove('open');
+  }
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
 
 </body>
 </html>
