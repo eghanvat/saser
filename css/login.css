@@ -1,4 +1,4 @@
-<style>
+
   :root{
     --ink:#242119; --paper:#EFEADA; --brass:#AD803B; --pine:#33463A; --rust:#9C5A38;
     --line:rgba(36,33,25,0.14);
@@ -21,4 +21,4 @@
   button:disabled{ opacity:0.5; cursor:not-allowed; }
   .error{ color:var(--rust); font-size:0.85rem; margin:-4px 0 12px; }
   .back{ display:inline-block; margin-top:16px; font-size:0.85rem; color:var(--brass); cursor:pointer; border-bottom:1px solid var(--brass); }
-</style>
+
