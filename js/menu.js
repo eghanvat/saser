@@ -1,8 +1,4 @@
 
-  // ---- Fill in your Supabase project details here ----
-  const SUPABASE_URL = "https://rysxztcnnfxtuikymvyd.supabase.co";   // e.g. https://xxxx.supabase.co
-  const SUPABASE_ANON_KEY = "sb_publishable_9F7WBGfcVF9lYrEx9x7l_w_8hjhNNmq";
-  const VENDOR_ID = "d1100148-64b4-4d41-8930-af7029aa7726";                 // the vendors.id row for this hotel's kitchen
   const params = new URLSearchParams(window.location.search);
   const contextType = params.get('type'); // 'table' or 'room' or null
   const contextNum  = params.get('num');
