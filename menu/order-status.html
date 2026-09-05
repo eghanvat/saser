@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your order — Saser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#242119; --paper:#EFEADA; --paper-soft:#E6DFC9;
+    --brass:#AD803B; --pine:#33463A; --rust:#9C5A38;
+    --line:rgba(36,33,25,0.14);
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Work Sans', sans-serif; }
+  .wrap{ max-width:520px; margin:0 auto; padding:0 28px; }
+  nav.wrap{ display:flex; align-items:center; justify-content:space-between; padding:28px 28px 20px; }
+  .brand{ font-family:'Fraunces', serif; font-weight:600; font-size:1.25rem; }
+  h1{ font-family:'Fraunces', serif; font-weight:500; font-size:1.7rem; margin:0 0 6px; }
+
+  .status-card{
+    text-align:center;
+    padding:36px 20px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    margin-top:20px;
+  }
+  .status-card.cancelled{ border-color:var(--rust); }
+  .spinner{
+    width:44px; height:44px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    border:3px solid var(--line);
+    border-top-color:var(--brass);
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .status-label{ font-family:'Fraunces', serif; font-size:1.25rem; margin:0 0 6px; }
+  .status-sub{ color:#6b6656; font-size:0.9rem; margin:0 0 20px; }
+  .countdown{
+    font-family:'Fraunces', serif;
+    font-size:2.2rem;
+    letter-spacing:1px;
+    margin:0 0 24px;
+  }
+  .cancel-btn{
+    background:none;
+    border:1px solid var(--rust);
+    color:var(--rust);
+    padding:9px 22px;
+    border-radius:4px;
+    font-family:'Work Sans', sans-serif;
+    font-size:0.88rem;
+    cursor:pointer;
+  }
+  .cancel-btn:hover{ background:var(--rust); color:var(--paper); }
+  .cancel-btn:disabled{ opacity:0.4; cursor:not-allowed; }
+
+  .items{ margin-top:30px; }
+  .items h2{ font-family:'Fraunces', serif; font-weight:500; font-size:1.1rem; margin:0 0 12px; }
+  .order-item{
+    display:flex; justify-content:space-between;
+    padding:10px 0; border-bottom:1px solid var(--line);
+    font-size:0.92rem;
+  }
+  .order-item:last-child{ border-bottom:none; }
+  .order-total{
+    display:flex; justify-content:space-between;
+    padding-top:14px; margin-top:6px;
+    border-top:1px solid var(--ink);
+    font-weight:500; font-size:1rem;
+  }
+  .meta{ font-size:0.85rem; color:#6b6656; margin-top:6px; }
+  .back-link{
+    display:inline-block; margin-top:28px;
+    font-size:0.88rem; text-decoration:none;
+    border-bottom:1px solid var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<nav class="wrap">
+  <div class="brand"><a href="/"><img src="../img/saser_logo.png" alt="Saser" style="height:56px; display:block;"></a></div>
+</nav>
+
+<div class="wrap">
+  <header>
+    <h1>Your order</h1>
+    <p class="meta" id="order-meta">Loading…</p>
+  </header>
+
+  <div class="status-card" id="status-card">
+    <div class="spinner" id="spinner"></div>
+    <p class="status-label" id="status-label">Preparing your order</p>
+    <p class="status-sub" id="status-sub">The kitchen has your ticket</p>
+    <p class="countdown" id="countdown">--:--</p>
+    <button class="cancel-btn" id="cancel-btn">Cancel order</button>
+  </div>
+
+  <div class="items">
+    <h2>Items</h2>
+    <div id="items-list">Loading…</div>
+    <div class="order-total" id="order-total" style="display:none;"></div>
+  </div>
+
+  <a class="back-link" href="/menu.html">← Back to menu</a>
+</div>
+
+<script>
+  const SUPABASE_URL = "https://rysxztcnnfxtuikymvyd.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_9F7WBGfcVF9lYrEx9x7l_w_8hjhNNmq";
+  const ESTIMATED_MINUTES = 20;
+
+  const params = new URLSearchParams(window.location.search);
+  const orderId = params.get('order');
+  let secondsLeft = ESTIMATED_MINUTES * 60;
+  let countdownTimer = null;
+  let pollTimer = null;
+
+  const el = id => document.getElementById(id);
+
+  if (!orderId) {
+    el('status-label').textContent = "No order found";
+    el('status-sub').textContent = "Go back to the menu and place an order first.";
+    el('spinner').style.display = 'none';
+    el('cancel-btn').style.display = 'none';
+    el('items-list').textContent = '';
+  } else {
+    loadOrder();
+    pollTimer = setInterval(loadOrder, 15000);
+    startCountdown();
+    el('cancel-btn').onclick = cancelOrder;
+  }
+
+  function formatTime(s){
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+  }
+
+  function startCountdown(){
+    el('countdown').textContent = formatTime(secondsLeft);
+    countdownTimer = setInterval(() => {
+      if (secondsLeft <= 0) {
+        clearInterval(countdownTimer);
+        el('status-sub').textContent = "Should be ready any moment";
+        return;
+      }
+      secondsLeft--;
+      el('countdown').textContent = formatTime(secondsLeft);
+    }, 1000);
+  }
+
+  async function loadOrder(){
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}&select=*,order_items(*)`,
+        { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
+      );
+      const [order] = await res.json();
+      if (!order) throw new Error("Order not found");
+      renderOrder(order);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function renderOrder(order){
+    el('order-meta').textContent = order.table_number
+      ? `Table ${order.table_number}` : order.room_number
+      ? `Room ${order.room_number}` : `Order #${order.id.slice(0,8)}`;
+
+    const items = order.order_items || [];
+    const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
+    el('items-list').innerHTML = items.map(i => `
+      <div class="order-item">
+        <span>${i.item_name} × ${i.quantity}</span>
+        <span>₹${i.price * i.quantity}</span>
+      </div>
+    `).join('');
+    el('order-total').style.display = 'flex';
+    el('order-total').innerHTML = `<span>Total</span><span>₹${total}</span>`;
+
+    if (order.status === 'cancelled') {
+      clearInterval(countdownTimer);
+      clearInterval(pollTimer);
+      el('status-card').classList.add('cancelled');
+      el('spinner').style.display = 'none';
+      el('status-label').textContent = "Order cancelled";
+      el('status-sub').textContent = "This order was cancelled.";
+      el('countdown').style.display = 'none';
+      el('cancel-btn').style.display = 'none';
+    } else if (order.status === 'ready') {
+      clearInterval(countdownTimer);
+      clearInterval(pollTimer);
+      el('spinner').style.display = 'none';
+      el('status-label').textContent = "Order ready";
+      el('status-sub').textContent = "Enjoy your meal!";
+      el('countdown').style.display = 'none';
+      el('cancel-btn').style.display = 'none';
+    }
+  }
+
+  async function cancelOrder(){
+    if (!confirm("Cancel this order?")) return;
+    el('cancel-btn').disabled = true;
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}`, {
+        method: 'PATCH',
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=representation'
+        },
+        body: JSON.stringify({ status: 'cancelled' })
+      });
+      loadOrder();
+    } catch (err) {
+      console.error(err);
+      el('cancel-btn').disabled = false;
+      alert("Couldn't cancel — try again.");
+    }
+  }
+</script>
+
+</body>
+</html>
