@@ -250,17 +250,15 @@ html{ scroll-behavior:smooth; }
     font-size:0.9rem;
   }
   
-  #cart-bar.visible{
-    display:grid;
-    grid-template-columns:1fr auto 1fr;
-    align-items:center;
-  }
+#cart-bar.visible{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+}
+#cart-bar > span{ justify-self:start; }
+#cart-bar .order-btn{ justify-self:center; }
+#cart-bar .btn-group{ justify-self:end; }
 
-  #cart-bar > span { justify-self: start }
-
-  #cart-bar .btn-group {
-    justify-self: end
-  }
 
 #cart-bar .view-btn{
   background:none;
