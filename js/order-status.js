@@ -94,7 +94,6 @@
   const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
   const canCancelItems = order.status === 'placed';
   const activeItems = items.filter(i => !i.cancelled);
-  const total = activeItems.reduce((s, i) => s + i.price * i.quantity, 0);
   
   el('items-list').innerHTML = items.map(i => `
     <div class="order-item${i.cancelled ? ' item-cancelled' : ''}">
