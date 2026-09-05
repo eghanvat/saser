@@ -22,6 +22,27 @@
     pollTimer = setInterval(loadOrder, 15000);
     startCountdown();
     el('cancel-btn').onclick = cancelOrder;
+    el('bring-btn').onclick = async () => {
+  el('bring-btn').disabled = true;
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}`, {
+      method: 'PATCH',
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ delivery_requested: true })
+    });
+    el('status-sub').textContent = "Staff have been notified";
+    el('bring-btn').textContent = "Notified ✓";
+  } catch (err) {
+    console.error(err);
+    el('bring-btn').disabled = false;
+    alert("Couldn't notify staff — try again.");
+  }
+};
+
   }
 
   function formatTime(s){
@@ -58,40 +79,66 @@
   }
 
   function renderOrder(order){
-    el('order-meta').textContent = order.table_number
-      ? `Table ${order.table_number}` : order.room_number
-      ? `Room ${order.room_number}` : `Order #${order.id.slice(0,8)}`;
+  el('order-meta').textContent = order.table_number
+    ? `Table ${order.table_number}` : order.room_number
+    ? `Room ${order.room_number}` : `Order #${order.id.slice(0,8)}`;
 
-    const items = order.order_items || [];
-    const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
-    el('items-list').innerHTML = items.map(i => `
-      <div class="order-item">
-        <span>${i.item_name} × ${i.quantity}</span>
-        <span>₹${i.price * i.quantity}</span>
-      </div>
-    `).join('');
-    el('order-total').style.display = 'flex';
-    el('order-total').innerHTML = `<span>Total</span><span>₹${total}</span>`;
+  const items = order.order_items || [];
+  const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
+  el('items-list').innerHTML = items.map(i => `
+    <div class="order-item">
+      <span>${i.item_name} × ${i.quantity}</span>
+      <span>₹${i.price * i.quantity}</span>
+    </div>
+  `).join('');
+  el('order-total').style.display = 'flex';
+  el('order-total').innerHTML = `<span>Total</span><span>₹${total}</span>`;
 
-    if (order.status === 'cancelled') {
-      clearInterval(countdownTimer);
-      clearInterval(pollTimer);
-      el('status-card').classList.add('cancelled');
-      el('spinner').style.display = 'none';
-      el('status-label').textContent = "Order cancelled";
-      el('status-sub').textContent = "This order was cancelled.";
-      el('countdown').style.display = 'none';
-      el('cancel-btn').style.display = 'none';
-    } else if (order.status === 'ready') {
-      clearInterval(countdownTimer);
-      clearInterval(pollTimer);
-      el('spinner').style.display = 'none';
-      el('status-label').textContent = "Order ready";
-      el('status-sub').textContent = "Enjoy your meal!";
-      el('countdown').style.display = 'none';
-      el('cancel-btn').style.display = 'none';
+  const card = el('status-card');
+  card.classList.remove('cancelled');
+
+  if (order.status === 'cancelled') {
+    clearInterval(countdownTimer); clearInterval(pollTimer);
+    card.classList.add('cancelled');
+    el('spinner').style.display = 'none';
+    el('status-label').textContent = "Order cancelled";
+    el('status-sub').textContent = "This order was cancelled.";
+    el('countdown').style.display = 'none';
+    el('cancel-btn').style.display = 'none';
+    el('bring-btn').style.display = 'none';
+
+  } else if (order.status === 'ready') {
+    clearInterval(countdownTimer); clearInterval(pollTimer);
+    el('spinner').style.display = 'none';
+    el('status-label').textContent = "Order ready";
+    el('status-sub').textContent = "Your food is ready to go";
+    el('countdown').style.display = 'none';
+    el('cancel-btn').style.display = 'none';
+    el('bring-btn').style.display = 'inline-block';
+
+  } else if (order.status === 'preparing') {
+    el('spinner').style.display = 'block';
+    el('status-label').textContent = "Preparing your order";
+    el('status-sub').textContent = "The kitchen is on it";
+    el('cancel-btn').style.display = 'none';
+    el('bring-btn').style.display = 'none';
+    el('countdown').style.display = 'block';
+
+    if (!countdownTimer) {
+      const startedAt = order.started_at ? new Date(order.started_at).getTime() : Date.now();
+      secondsLeft = Math.max(0, ESTIMATED_MINUTES * 60 - Math.floor((Date.now() - startedAt) / 1000));
+      startCountdown();
     }
+
+  } else {
+    el('spinner').style.display = 'block';
+    el('status-label').textContent = "Waiting for kitchen";
+    el('status-sub').textContent = "Your order has been sent through";
+    el('countdown').style.display = 'none';
+    el('cancel-btn').style.display = 'inline-block';
+    el('bring-btn').style.display = 'none';
   }
+}
 
   async function cancelOrder(){
     if (!confirm("Cancel this order?")) return;
@@ -114,4 +161,3 @@
       alert("Couldn't cancel — try again.");
     }
   }
-
