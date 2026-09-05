@@ -172,14 +172,15 @@ function toggleCartDropdown(){
 async function placeOrder(){
   let type = contextType;
   let num = contextNum;
-
-  if (!type) {
+  type = 'table';
+  num = 1;
+  /*if (!type) {
     const choice = prompt("Is this for a Table or a Room? Type 'table' or 'room':");
     if (!choice) return;
     type = choice.trim().toLowerCase();
     num = prompt(`Enter your ${type} number:`);
     if (!num) return;
-  }
+  }*/
 
   const orderRes = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
     method:'POST',
