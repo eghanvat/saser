@@ -193,16 +193,17 @@ async function placeOrder(){
     })
   });
   const [order] = await orderRes.json();
+
   const items = cart.map(c => ({ order_id: order.id, item_id: c.item_id, item_name: c.name, price: c.price, quantity: c.qty }));
   await fetch(`${SUPABASE_URL}/rest/v1/order_items`, {
     method:'POST',
     headers:{ apikey:SUPABASE_ANON_KEY, Authorization:`Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type':'application/json' },
     body: JSON.stringify(items)
   });
+
   cart = [];
   window.location.href = `order-status.html?order=${order.id}`;
 }
-
   
   async function loadMenu(){
     const configured = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 10;
