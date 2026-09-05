@@ -68,16 +68,21 @@
     font-size:0.88rem;
     color:#6b6656;
   }
-
-    .back-to-top{
-  display:inline-block;
-  margin-top:18px;
+  .category-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:12px;
+}
+.back-to-top{
   font-size:0.82rem;
   color:var(--brass);
   text-decoration:none;
   border-bottom:1px solid var(--brass);
   padding-bottom:1px;
   cursor:pointer;
+  white-space:nowrap;
+  flex-shrink:0;
 }
 .back-to-top:hover{ color:var(--pine); border-color:var(--pine); }
 
@@ -247,7 +252,15 @@ html{ scroll-behavior:smooth; }
     const section = document.createElement('div');
     section.className = 'category';
     section.id = slug;
-    section.innerHTML = `<h2>${cat.category}</h2><p class="count">${cat.items.length} item${cat.items.length===1?'':'s'}</p>`;
+    section.innerHTML = `
+      <div class="category-header">
+        <div>
+          <h2>${cat.category}</h2>
+          <p class="count">${cat.items.length} item${cat.items.length===1?'':'s'}</p>
+        </div>
+        <a class="back-to-top" onclick="document.getElementById('category-nav').scrollIntoView({behavior:'smooth', block:'start'})">↑ Back</a>
+      </div>
+    `;
 
     cat.items.forEach(item => {
       const row = document.createElement('div');
