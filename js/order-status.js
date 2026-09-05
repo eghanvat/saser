@@ -65,18 +65,25 @@
   }
 
   async function loadOrder(){
-    try {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}&select=*,order_items(*)`,
-        { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
-      );
-      const [order] = await res.json();
-      if (!order) throw new Error("Order not found");
-      renderOrder(order);
-    } catch (err) {
-      console.error(err);
-    }
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/orders?id=eq.${orderId}&select=*,order_items(*)`,
+      { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
+    );
+    if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+    const data = await res.json();
+    const order = data[0];
+    if (!order) throw new Error("No order found for id " + orderId);
+    renderOrder(order);
+  } catch (err) {
+    console.error(err);
+    el('items-list').textContent = "Couldn't load this order.";
+    el('status-label').textContent = "Something went wrong";
+    el('status-sub').textContent = err.message;
+    el('spinner').style.display = 'none';
+    clearInterval(pollTimer);
   }
+}
 
   function renderOrder(order){
   el('order-meta').textContent = order.table_number
