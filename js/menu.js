@@ -132,7 +132,7 @@ function renderCartBar(){
     <span>${count} item(s) · ₹${total}</span>
     <button class="order-btn" onclick="placeOrder()">Place order</button>
     <div class="btn-group">
-      <button class="view-btn" onclick="toggleCartDropdown()">My Orders ▾</button>
+      <button class="view-btn" onclick="toggleCartDropdown()">My Orders</button>
     </div>
     `;
   renderCartDropdown();
