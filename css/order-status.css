@@ -1,0 +1,70 @@
+ :root{
+    --ink:#242119; --paper:#EFEADA; --paper-soft:#E6DFC9;
+    --brass:#AD803B; --pine:#33463A; --rust:#9C5A38;
+    --line:rgba(36,33,25,0.14);
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Work Sans', sans-serif; }
+  .wrap{ max-width:520px; margin:0 auto; padding:0 28px; }
+  nav.wrap{ display:flex; align-items:center; justify-content:space-between; padding:28px 28px 20px; }
+  .brand{ font-family:'Fraunces', serif; font-weight:600; font-size:1.25rem; }
+  h1{ font-family:'Fraunces', serif; font-weight:500; font-size:1.7rem; margin:0 0 6px; }
+
+  .status-card{
+    text-align:center;
+    padding:36px 20px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    margin-top:20px;
+  }
+  .status-card.cancelled{ border-color:var(--rust); }
+  .spinner{
+    width:44px; height:44px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    border:3px solid var(--line);
+    border-top-color:var(--brass);
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .status-label{ font-family:'Fraunces', serif; font-size:1.25rem; margin:0 0 6px; }
+  .status-sub{ color:#6b6656; font-size:0.9rem; margin:0 0 20px; }
+  .countdown{
+    font-family:'Fraunces', serif;
+    font-size:2.2rem;
+    letter-spacing:1px;
+    margin:0 0 24px;
+  }
+  .cancel-btn{
+    background:none;
+    border:1px solid var(--rust);
+    color:var(--rust);
+    padding:9px 22px;
+    border-radius:4px;
+    font-family:'Work Sans', sans-serif;
+    font-size:0.88rem;
+    cursor:pointer;
+  }
+  .cancel-btn:hover{ background:var(--rust); color:var(--paper); }
+  .cancel-btn:disabled{ opacity:0.4; cursor:not-allowed; }
+
+  .items{ margin-top:30px; }
+  .items h2{ font-family:'Fraunces', serif; font-weight:500; font-size:1.1rem; margin:0 0 12px; }
+  .order-item{
+    display:flex; justify-content:space-between;
+    padding:10px 0; border-bottom:1px solid var(--line);
+    font-size:0.92rem;
+  }
+  .order-item:last-child{ border-bottom:none; }
+  .order-total{
+    display:flex; justify-content:space-between;
+    padding-top:14px; margin-top:6px;
+    border-top:1px solid var(--ink);
+    font-weight:500; font-size:1rem;
+  }
+  .meta{ font-size:0.85rem; color:#6b6656; margin-top:6px; }
+  .back-link{
+    display:inline-block; margin-top:28px;
+    font-size:0.88rem; text-decoration:none;
+    border-bottom:1px solid var(--ink);
+  }
