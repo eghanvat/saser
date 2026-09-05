@@ -130,6 +130,40 @@
     font-size:0.78rem;
   }
 
+  .category-nav{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:16px 0;
+  border-bottom:1px solid var(--line);
+  margin-bottom:8px;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.category-nav::-webkit-scrollbar{ display:none; }
+.category-nav button{
+  flex-shrink:0;
+  background:var(--paper-soft);
+  border:1px solid var(--line);
+  color:var(--ink);
+  font-family:'Work Sans', sans-serif;
+  font-size:0.85rem;
+  font-weight:500;
+  padding:8px 16px;
+  border-radius:20px;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:background .15s ease, border-color .15s ease;
+}
+.category-nav button:hover,
+.category-nav button.active{
+  background:var(--pine);
+  color:var(--paper);
+  border-color:var(--pine);
+}
+html{ scroll-behavior:smooth; }
+.category{ scroll-margin-top:20px; }
+
   footer{
     border-top:1px solid var(--line);
     margin-top:56px;
@@ -153,6 +187,7 @@
   </header>
 
   <div id="status" class="status">Loading menu…</div>
+  <div id="category-nav" class="category-nav"></div>
   <div id="menu-root"></div>
 </div>
 
@@ -160,7 +195,7 @@
   <span class="dot veg" style="margin-right:6px;"></span> Veg &nbsp;&nbsp;
   <span class="dot nonveg" style="margin-right:6px;"></span> Non-veg
 </footer>
-
+<script src="fallback-menu.js"></script>
 <script>
   // ---- Fill in your Supabase project details here ----
   const SUPABASE_URL = "https://rysxztcnnfxtuikymvyd.supabase.co";   // e.g. https://xxxx.supabase.co
@@ -172,57 +207,62 @@
   let cart = [];
 
   // Static fallback shown if Supabase isn't configured yet, or the fetch fails.
-  const FALLBACK_MENU = [
-    { category: "Starters", items: [
-      { name: "Vegetable Momos", description: "Steamed dumplings, Ladakhi-style chutney", price: 180, is_veg: true, is_available: true },
-      { name: "Chicken Thukpa", description: "Hand-pulled noodle soup, Himalayan herbs", price: 260, is_veg: false, is_available: true }
-    ]},
-    { category: "Main Course", items: [
-      { name: "Paneer Butter Masala", description: "With butter naan or steamed rice", price: 320, is_veg: true, is_available: true },
-      { name: "Ladakhi Skyu", description: "Wheat dumpling stew with root vegetables", price: 280, is_veg: true, is_available: false },
-      { name: "Mutton Curry", description: "Slow-cooked, served with rice", price: 420, is_veg: false, is_available: true }
-    ]},
-    { category: "Beverages", items: [
-      { name: "Butter Tea", description: "Traditional Ladakhi po cha", price: 90, is_veg: true, is_available: true },
-      { name: "Fresh Lime Soda", price: 110, is_veg: true, is_available: true }
-    ]}
-  ];
+  
 
   const root = document.getElementById('menu-root');
   const statusEl = document.getElementById('status');
 
-  function render(categories){
-    root.innerHTML = "";
-    categories.forEach(cat => {
-      const section = document.createElement('div');
-      section.className = 'category';
-      section.innerHTML = `<h2>${cat.category}</h2><p class="count">${cat.items.length} item${cat.items.length===1?'':'s'}</p>`;
-      cat.items.forEach(item => {
-  const row = document.createElement('div');
-  row.className = 'item' + (item.is_available === false ? ' unavailable' : '');
-
-  const orderingOn = contextType && item.is_available !== false;
-  const priceBlock = orderingOn
-    ? `<div class="item-price">₹${item.price}
-         <button onclick="addToCart('${item.id}','${item.name}',${item.price})">+</button>
-       </div>`
-    : `<div class="item-price">₹${item.price}</div>`;
-
-  row.innerHTML = `
-    <div class="item-main">
-      <div class="item-name-row">
-        <span class="dot ${item.is_veg ? 'veg' : 'nonveg'}"></span>
-        <span class="item-name">${item.name}</span>
-      </div>
-      ${item.description ? `<p class="item-desc">${item.description}</p>` : ""}
-    </div>
-    ${priceBlock}
-  `;
-  section.appendChild(row);
-});
-      root.appendChild(section);
-    });
+  function slugify(text){
+    return text.toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '');
   }
+
+  function render(categories){
+  root.innerHTML = "";
+
+  // Build the category jump-nav
+  const navBar = document.getElementById('category-nav');
+  navBar.innerHTML = "";
+  categories.forEach(cat => {
+    const slug = slugify(cat.category);
+    const btn = document.createElement('button');
+    btn.textContent = cat.category;
+    btn.onclick = () => document.getElementById(slug).scrollIntoView({behavior:'smooth', block:'start'});
+    navBar.appendChild(btn);
+  });
+
+  categories.forEach(cat => {
+    const slug = slugify(cat.category);
+    const section = document.createElement('div');
+    section.className = 'category';
+    section.id = slug;
+    section.innerHTML = `<h2>${cat.category}</h2><p class="count">${cat.items.length} item${cat.items.length===1?'':'s'}</p>`;
+
+    cat.items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'item' + (item.is_available === false ? ' unavailable' : '');
+
+      const orderingOn = contextType && item.is_available !== false;
+      const priceBlock = orderingOn
+        ? `<div class="item-price">₹${item.price}
+             <button onclick="addToCart('${item.id}','${item.name}',${item.price})">+</button>
+           </div>`
+        : `<div class="item-price">₹${item.price}</div>`;
+
+      row.innerHTML = `
+        <div class="item-main">
+          <div class="item-name-row">
+            <span class="dot ${item.is_veg ? 'veg' : 'nonveg'}"></span>
+            <span class="item-name">${item.name}</span>
+          </div>
+          ${item.description ? `<p class="item-desc">${item.description}</p>` : ""}
+        </div>
+        ${priceBlock}
+      `;
+      section.appendChild(row);
+    });
+    root.appendChild(section);
+  });
+}
 
   function addToCart(id, name, price){
   const existing = cart.find(c => c.item_id === id);
