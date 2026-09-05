@@ -30,3 +30,229 @@
 
   nav.wrap{
     display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-top:28px;
+    padding-bottom:20px;
+  }
+  .brand{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.25rem;
+  }
+  .nav-links a{
+    text-decoration:none;
+    font-size:0.92rem;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:2px;
+  }
+
+  header.page-head{
+    padding:20px 0 30px;
+    border-bottom:1px solid var(--line);
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:2.1rem;
+    margin:0 0 8px;
+  }
+  .sub{
+    color:#5c5748;
+    font-size:0.98rem;
+    margin:0;
+  }
+
+  .status{
+    padding:14px 0;
+    font-size:0.88rem;
+    color:#6b6656;
+  }
+
+  .category{ margin-top:38px; }
+  .category h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:1.3rem;
+    margin:0 0 4px;
+  }
+  .category .count{
+    font-size:0.82rem;
+    color:#8a8570;
+    margin:0 0 18px;
+  }
+
+  .item{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:16px;
+    padding:16px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .item:last-child{ border-bottom:none; }
+  .item-main{ flex:1; }
+  .item-name-row{
+    display:flex;
+    align-items:center;
+    gap:9px;
+  }
+  .dot{
+    width:9px; height:9px;
+    border-radius:50%;
+    flex-shrink:0;
+    display:inline-block;
+  }
+  .dot.veg{ background:#4C7A3D; border:1px solid #365828; }
+  .dot.nonveg{ background:var(--rust); border:1px solid #6e3d24; }
+  .item-name{
+    font-weight:500;
+    font-size:1.02rem;
+  }
+  .item-desc{
+    margin:5px 0 0;
+    font-size:0.88rem;
+    color:#6b6656;
+    line-height:1.5;
+    max-width:46ch;
+  }
+  .item-price{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:1.05rem;
+    white-space:nowrap;
+  }
+  .unavailable .item-name,
+  .unavailable .item-price{ color:#a39d89; }
+  .unavailable .item-price::after{
+    content:" — sold out";
+    font-family:'Work Sans', sans-serif;
+    font-size:0.78rem;
+  }
+
+  footer{
+    border-top:1px solid var(--line);
+    margin-top:56px;
+    padding:26px 0 40px;
+    font-size:0.84rem;
+    color:#6b6656;
+  }
+</style>
+</head>
+<body>
+
+<nav class="wrap">
+  <div class="brand">Saser</div>
+  <div class="nav-links"><a href="/">← Back home</a></div>
+</nav>
+
+<div class="wrap">
+  <header class="page-head">
+    <h1>Menu</h1>
+    <p class="sub">Straight from the kitchen — updated by staff, no reprinting needed.</p>
+  </header>
+
+  <div id="status" class="status">Loading menu…</div>
+  <div id="menu-root"></div>
+</div>
+
+<footer class="wrap">
+  <span class="dot veg" style="margin-right:6px;"></span> Veg &nbsp;&nbsp;
+  <span class="dot nonveg" style="margin-right:6px;"></span> Non-veg
+</footer>
+
+<script>
+  // ---- Fill in your Supabase project details here ----
+  const SUPABASE_URL = "https://rysxztcnnfxtuikymvyd.supabase.co";   // e.g. https://xxxx.supabase.co
+  const SUPABASE_ANON_KEY = "sb_publishable_9F7WBGfcVF9lYrEx9x7l_w_8hjhNNmq";
+  const VENDOR_ID = "d1100148-64b4-4d41-8930-af7029aa7726";                 // the vendors.id row for this hotel's kitchen
+
+  // Static fallback shown if Supabase isn't configured yet, or the fetch fails.
+  const FALLBACK_MENU = [
+    { category: "Starters", items: [
+      { name: "Vegetable Momos", description: "Steamed dumplings, Ladakhi-style chutney", price: 180, is_veg: true, is_available: true },
+      { name: "Chicken Thukpa", description: "Hand-pulled noodle soup, Himalayan herbs", price: 260, is_veg: false, is_available: true }
+    ]},
+    { category: "Main Course", items: [
+      { name: "Paneer Butter Masala", description: "With butter naan or steamed rice", price: 320, is_veg: true, is_available: true },
+      { name: "Ladakhi Skyu", description: "Wheat dumpling stew with root vegetables", price: 280, is_veg: true, is_available: false },
+      { name: "Mutton Curry", description: "Slow-cooked, served with rice", price: 420, is_veg: false, is_available: true }
+    ]},
+    { category: "Beverages", items: [
+      { name: "Butter Tea", description: "Traditional Ladakhi po cha", price: 90, is_veg: true, is_available: true },
+      { name: "Fresh Lime Soda", price: 110, is_veg: true, is_available: true }
+    ]}
+  ];
+
+  const root = document.getElementById('menu-root');
+  const statusEl = document.getElementById('status');
+
+  function render(categories){
+    root.innerHTML = "";
+    categories.forEach(cat => {
+      const section = document.createElement('div');
+      section.className = 'category';
+      section.innerHTML = `<h2>${cat.category}</h2><p class="count">${cat.items.length} item${cat.items.length===1?'':'s'}</p>`;
+      cat.items.forEach(item => {
+        const row = document.createElement('div');
+        row.className = 'item' + (item.is_available === false ? ' unavailable' : '');
+        row.innerHTML = `
+          <div class="item-main">
+            <div class="item-name-row">
+              <span class="dot ${item.is_veg ? 'veg' : 'nonveg'}"></span>
+              <span class="item-name">${item.name}</span>
+            </div>
+            ${item.description ? `<p class="item-desc">${item.description}</p>` : ""}
+          </div>
+          <div class="item-price">₹${item.price}</div>
+        `;
+        section.appendChild(row);
+      });
+      root.appendChild(section);
+    });
+  }
+
+  async function loadMenu(){
+    const configured = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 10;
+
+    if (!configured) {
+      statusEl.textContent = "Showing sample menu — connect Supabase to show live items.";
+      render(FALLBACK_MENU);
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/menu_items?vendor_id=eq.${VENDOR_ID}&select=*,menu_categories(name,sort_order)&order=category_id`,
+        { headers: {
+            "apikey": SUPABASE_ANON_KEY,
+            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+        }}
+      );
+      if (!res.ok) throw new Error("Fetch failed: " + res.status);
+      const items = await res.json();
+      if (!items.length) throw new Error("No items returned");
+
+      // Group flat item list by category name
+      const grouped = {};
+      items.forEach(item => {
+        const catName = item.menu_categories?.name || "Menu";
+        if (!grouped[catName]) grouped[catName] = [];
+        grouped[catName].push(item);
+      });
+      const categories = Object.keys(grouped).map(name => ({ category: name, items: grouped[name] }));
+
+      statusEl.remove();
+      render(categories);
+    } catch (err) {
+      statusEl.textContent = "Live menu unavailable right now — showing sample menu.";
+      render(FALLBACK_MENU);
+      console.error(err);
+    }
+  }
+
+  loadMenu();
+</script>
+
+</body>
+</html>
