@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Saser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#242119;
+    --paper:#EFEADA;
+    --paper-soft:#E6DFC9;
+    --brass:#AD803B;
+    --pine:#33463A;
+    --line:rgba(36,33,25,0.14);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; }
+  .wrap{ max-width:760px; margin:0 auto; padding:0 28px; }
+
+  nav.wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-top:28px;
+    padding-bottom:20px;
+  }
+  .brand img{ height:60px; display:block; }
+  .nav-links{ display:flex; gap:24px; }
+  .nav-links a{
+    text-decoration:none;
+    font-size:0.92rem;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:2px;
+  }
+
+  header.page-head{
+    padding:20px 0 30px;
+    border-bottom:1px solid var(--line);
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:2.1rem;
+    margin:0 0 8px;
+  }
+  .sub{
+    color:#5c5748;
+    font-size:0.98rem;
+    margin:0;
+  }
+
+  .contact-card{
+    margin-top:44px;
+    display:grid;
+    grid-template-columns:180px 1fr;
+    gap:32px;
+    align-items:start;
+  }
+  .photo-frame{
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background:var(--paper-soft);
+    border:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .photo-frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .photo-placeholder{
+    font-family:'Fraunces', serif;
+    font-size:0.82rem;
+    color:#8a8570;
+    text-align:center;
+    padding:0 20px;
+    line-height:1.5;
+  }
+
+  .details h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:1.5rem;
+    margin:6px 0 2px;
+  }
+  .role{
+    font-size:0.92rem;
+    color:var(--brass);
+    font-weight:600;
+    margin:0 0 22px;
+  }
+  .detail-row{
+    display:flex;
+    gap:14px;
+    align-items:baseline;
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .detail-row:last-child{ border-bottom:none; }
+  .detail-label{
+    font-size:0.82rem;
+    color:#8a8570;
+    width:70px;
+    flex-shrink:0;
+  }
+  .detail-value a{
+    font-size:1.02rem;
+    text-decoration:none;
+    border-bottom:1px solid var(--ink);
+    padding-bottom:1px;
+  }
+  .detail-value a:hover{ color:var(--pine); border-color:var(--pine); }
+
+  footer{
+    border-top:1px solid var(--line);
+    margin-top:56px;
+    padding:26px 0 40px;
+    font-size:0.84rem;
+    color:#6b6656;
+  }
+
+  @media (max-width:560px){
+    .contact-card{ grid-template-columns:1fr; justify-items:center; text-align:center; }
+    .detail-row{ justify-content:center; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="wrap">
+  <div class="brand"><img src="saser_logo.png" alt="Saser"></div>
+  <div class="nav-links">
+    <a href="/menu/">Menu</a>
+    <a href="/contact.html">Contact</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="page-head">
+    <h1>Get in touch</h1>
+    <p class="sub">Questions, bookings, or just to say hello.</p>
+  </header>
+
+  <div class="contact-card">
+    <div class="photo-frame">
+      <!-- Replace this placeholder with: <img src="proprietor.jpg" alt="Sonam Tundup"> -->
+      <div class="photo-placeholder">Photo coming soon</div>
+    </div>
+
+    <div class="details">
+      <h2>Sonam Tundup</h2>
+      <p class="role">Proprietor</p>
+
+      <div class="detail-row">
+        <span class="detail-label">Phone</span>
+        <span class="detail-value"><a href="tel:+919797578181">+91 97975 78181</a></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Email</span>
+        <span class="detail-value"><a href="mailto:tundup534@gmail.com">tundup534@gmail.com</a></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="wrap">
+  <span>Saser</span>
+</footer>
+
+</body>
+</html>
