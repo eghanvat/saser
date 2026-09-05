@@ -147,6 +147,18 @@
     font-size:0.78rem;
   }
 
+  .drop-close{ padding-top:10px; text-align:center; }
+.close-btn{
+  background:none; border:none;
+  color:var(--brass);
+  font-family:'Work Sans', sans-serif;
+  font-size:0.82rem;
+  cursor:pointer;
+  border-bottom:1px solid var(--brass);
+  padding:2px 0;
+}
+.close-btn:hover{ color:var(--pine); border-color:var(--pine); }
+
   .category-nav{
   display:flex;
   gap:10px;
@@ -261,11 +273,26 @@ html{ scroll-behavior:smooth; }
   font-size:0.85rem;
   cursor:pointer;
 }
+  #cart-bar .order-btn{
+  background:var(--brass);
+  border:none;
+  color:var(--paper);
+  padding:8px 16px;
+  border-radius:4px;
+  font-family:'Work Sans', sans-serif;
+  font-size:0.85rem;
+  font-weight:500;
+  cursor:pointer;
+}
+#cart-bar .order-btn:hover{ background:#c1893f; }
+  
 #cart-dropdown{
   display:none;
   position:fixed;
   top:56px;
-  right:20px;
+  left:50%;
+  transform:translateX(-50%);
+  right:auto;
   background:var(--paper);
   color:var(--ink);
   border:1px solid var(--line);
@@ -288,6 +315,15 @@ html{ scroll-behavior:smooth; }
 #cart-dropdown .drop-item:last-child{ border-bottom:none; }
 /* push page content down so the fixed bar doesn't cover the nav/heading */
 body.has-cart{ padding-top:56px; }
+
+.drop-price{
+  min-width:44px;
+  text-align:right;
+  font-size:0.85rem;
+  margin-left:6px;
+}
+
+  .qty-control{ margin-top:9px; }
 
   footer{
     border-top:1px solid var(--line);
@@ -460,7 +496,7 @@ function renderCartBar(){
     <span>${count} item(s) · ₹${total}</span>
     <div class="btn-group">
       <button class="view-btn" onclick="toggleCartDropdown()">View ▾</button>
-      <button onclick="placeOrder()">Place order</button>
+      <button class="order-btn" onclick="placeOrder()">Place order</button>
     </div>
   `;
   renderCartDropdown();
@@ -482,8 +518,10 @@ function renderCartDropdown(){
         <span class="drop-price">₹${c.price * c.qty}</span>
       </div>
     </div>
-  `).join('');
+  `).join('') + `<div class="drop-close"><button class="close-btn" onclick="toggleCartDropdown()">Close</button></div>`;
 }
+  
+  
 function toggleCartDropdown(){
   document.getElementById('cart-dropdown').classList.toggle('open');
 }
