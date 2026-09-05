@@ -182,28 +182,39 @@ async function placeOrder(){
     if (!num) return;
   }*/
 
-  const orderRes = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
-    method:'POST',
-    headers:{ apikey:SUPABASE_ANON_KEY, Authorization:`Bearer ${SUPABASE_ANON_KEY}`,
-              'Content-Type':'application/json', Prefer:'return=representation' },
-    body: JSON.stringify({
-      vendor_id: VENDOR_ID,
-      source_type: type,
-      table_number: type==='table' ? Number(num) : null,
-      room_number: type==='room' ? num : null
-    })
-  });
-  const [order] = await orderRes.json();
+  
+  try {
+    const orderRes = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
+      method:'POST',
+      headers:{ apikey:SUPABASE_ANON_KEY, Authorization:`Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type':'application/json', Prefer:'return=representation' },
+      body: JSON.stringify({
+        vendor_id: VENDOR_ID,
+        source_type: type,
+        table_number: type==='table' ? Number(num) : null,
+        room_number: type==='room' ? num : null
+      })
+    });
 
-  const items = cart.map(c => ({ order_id: order.id, item_id: c.item_id, item_name: c.name, price: c.price, quantity: c.qty }));
-  await fetch(`${SUPABASE_URL}/rest/v1/order_items`, {
-    method:'POST',
-    headers:{ apikey:SUPABASE_ANON_KEY, Authorization:`Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type':'application/json' },
-    body: JSON.stringify(items)
-  });
+    if (!orderRes.ok) throw new Error(`Order insert failed: ${orderRes.status} ${await orderRes.text()}`);
+    const [order] = await orderRes.json();
+    if (!order) throw new Error("No order returned from Supabase");
 
-  cart = [];
-  window.location.href = `order-status.html?order=${order.id}`;
+    const items = cart.map(c => ({ order_id: order.id, item_id: c.item_id, item_name: c.name, price: c.price, quantity: c.qty }));
+    const itemsRes = await fetch(`${SUPABASE_URL}/rest/v1/order_items`, {
+      method:'POST',
+      headers:{ apikey:SUPABASE_ANON_KEY, Authorization:`Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type':'application/json' },
+      body: JSON.stringify(items)
+    });
+
+    if (!itemsRes.ok) throw new Error(`Order items insert failed: ${itemsRes.status} ${await itemsRes.text()}`);
+
+    cart = [];
+    window.location.href = `order-status.html?order=${order.id}`;
+  } catch (err) {
+    console.error(err);
+    alert("Couldn't place your order. Please try again — " + err.message);
+  }
 }
   
   async function loadMenu(){
