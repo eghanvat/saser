@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitchen — Saser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#242119; --paper:#EFEADA; --paper-soft:#E6DFC9;
+    --brass:#AD803B; --pine:#33463A; --rust:#9C5A38;
+    --line:rgba(36,33,25,0.14);
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Work Sans', sans-serif; }
+  .wrap{ max-width:960px; margin:0 auto; padding:0 24px; }
+  nav.wrap{ display:flex; align-items:center; justify-content:space-between; padding:24px; }
+  .brand{ font-family:'Fraunces', serif; font-weight:600; font-size:1.25rem; }
+  h1{ font-family:'Fraunces', serif; font-weight:500; font-size:1.6rem; margin:0 0 4px; }
+  .sub{ color:#6b6656; font-size:0.9rem; margin:0 0 20px; }
+
+  .tabs{ display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap; }
+  .tabs button{
+    background:var(--paper-soft); border:1px solid var(--line); color:var(--ink);
+    font-family:'Work Sans', sans-serif; font-size:0.85rem; font-weight:500;
+    padding:8px 16px; border-radius:20px; cursor:pointer;
+  }
+  .tabs button.active{ background:var(--pine); color:var(--paper); border-color:var(--pine); }
+
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px; }
+  .order-card{
+    background:#fff; border:1px solid var(--line); border-radius:8px; padding:16px;
+  }
+  .order-card.placed{ border-left:4px solid var(--brass); }
+  .order-card.preparing{ border-left:4px solid var(--pine); }
+  .order-card.ready{ border-left:4px solid #4C7A3D; }
+  .order-card.cancelled{ opacity:0.55; border-left:4px solid var(--rust); }
+
+  .order-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
+  .order-loc{ font-family:'Fraunces', serif; font-weight:500; font-size:1.1rem; }
+  .order-time{ font-size:0.78rem; color:#8a8570; }
+
+  .badge{
+    display:inline-block; font-size:0.72rem; padding:2px 8px; border-radius:10px;
+    margin-bottom:10px;
+  }
+  .badge.placed{ background:#faeeda; color:#854f0b; }
+  .badge.preparing{ background:#e1f5ee; color:#085041; }
+  .badge.ready{ background:#eaf3de; color:#27500a; }
+  .badge.cancelled{ background:#fcebeb; color:#791f1f; }
+  .badge.deliver{ background:var(--brass); color:#fff; margin-left:6px; }
+
+  .order-items{ font-size:0.88rem; margin-bottom:12px; }
+  .order-items div{ display:flex; justify-content:space-between; padding:3px 0; }
+  .order-items .cancelled-item span{ text-decoration:line-through; color:#a39d89; }
+
+  .order-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+  .order-actions button{
+    flex:1; min-width:110px;
+    border:none; border-radius:4px; padding:9px 0;
+    font-family:'Work Sans', sans-serif; font-size:0.85rem; font-weight:500; cursor:pointer;
+  }
+  .btn-prepare{ background:var(--pine); color:var(--paper); }
+  .btn-ready{ background:#4C7A3D; color:#fff; }
+  .btn-cancel{ background:none; border:1px solid var(--rust) !important; color:var(--rust); }
+  .btn-cancel:hover{ background:var(--rust); color:#fff; }
+
+  .empty{ color:#8a8570; font-size:0.9rem; padding:40px 0; text-align:center; }
+</style>
+</head>
+<body>
+
+<nav class="wrap">
+  <div class="brand">Saser — Kitchen</div>
+</nav>
+
+<div class="wrap">
+  <h1>Live orders</h1>
+  <p class="sub">Updates every few seconds — no need to refresh.</p>
+
+  <div class="tabs" id="tabs">
+    <button data-filter="active" class="active">Active</button>
+    <button data-filter="placed">Placed</button>
+    <button data-filter="preparing">Preparing</button>
+    <button data-filter="ready">Ready</button>
+    <button data-filter="cancelled">Cancelled</button>
+  </div>
+
+  <div id="orders-root" class="grid"><div class="empty">Loading…</div></div>
+</div>
+
+<script>
+  const SUPABASE_URL = "https://rysxztcnnfxtuikymvyd.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_9F7WBGfcVF9lYrEx9x7l_w_8hjhNNmq";
+  const VENDOR_ID = "d1100148-64b4-4d41-8930-af7029aa7726";
+
+  let currentFilter = 'active';
+  const root = document.getElementById('orders-root');
+
+  document.querySelectorAll('#tabs button').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('#tabs button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      loadOrders();
+    };
+  });
+
+  async function loadOrders(){
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/orders?vendor_id=eq.${VENDOR_ID}&select=*,order_items(*)&order=created_at.desc`,
+        { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
+      );
+      if (!res.ok) throw new Error(await res.text());
+      let orders = await res.json();
+
+      if (currentFilter === 'active') {
+        orders = orders.filter(o => o.status !== 'ready' && o.status !== 'cancelled');
+      } else {
+        orders = orders.filter(o => o.status === currentFilter);
+      }
+
+      render(orders);
+    } catch (err) {
+      console.error(err);
+      root.innerHTML = `<div class="empty">Couldn't load orders.</div>`;
+    }
+  }
+
+  function render(orders){
+    if (!orders.length) {
+      root.innerHTML = `<div class="empty">No orders here.</div>`;
+      return;
+    }
+    root.innerHTML = orders.map(o => {
+      const loc = o.table_number ? `Table ${o.table_number}` : o.room_number ? `Room ${o.room_number}` : `Order #${o.id.slice(0,8)}`;
+      const time = new Date(o.created_at).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+      const items = o.order_items || [];
+      const itemsHtml = items.map(i => `
+        <div class="${i.cancelled ? 'cancelled-item' : ''}">
+          <span>${i.item_name} × ${i.quantity}</span>
+          <span>${i.cancelled ? 'cancelled' : '₹' + i.price * i.quantity}</span>
+        </div>
