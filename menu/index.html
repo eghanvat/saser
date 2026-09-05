@@ -229,6 +229,21 @@ html{ scroll-behavior:smooth; }
 }
 
   #category-nav{ scroll-margin-top:70px; }
+  #cart-bar{
+    display:none;
+    position:fixed;
+    top:0; left:0; right:0;
+    height:56px;
+    background:var(--pine);
+    color:var(--paper);
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    z-index:50;
+    font-size:0.9rem;
+  }
+  
+#cart-bar.visible{ display:flex; }
 
   #cart-bar .btn-group{
   display:flex;
