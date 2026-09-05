@@ -14,6 +14,27 @@ const SUPABASE_URL = "https://rysxztcnnfxtuikymvyd.supabase.co";
     };
   });
 
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function checkAuth(){
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) {
+    window.location.href = 'login.html?redirect=kitchen.html';
+    return null;
+  }
+  return session;
+}
+
+async function init(){
+  const session = await checkAuth();
+  if (!session) return;
+  document.getElementById('staff-email').textContent = session.user.email;
+  loadOrders();
+  setInterval(loadOrders, 8000);
+}
+
+init();
+
   async function loadOrders(){
     try {
       const res = await fetch(
