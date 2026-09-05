@@ -1,6 +1,4 @@
 
-  const SUPABASE_URL = "https://rysxztcnnfxtuikymvyd.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_9F7WBGfcVF9lYrEx9x7l_w_8hjhNNmq";
   const ESTIMATED_MINUTES = 20;
 
   const params = new URLSearchParams(window.location.search);
