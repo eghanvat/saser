@@ -169,11 +169,11 @@ function renderCartBar(){
   document.body.classList.add('has-cart');
   bar.innerHTML = `
     <span>${count} item(s) · ₹${total}</span>
+    <button class="order-btn" onclick="placeOrder()">Place order</button>
     <div class="btn-group">
-      <button class="view-btn" onclick="toggleCartDropdown()">Order</button>
-      <button class="order-btn" onclick="placeOrder()">Place order</button>
+      <button class="view-btn" onclick="toggleCartDropdown()">My Orders ▾</button>
     </div>
-  `;
+    `;
   renderCartDropdown();
 }
 
