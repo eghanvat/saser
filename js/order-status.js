@@ -85,15 +85,28 @@
 
   const items = order.order_items || [];
   const total = items.reduce((s, i) => s + i.price * i.quantity, 0);
+  const items = order.order_items || [];
+  const canCancelItems = order.status === 'placed';
+  const activeItems = items.filter(i => !i.cancelled);
+  const total = activeItems.reduce((s, i) => s + i.price * i.quantity, 0);
+  
   el('items-list').innerHTML = items.map(i => `
-    <div class="order-item">
+    <div class="order-item${i.cancelled ? ' item-cancelled' : ''}">
       <span>${i.item_name} × ${i.quantity}</span>
-      <span>₹${i.price * i.quantity}</span>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span>₹${i.price * i.quantity}</span>
+        ${i.cancelled
+          ? `<span class="item-cancelled-tag">Cancelled</span>`
+          : canCancelItems
+            ? `<button class="item-cancel-btn" onclick="cancelItem('${i.id}')">✕</button>`
+            : ``
+        }
+      </div>
     </div>
   `).join('');
-  el('order-total').style.display = 'flex';
-  el('order-total').innerHTML = `<span>Total</span><span>₹${total}</span>`;
 
+el('order-total').style.display = 'flex';
+el('order-total').innerHTML = `<span>Total</span><span>₹${total}</span>`;
   const card = el('status-card');
   card.classList.remove('cancelled');
 
@@ -161,3 +174,22 @@
       alert("Couldn't cancel — try again.");
     }
   }
+
+  async function cancelItem(itemId){
+  if (!confirm("Cancel this item?")) return;
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/order_items?id=eq.${itemId}`, {
+      method: 'PATCH',
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ cancelled: true })
+    });
+    loadOrder();
+  } catch (err) {
+    console.error(err);
+    alert("Couldn't cancel item — try again.");
+  }
+}
