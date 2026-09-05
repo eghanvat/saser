@@ -14,8 +14,13 @@
 
 <nav class="wrap">
   <div class="brand">Saser — Kitchen</div>
+  <div style="display:flex; align-items:center; gap:12px; font-size:0.85rem;">
+    <span id="staff-email"></span>
+    <button onclick="supabase.auth.signOut().then(() => location.href='login.html')" style="background:none; border:1px solid var(--rust); color:var(--rust); padding:5px 12px; border-radius:4px; cursor:pointer;">Log out</button>
+  </div>
 </nav>
 
+  
 <div class="wrap">
   <h1>Live orders</h1>
   <p class="sub">Updates every few seconds — no need to refresh.</p>
