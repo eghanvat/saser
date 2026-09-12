@@ -80,6 +80,13 @@
     mobile = '91' + mobile.replace(/\D/g, '').slice(-10);
     console.log('Target mobile formatted:', mobile);
     configuration.identifier = mobile;
+
+     // Debug: Print exactly what objects the vendor script exposed
+  console.log("Current Window Properties:", {
+    sendOtpExists: (typeof window.sendOtp === "function"),
+    initSendOTPExists: (typeof window.initSendOTP === "function"),
+    rawWindowObject: window.sendOtp
+  });
       
     if (typeof window.sendOtp === "function") {
       // MSG91 custom UI method accepts the target phone/email string
