@@ -12,6 +12,31 @@
 <script src="../js/supabase-client.js"></script>
 </head>
 <body>
+  <script>
+    // Load widget
+  (function loadOtpScript(urls) {
+    let i = 0;
+    function attempt() {
+      const s = document.createElement('script');
+      s.src = urls[i];
+      s.async = true;
+      s.onload = () => {
+        if (typeof window.initSendOTP === 'function') {
+          window.initSendOTP(configuration);
+        }
+      };
+      s.onerror = () => {
+        i++;
+        if (i < urls.length) attempt();
+      };
+      document.head.appendChild(s);
+    }
+    attempt();
+  })([
+    'https://verify.msg91.com/otp-provider.js',
+    'https://verify.phone91.com/otp-provider.js'
+  ]);
+  </script>
 
 <div class="card">
   <h1>Staff login</h1>
@@ -100,32 +125,17 @@
   document.getElementById('loginContainer').style.display = 'none';
   document.getElementById('widgetContainer').style.display = 'block';
   console.log(configuration);
+  
+
+  // Widget already loaded, just initialize
+  if (typeof window.initSendOTP === 'function') {
+    window.initSendOTP(configuration);
+  } else {
+    console.error('Widget script not loaded yet');
+  }
   }
   
-  // Load widget
-  (function loadOtpScript(urls) {
-    let i = 0;
-    function attempt() {
-      const s = document.createElement('script');
-      s.src = urls[i];
-      s.async = true;
-      s.onload = () => {
-        if (typeof window.initSendOTP === 'function') {
-          window.initSendOtp(configuration);
-        }
-      };
-      s.onerror = () => {
-        i++;
-        if (i < urls.length) attempt();
-      };
-      document.head.appendChild(s);
-    }
-    attempt();
-  })([
-    'https://verify.msg91.com/otp-provider.js',
-    'https://verify.phone91.com/otp-provider.js'
-  ]);
-
+  
 </script>
 <script src="../js/login.js"></script>
 </body>
