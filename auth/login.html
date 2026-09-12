@@ -15,22 +15,107 @@
 
 <div class="card">
   <h1>Staff login</h1>
-  <p class="sub" id="sub">Enter your work email to get a code</p>
-
-  <div id="step-email">
-    <input type="email" id="email-input" placeholder="you@saser.in" autocomplete="email">
-    <div class="error" id="email-error" style="display:none;"></div>
-    <button id="send-btn">Send code</button>
+  <div id="loginContainer">
+    <p class="sub" id="sub">Enter your work mobile number to get a code</p>
+  
+    <div id="emailLogin" style="display:none'>
+    <input type="email" id="email" placeholder="Email">
+      <div class="error" id="email-error" style="display:none;"></div>
+    <button onclick="loginEmail()">Login</button>
   </div>
+  
+  <div id="mobileLogin" style="display:block">
+    <input type="tel" id="mobile" placeholder="Mobile (10 digits)">
+    <div class="error" id="mobile-error" style="display:none;"></div>
+    <button onclick="initiateOtp()">Send OTP</button>
+  </div>
+  
+  <div id="otpInput" style="display:none">
+    <input type="text" id="otp" placeholder="Enter 6-digit OTP">
+    <div class="error" id="otp-error" style="display:none;"></div>
+    <button onclick="verifyOTP()">Verify</button>
+  </div>
+  
+  <button onclick="toggleMobileLogin()">Login with Email</button>
+</div>
 
+<div id="widgetContainer" style="display:none"></div>
+<!--
   <div id="step-otp" style="display:none;">
     <input type="text" id="otp-input" placeholder="6-digit code" inputmode="numeric" maxlength="6">
     <div class="error" id="otp-error" style="display:none;"></div>
     <button id="verify-btn">Verify and log in</button>
     <span class="back" id="back-link">Use a different email</span>
-  </div>
+  </div> -->
 </div>
 
+<script type="text/javascript">
+  var configuration = {
+  widgetId: "36696c6c7565333636333131",
+  tokenAuth: "570513TSG5QcKsSq6aa545b2P1",
+  identifier: "", // Will be set dynamically
+  exposeMethods: true,
+  success: async (data) => {
+    console.log('OTP verified, token:', data);
+    
+    // Send verified token to your backend
+    const res = await fetch('/api/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        accessToken: data.accessToken || data.token,
+        mobile: document.getElementById('mobileInput').value
+      })
+    });
+    
+    if (res.ok) {
+      const { sessionToken } = await res.json();
+      localStorage.setItem('authToken', sessionToken);
+      window.location.href = '/kitchen/dashboard';
+    }
+  },
+  failure: (error) => {
+    console.log('OTP failed:', error);
+    alert('OTP verification failed. Try again.');
+  }
+};
+  
+  function initiateOTP() {
+    const mobile = document.getElementById('mobile').value;
+    if (!/^\d{10}$/.test(mobile)) {
+      alert('Enter valid 10-digit mobile');
+      return;
+    }
+  
+  configuration.identifier = mobile; // Set mobile number
+  document.getElementById('loginContainer').style.display = 'none';
+  document.getElementById('widgetContainer').style.display = 'block';
+  
+  // Load widget
+  (function loadOtpScript(urls) {
+    let i = 0;
+    function attempt() {
+      const s = document.createElement('script');
+      s.src = urls[i];
+      s.async = true;
+      s.onload = () => {
+        if (typeof window.initSendOTP === 'function') {
+          window.initSendOTP(configuration);
+        }
+      };
+      s.onerror = () => {
+        i++;
+        if (i < urls.length) attempt();
+      };
+      document.head.appendChild(s);
+    }
+    attempt();
+  })([
+    'https://verify.msg91.com/otp-provider.js',
+    'https://verify.phone91.com/otp-provider.js'
+  ]);
+}
+</script>
 <script src="../js/login.js"></script>
 </body>
 </html>
