@@ -86,6 +86,11 @@
       alert('Enter valid 10-digit mobile');
       return;
     }
+    
+   // Format: ensure +91 prefix
+  if (!mobile.startsWith('+91')) {
+    mobile = '+91' + mobile.replace(/\D/g, '').slice(-10);
+  }
   
   configuration.identifier = mobile; // Set mobile number
   document.getElementById('loginContainer').style.display = 'none';
