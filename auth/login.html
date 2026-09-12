@@ -77,10 +77,14 @@
   failure: (error) => {
     console.log('OTP failed:', error);
     alert('OTP verification failed. Try again.');
+  },
+  error: (err) => {
+    console.log("Eror");
   }
 };
   
   function initiateOtp() {
+    console.log('initiateOtp');
     const mobile = document.getElementById('mobile').value;
     if (!/^\d{10}$/.test(mobile)) {
       alert('Enter valid 10-digit mobile');
