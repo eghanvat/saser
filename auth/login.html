@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Staff login — Saser</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://googleapis.com">
+  <link rel="preconnect" href="https://gstatic.com" crossorigin>
+  <link href="https://googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/login.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://jsdelivr.net"></script>
   <script src="../js/supabase-client.js"></script>
 </head>
 <body>
@@ -18,7 +18,6 @@
   <div id="loginContainer">
     <p class="sub" id="sub">Enter your work mobile number to get a code</p>
   
-    <!-- Fixed: Fixed mismatched single quote on style attribute -->
     <div id="emailLogin" style="display:none;">
       <input type="email" id="email" placeholder="Email">
       <div class="error" id="email-error" style="display:none;"></div>
@@ -32,8 +31,8 @@
     </div>
     
     <div id="otpInput" style="display:none;">
-      <!-- Hidden container required by MSG91 when exposeMethods is active -->
-      <div id="ass"></div>
+      <!-- Crucial: Captcha node container placed above the runtime scripts -->
+      <div id="ass" style="margin-bottom: 10px;"></div>
       <input type="text" id="otp" placeholder="Enter 6-digit OTP">
       <div class="error" id="otp-error" style="display:none;"></div>
       <button onclick="verifyOtp()">Verify</button>
@@ -50,68 +49,58 @@
   </div>
 </div>
 
+<!-- Scripts placed at the bottom to ensure DOM elements are fully loaded first -->
 <script type="text/javascript">
   var configuration = {
-    widgetId: "36696c6c7965333636333131",
+    widgetId: "36696c6c7565333636333131",
     tokenAuth: "570513TSG5QcKsSq6aa545b2P1",
     exposeMethods: true,
     captchaRenderId: 'ass',
-    identifier: "",
+    identifier: '', // Initialized empty placeholder string
       
     success: async (data) => {
-      console.log('OTP verified, token:', data);
+      console.log('OTP verified successfully, token:', data);
     },
-    
     failure: (error) => {
-      console.log('OTP failed:', error);
+      console.log('OTP integration failed:', error);
       alert('OTP verification failed. Try again.');
     }
   };
     
   function sendOtpS() {
-    console.log('initiateOtp');
-    var mobile = document.getElementById('mobile').value;
-    if (!/^\d{10}$/.test(mobile)) {
-      alert('Enter valid 10-digit mobile');
+    var mobileInput = document.getElementById('mobile').value;
+    if (!/^\d{10}$/.test(mobileInput)) {
+      alert('Enter valid 10-digit mobile number');
       return;
     }
       
-    // Format: ensure 91 prefix without plus sign
-    mobile = '91' + mobile.replace(/\D/g, '').slice(-10);
-    console.log('Target mobile formatted:', mobile);
-    configuration.identifier = mobile;
-
-     // Debug: Print exactly what objects the vendor script exposed
-  console.log("Current Window Properties:", {
-    sendOtpExists: (typeof window.sendOtp === "function"),
-    initSendOTPExists: (typeof window.initSendOTP === "function"),
-    rawWindowObject: window.sendOtp
-  });
+    // Format payload cleanly for MSG91 ingestion
+    var formattedMobile = '91' + mobileInput.replace(/\D/g, '').slice(-10);
+    
+    // Inject parameters directly into configuration context
+    configuration.identifier = formattedMobile;
       
+    // Double check window context injection assignment status
     if (typeof window.sendOtp === "function") {
-      // MSG91 custom UI method accepts the target phone/email string
-      window.sendOtp(mobile);
-      console.log('OTP sent successfully.');
+      window.sendOtp(); // Call the method globally without parameter variables
+      console.log('OTP API flow invoked.');
       document.getElementById('otpInput').style.display = 'block';
     } else {
-      console.error("MSG91 SDK is not fully loaded into the window object yet.");
+      console.error("Method execution blocked: check if your domain origin is whitelisted in MSG91 dashboard.");
     }
   }
 
   function verifyOtp() {
-    var otp = document.getElementById('otp').value;
-    console.log('Verifying OTP:', otp);
+    var otpValue = document.getElementById('otp').value;
     
     if (typeof window.verifyOtp === "function") {
-      // MSG91 verification method expects the code string/integer
-      window.verifyOtp(otp);
+      window.verifyOtp(otpValue);
     } else {
-      console.error("MSG91 verifyOtp method is unavailable.");
+      console.error("window.verifyOtp is missing.");
     }
   }
 </script>
 
-<!-- The initialization script loads here at the bottom of the body -->
 <script type="text/javascript" onload="initSendOTP(configuration); console.log('MSG91 SDK Loaded');" src="https://verify.msg91.com/otp-provider.js"></script>
 </body>
 </html>
