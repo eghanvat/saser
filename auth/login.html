@@ -30,7 +30,7 @@
   <div id="mobileLogin" style="display:block">
     <input type="tel" id="mobile" placeholder="Mobile (10 digits)">
     <div class="error" id="mobile-error" style="display:none;"></div>
-    <button onclick="initSendOtp()">Send OTP</button>
+    <button onclick="sendOtpS()">Send OTP</button>
   </div>
   
   <div id="otpInput" style="display:none">
@@ -86,13 +86,13 @@
   }
 };
   
-  function initSendOtp() {
-    console.log('initiateOtp');
-    var mobile = document.getElementById('mobile').value;
-    if (!/^\d{10}$/.test(mobile)) {
-      alert('Enter valid 10-digit mobile');
-      return;
-    }
+function sendOtpS() {
+  console.log('initiateOtp');
+  var mobile = document.getElementById('mobile').value;
+  if (!/^\d{10}$/.test(mobile)) {
+    alert('Enter valid 10-digit mobile');
+    return;
+  }
     
    // Format: ensure +91 prefix
   if (!mobile.startsWith('+91')) {
@@ -101,7 +101,7 @@
 
   console.log(mobile);
     
-  window.sendOTP (
+  window.sendOtp (
     mobile, // mandatory
     (data) => {
       console.log('OTP sent successfully.');
@@ -111,8 +111,7 @@
   );
   
     //document.getElementById('loginContainer').style.display = 'none';
-  
-  }
+}
 
   function verifyOtp() {
     var otp = document.getElementById('otp').value;
