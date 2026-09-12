@@ -6,7 +6,8 @@
   <title>Staff login — Saser</title>
   <link rel="preconnect" href="https://googleapis.com">
   <link rel="preconnect" href="https://gstatic.com" crossorigin>
-  <link href="https://googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="../css/login.css">
   <script src="https://jsdelivr.net"></script>
   <script src="../js/supabase-client.js"></script>
@@ -50,13 +51,13 @@
 </div>
 
 <!-- Scripts placed at the bottom to ensure DOM elements are fully loaded first -->
+<!-- Scripts placed at the bottom to ensure DOM elements are fully loaded first -->
 <script type="text/javascript">
   var configuration = {
     widgetId: "36696c6c7565333636333131",
     tokenAuth: "570513TSG5QcKsSq6aa545b2P1",
     exposeMethods: true,
-    captchaRenderId: 'ass',
-    identifier: '', // Initialized empty placeholder string
+    captchaRenderId: 'ass', // The unique ID of the target rendering container
       
     success: async (data) => {
       console.log('OTP verified successfully, token:', data);
@@ -76,17 +77,23 @@
       
     // Format payload cleanly for MSG91 ingestion
     var formattedMobile = '91' + mobileInput.replace(/\D/g, '').slice(-10);
-    
-    // Inject parameters directly into configuration context
-    configuration.identifier = formattedMobile;
+    console.log('Target mobile formatted:', formattedMobile);
       
     // Double check window context injection assignment status
     if (typeof window.sendOtp === "function") {
-      window.sendOtp(); // Call the method globally without parameter variables
-      console.log('OTP API flow invoked.');
-      document.getElementById('otpInput').style.display = 'block';
+      // Per MSG91 guidelines: Pass the variable parameter string directly inside the global function
+      window.sendOtp(
+        formattedMobile, 
+        (data) => {
+           console.log('OTP API flow invoked successfully.', data);
+           document.getElementById('otpInput').style.display = 'block';
+        },
+        (err) => {
+           console.error('MSG91 Engine rejected the request.', err);
+        }
+      );
     } else {
-      console.error("Method execution blocked: check if your domain origin is whitelisted in MSG91 dashboard.");
+      console.error("Method execution blocked: window.sendOtp is still undefined.");
     }
   }
 
@@ -94,13 +101,20 @@
     var otpValue = document.getElementById('otp').value;
     
     if (typeof window.verifyOtp === "function") {
-      window.verifyOtp(otpValue);
+      window.verifyOtp(
+        otpValue,
+        (data) => console.log('OTP verification passed:', data),
+        (err) => console.error('Verification failed:', err)
+      );
     } else {
       console.error("window.verifyOtp is missing.");
     }
   }
 </script>
 
-<script type="text/javascript" onload="initSendOTP(configuration); console.log('MSG91 SDK Loaded');" src="https://verify.msg91.com/otp-provider.js"></script>
+<!-- FIXED: Removed the inline console string from onload to prevent parameter routing crashes -->
+<script type="text/javascript" onload="initSendOTP(configuration)" src="https://verify.msg91.com/otp-provider.js"></script>
+</body>
+</html>
 </body>
 </html>
