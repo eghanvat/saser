@@ -85,7 +85,7 @@
   
   function initiateOtp() {
     console.log('initiateOtp');
-    const mobile = document.getElementById('mobile').value;
+    var mobile = document.getElementById('mobile').value;
     if (!/^\d{10}$/.test(mobile)) {
       alert('Enter valid 10-digit mobile');
       return;
