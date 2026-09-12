@@ -84,7 +84,7 @@
     console.log('OTP verified, token:', data);
     
     // Send verified token to your backend
-    const res = await fetch('/api/verify-otp', {
+    const res = await fetch('https://rysxztcnnfxtuikymvyd.supabase.co/functions/v1/verify-otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
