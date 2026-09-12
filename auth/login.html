@@ -27,7 +27,7 @@
   <div id="mobileLogin" style="display:block">
     <input type="tel" id="mobile" placeholder="Mobile (10 digits)">
     <div class="error" id="mobile-error" style="display:none;"></div>
-    <button onclick="initiateOtp()">Send OTP</button>
+    <button onclick="initSendOtp()">Send OTP</button>
   </div>
   
   <div id="otpInput" style="display:none">
@@ -83,7 +83,7 @@
   }
 };
   
-  function initiateOtp() {
+  function initSendOtp() {
     console.log('initiateOtp');
     var mobile = document.getElementById('mobile').value;
     if (!/^\d{10}$/.test(mobile)) {
