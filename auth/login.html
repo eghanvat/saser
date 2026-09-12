@@ -10,34 +10,12 @@
 <link rel="stylesheet" href="../css/login.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/supabase-client.js"></script>
+<script type="text/javascript" onload="initSendOTP(configuration)" src="https://verify.msg91.com/otp-provider.js"></script>
+</body>
+
 </head>
 <body>
-  <script>
-    // Load widget
-  (function loadOtpScript(urls) {
-    let i = 0;
-    function attempt() {
-      const s = document.createElement('script');
-      s.src = urls[i];
-      s.async = true;
-      s.onload = () => {
-        if (typeof window.initSendOTP === 'function') {
-          window.initSendOTP(configuration);
-        }
-      };
-      s.onerror = () => {
-        i++;
-        if (i < urls.length) attempt();
-      };
-      document.head.appendChild(s);
-    }
-    attempt();
-  })([
-    'https://verify.msg91.com/otp-provider.js',
-    'https://verify.phone91.com/otp-provider.js'
-  ]);
-  </script>
-
+  
 <div class="card">
   <h1>Staff login</h1>
   <div id="loginContainer">
@@ -78,8 +56,9 @@
   var configuration = {
   widgetId: "36696c6c7565333636333131",
   tokenAuth: "570513TSG5QcKsSq6aa545b2P1",
-  identifier: "", // Will be set dynamically
   exposeMethods: true,
+  captchaRenderId: '',
+    
   success: async (data) => {
     console.log('OTP verified, token:', data);
     
@@ -121,18 +100,14 @@
     mobile = '91' + mobile.replace(/\D/g, '').slice(-10);
   }
   
-  configuration.identifier = mobile; // Set mobile number
-  document.getElementById('loginContainer').style.display = 'none';
-  document.getElementById('widgetContainer').style.display = 'block';
-  console.log(configuration);
+  window.sendOtp(
+    mobile, // mandatory
+    (data) => console.log('OTP sent successfully.'),
+    (error) => console.log('Error occurred')
+  );
   
-
-  // Widget already loaded, just initialize
-  if (typeof window.initSendOTP === 'function') {
-    window.initSendOTP(configuration);
-  } else {
-    console.error('Widget script not loaded yet');
-  }
+    //document.getElementById('loginContainer').style.display = 'none';
+  
   }
   
   
