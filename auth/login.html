@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Staff login — Saser</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/login.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/supabase-client.js"></script>
-
-</body>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff login — Saser</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/login.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
 </head>
 <body>
   
@@ -21,27 +18,29 @@
   <div id="loginContainer">
     <p class="sub" id="sub">Enter your work mobile number to get a code</p>
   
-  <div id="emailLogin" style="display:none'>
-    <input type="email" id="email" placeholder="Email">
+    <!-- Fixed: Fixed mismatched single quote on style attribute -->
+    <div id="emailLogin" style="display:none;">
+      <input type="email" id="email" placeholder="Email">
       <div class="error" id="email-error" style="display:none;"></div>
-    <button onclick="loginEmail()">Login</button>
+      <button onclick="loginEmail()">Login</button>
+    </div>
+    
+    <div id="mobileLogin" style="display:block;">
+      <input type="tel" id="mobile" placeholder="Mobile (10 digits)">
+      <div class="error" id="mobile-error" style="display:none;"></div>
+      <button onclick="sendOtpS()">Send OTP</button>
+    </div>
+    
+    <div id="otpInput" style="display:none;">
+      <!-- Hidden container required by MSG91 when exposeMethods is active -->
+      <div id="ass"></div>
+      <input type="text" id="otp" placeholder="Enter 6-digit OTP">
+      <div class="error" id="otp-error" style="display:none;"></div>
+      <button onclick="verifyOtp()">Verify</button>
+    </div>
+    
+    <button onclick="toggleMobileLogin()">Login with Email</button>
   </div>
-  
-  <div id="mobileLogin" style="display:block">
-    <input type="tel" id="mobile" placeholder="Mobile (10 digits)">
-    <div class="error" id="mobile-error" style="display:none;"></div>
-    <button onclick="sendOtpS()">Send OTP</button>
-  </div>
-  
-  <div id="otpInput" style="display:none">
-    <div id="ass"></div>
-    <input type="text" id="otp" placeholder="Enter 6-digit OTP">
-    <div class="error" id="otp-error" style="display:none;"></div>
-    <button onclick="verifyOTP()">Verify</button>
-  </div>
-  
-  <button onclick="toggleMobileLogin()">Login with Email</button>
-</div>
 
   <div id="step-otp" style="display:none;">
     <input type="text" id="otp-input" placeholder="6-digit code" inputmode="numeric" maxlength="6">
@@ -53,77 +52,56 @@
 
 <script type="text/javascript">
   var configuration = {
-  widgetId: "36696c6c7565333636333131",
-  tokenAuth: "570513TSG5QcKsSq6aa545b2P1",
-  exposeMethods: true,
-  captchaRenderId: 'ass',
+    widgetId: "36696c6c7565333636333131",
+    tokenAuth: "570513TSG5QcKsSq6aa545b2P1",
+    exposeMethods: true,
+    captchaRenderId: 'ass',
+      
+    success: async (data) => {
+      console.log('OTP verified, token:', data);
+    },
+    failure: (error) => {
+      console.log('OTP failed:', error);
+      alert('OTP verification failed. Try again.');
+    }
+  };
     
-  success: async (data) => {
-    console.log('OTP verified, token:', data);
-    
-   /* // Send verified token to your backend
-    const res = await fetch('https://rysxztcnnfxtuikymvyd.supabase.co/functions/v1/verify-otp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        accessToken: data.accessToken || data.token,
-        mobile: document.getElementById('mobileInput').value
-      })
-    });
-    
-    if (res.ok) {
-      const { sessionToken } = await res.json();
-      localStorage.setItem('authToken', sessionToken);
-      window.location.href = '/kitchen/dashboard';
-    } */
-  },
-  failure: (error) => {
-    console.log('OTP failed:', error);
-    alert('OTP verification failed. Try again.');
-  }
-};
-  
-function sendOtpS() {
-  console.log('initiateOtp');
-  var mobile = document.getElementById('mobile').value;
-  if (!/^\d{10}$/.test(mobile)) {
-    alert('Enter valid 10-digit mobile');
-    return;
-  }
-    
-   // Format: ensure +91 prefix
-  if (!mobile.startsWith('+91')) {
+  function sendOtpS() {
+    console.log('initiateOtp');
+    var mobile = document.getElementById('mobile').value;
+    if (!/^\d{10}$/.test(mobile)) {
+      alert('Enter valid 10-digit mobile');
+      return;
+    }
+      
+    // Format: ensure 91 prefix without plus sign
     mobile = '91' + mobile.replace(/\D/g, '').slice(-10);
-  }
-
-  console.log(mobile);
-    
-  window.sendOtp (
-    mobile, // mandatory
-    (data) => {
+    console.log('Target mobile formatted:', mobile);
+      
+    if (typeof window.sendOtp === "function") {
+      // MSG91 custom UI method accepts the target phone/email string
+      window.sendOtp(mobile);
       console.log('OTP sent successfully.');
       document.getElementById('otpInput').style.display = 'block';
-    },
-    (error) => console.log('Error occurred')
-  );
-  
-    //document.getElementById('loginContainer').style.display = 'none';
-}
+    } else {
+      console.error("MSG91 SDK is not fully loaded into the window object yet.");
+    }
+  }
 
   function verifyOtp() {
     var otp = document.getElementById('otp').value;
-    console.log(otp);
-    // For example
-    window.verifyOtp(
-      otp, // OTP value
-      (data) => console.log('OTP verified: ', data), // optional
-      (error) => console.log(error)
-    );
-
+    console.log('Verifying OTP:', otp);
+    
+    if (typeof window.verifyOtp === "function") {
+      // MSG91 verification method expects the code string/integer
+      window.verifyOtp(otp);
+    } else {
+      console.error("MSG91 verifyOtp method is unavailable.");
+    }
   }
-  
-  
 </script>
-<script type="text/javascript" onload="initSendOTP(configuration); console.log('loaded');" src="https://verify.msg91.com/otp-provider.js"></script>
+
+<!-- The initialization script loads here at the bottom of the body -->
+<script type="text/javascript" onload="initSendOTP(configuration); console.log('MSG91 SDK Loaded');" src="https://verify.msg91.com/otp-provider.js"></script>
 </body>
 </html>
