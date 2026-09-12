@@ -34,6 +34,7 @@
   </div>
   
   <div id="otpInput" style="display:none">
+    <div id="ass"></div>
     <input type="text" id="otp" placeholder="Enter 6-digit OTP">
     <div class="error" id="otp-error" style="display:none;"></div>
     <button onclick="verifyOTP()">Verify</button>
@@ -41,8 +42,6 @@
   
   <button onclick="toggleMobileLogin()">Login with Email</button>
 </div>
-
-<div id="widgetContainer" style="display:none"></div>
 
   <div id="step-otp" style="display:none;">
     <input type="text" id="otp-input" placeholder="6-digit code" inputmode="numeric" maxlength="6">
@@ -57,12 +56,12 @@
   widgetId: "36696c6c7565333636333131",
   tokenAuth: "570513TSG5QcKsSq6aa545b2P1",
   exposeMethods: true,
-  captchaRenderId: '',
+  captchaRenderId: 'ass',
     
   success: async (data) => {
     console.log('OTP verified, token:', data);
     
-    // Send verified token to your backend
+   /* // Send verified token to your backend
     const res = await fetch('https://rysxztcnnfxtuikymvyd.supabase.co/functions/v1/verify-otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -76,7 +75,7 @@
       const { sessionToken } = await res.json();
       localStorage.setItem('authToken', sessionToken);
       window.location.href = '/kitchen/dashboard';
-    }
+    } */
   },
   failure: (error) => {
     console.log('OTP failed:', error);
@@ -99,15 +98,33 @@
   if (!mobile.startsWith('+91')) {
     mobile = '91' + mobile.replace(/\D/g, '').slice(-10);
   }
-  
+
+  console.log(mobile);
+    
   window.sendOtp(
     mobile, // mandatory
-    (data) => console.log('OTP sent successfully.'),
+    (data) => {
+      console.log('OTP sent successfully.');
+      document.getElementById('otpInput').style.display = 'block';
+    },
     (error) => console.log('Error occurred')
   );
   
     //document.getElementById('loginContainer').style.display = 'none';
   
+  }
+
+  function verifyOtp() {
+    var otp = document.getElementById('otp').value;
+    console.log(otp);
+    // For example
+    window.verifyOtp(
+      otp, // OTP value
+      (data) => console.log('OTP verified: ', data), // optional
+      (error) => console.log(error), // optional
+      '336870744532313134323444' // optional
+    );
+
   }
   
   
