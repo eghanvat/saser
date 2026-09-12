@@ -52,7 +52,7 @@
 
 <script type="text/javascript">
   var configuration = {
-    widgetId: "36696c6c7565333636333131",
+    widgetId: "36696c6c7965333636333131",
     tokenAuth: "570513TSG5QcKsSq6aa545b2P1",
     exposeMethods: true,
     captchaRenderId: 'ass',
@@ -61,6 +61,7 @@
     success: async (data) => {
       console.log('OTP verified, token:', data);
     },
+    
     failure: (error) => {
       console.log('OTP failed:', error);
       alert('OTP verification failed. Try again.');
