@@ -56,6 +56,7 @@
     tokenAuth: "570513TSG5QcKsSq6aa545b2P1",
     exposeMethods: true,
     captchaRenderId: 'ass',
+    identifier: "",
       
     success: async (data) => {
       console.log('OTP verified, token:', data);
@@ -77,6 +78,7 @@
     // Format: ensure 91 prefix without plus sign
     mobile = '91' + mobile.replace(/\D/g, '').slice(-10);
     console.log('Target mobile formatted:', mobile);
+    configuration.identifier = mobile;
       
     if (typeof window.sendOtp === "function") {
       // MSG91 custom UI method accepts the target phone/email string
