@@ -5,7 +5,7 @@ const redirectTo = params.get('redirect') || '/kitchen.html';
   let currentEmail = '';
 
   el('send-btn').onclick = async () => {
-    const email = el('email-input').value.trim();
+    const email = el('email').value.trim();
     el('email-error').style.display = 'none';
     if (!email || !email.includes('@')) {
       el('email-error').textContent = 'Enter a valid email.';
