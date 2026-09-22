@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Staff login — Saser</title>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -13,7 +14,7 @@
   <link rel="stylesheet" href="../css/login.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../js/supabase-client.js"></script>
-  <script src="https://google.com" async defer></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 
 </head>
 
@@ -31,9 +32,15 @@
         <div class="error" id="email-error" style="display:none;"></div>
         <button id="send-btn">Login</button>
       </div>
-      <div id="g_id_onload" data-client_id="252529151792-gpbslbg857o3l1eecsehrglc4vnk28db.apps.googleusercontent.com"
-        data-callback="handleCredentialResponse">
+
+      <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_blue" data-size="large"
+        data-text="signin_with" data-width="250"> <!-- Set a specific pixel width to prevent it shifting shapes -->
       </div>
+
+      <div id="g_id_onload" data-client_id="252529151792-gpbslbg857o3l1eecsehrglc4vnk28db.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse" data-auto_prompt="false">
+      </div>
+
       <div class="g_signin2" data-type="standard"></div>
 
 
@@ -65,9 +72,12 @@
   <script>
     // 4. Process the secure token after a user signs in
     function handleCredentialResponse(response) {
-      console.log("Encoded JWT ID token returned from Google:");
-      console.log(response.credential);
-      alert("Login token received successfully!");
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: 'google',
+        token: response.credential,
+      })
+      if (error) console.error(error)
+      else console.log('Logged in:', data.user)
     }
   </script>
   <!--
