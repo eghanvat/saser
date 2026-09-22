@@ -1,24 +1,91 @@
+:root {
+  --ink: #242119;
+  --paper: #EFEADA;
+  --brass: #AD803B;
+  --pine: #33463A;
+  --rust: #9C5A38;
+  --line: rgba(36, 33, 25, 0.14);
+}
 
-  :root{
-    --ink:#242119; --paper:#EFEADA; --brass:#AD803B; --pine:#33463A; --rust:#9C5A38;
-    --line:rgba(36,33,25,0.14);
-  }
-  *{box-sizing:border-box;}
-  body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Work Sans', sans-serif; display:flex; align-items:center; justify-content:center; min-height:100vh; }
-  .card{ width:100%; max-width:340px; padding:32px 28px; }
-  h1{ font-family:'Fraunces', serif; font-weight:500; font-size:1.5rem; margin:0 0 6px; }
-  p.sub{ color:#6b6656; font-size:0.9rem; margin:0 0 22px; }
-  input{
-    width:100%; padding:11px 12px; font-size:0.95rem;
-    border:1px solid var(--line); border-radius:4px; background:#fff;
-    margin-bottom:12px; font-family:'Work Sans', sans-serif;
-  }
-  button{
-    width:100%; padding:11px 0; border:none; border-radius:4px;
-    background:var(--pine); color:var(--paper);
-    font-family:'Work Sans', sans-serif; font-size:0.9rem; font-weight:500; cursor:pointer;
-  }
-  button:disabled{ opacity:0.5; cursor:not-allowed; }
-  .error{ color:var(--rust); font-size:0.85rem; margin:-4px 0 12px; }
-  .back{ display:inline-block; margin-top:16px; font-size:0.85rem; color:var(--brass); cursor:pointer; border-bottom:1px solid var(--brass); }
+* {
+  box-sizing: border-box;
+}
 
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Work Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.card {
+  width: 100%;
+  max-width: 340px;
+  padding: 32px 28px;
+}
+
+h1 {
+  font-family: 'Fraunces', serif;
+  font-weight: 500;
+  font-size: 1.5rem;
+  margin: 0 0 6px;
+}
+
+p.sub {
+  color: #6b6656;
+  font-size: 0.9rem;
+  margin: 0 0 22px;
+}
+
+input {
+  width: 100%;
+  padding: 11px 12px;
+  font-size: 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  margin-bottom: 12px;
+  font-family: 'Work Sans', sans-serif;
+}
+
+button {
+  width: 100%;
+  padding: 11px 0;
+  border: none;
+  border-radius: 4px;
+  background: var(--pine);
+  color: var(--paper);
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  color: var(--rust);
+  font-size: 0.85rem;
+  margin: -4px 0 12px;
+}
+
+.back {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--brass);
+  cursor: pointer;
+  border-bottom: 1px solid var(--brass);
+}
+
+.g_id_signin {
+  width: 284px;
+  margin-top: 30px;
+}

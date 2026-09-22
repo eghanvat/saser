@@ -34,7 +34,7 @@
       </div>
 
       <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_blue" data-size="large"
-        data-text="signin_with" data-width="250"> <!-- Set a specific pixel width to prevent it shifting shapes -->
+        data-text="signin_with" data-width="284"> <!-- Set a specific pixel width to prevent it shifting shapes -->
       </div>
 
       <div id="g_id_onload" data-client_id="252529151792-gpbslbg857o3l1eecsehrglc4vnk28db.apps.googleusercontent.com"
@@ -71,8 +71,8 @@
 
   <script>
     // 4. Process the secure token after a user signs in
-    function handleCredentialResponse(response) {
-      const { data, error } = await supabase.auth.signInWithIdToken({
+    async function handleCredentialResponse(response) {
+      const { data, error } = await sb.auth.signInWithIdToken({
         provider: 'google',
         token: response.credential,
       })
