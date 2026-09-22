@@ -16,16 +16,17 @@
 <div class="card">
   <h1>Staff login</h1>
   <div id="loginContainer">
-    <p class="sub" id="sub">Enter your work mobile number to get a code</p>
+    <!-- 
+    <p class="sub" id="sub">Enter your work mobile number to get a code</p>-->
   
     <!-- Fixed: Fixed mismatched single quote on style attribute -->
-    <div id="emailLogin" style="display:none;">
+    <div id="emailLogin" style="display:block;">
       <input type="email" id="email" placeholder="Email">
       <div class="error" id="email-error" style="display:none;"></div>
       <button onclick="loginEmail()">Login</button>
     </div>
     
-    <div id="mobileLogin" style="display:block;">
+    <div id="mobileLogin" style="display:none;">
       <input type="tel" id="mobile" placeholder="Mobile (10 digits)">
       <div class="error" id="mobile-error" style="display:none;"></div>
       <button onclick="sendOtpS()">Send OTP</button>
@@ -49,7 +50,7 @@
     <span class="back" id="back-link">Use a different email</span>
   </div>
 </div>
-
+<!--
 <script type="text/javascript">
   var configuration = {
     widgetId: "36696c6c7565333636333131",
@@ -101,7 +102,9 @@
   }
 </script>
 
-<!-- The initialization script loads here at the bottom of the body -->
+<!-- The initialization script loads here at the bottom of the body --
 <script type="text/javascript" onload="initSendOTP(configuration);" src="https://verify.msg91.com/otp-provider.js"></script>
+
+-->
 </body>
 </html>
