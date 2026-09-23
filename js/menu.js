@@ -1,20 +1,20 @@
 
-  const params = new URLSearchParams(window.location.search);
-  const contextType = params.get('type'); // 'table' or 'room' or null
-  const contextNum  = params.get('num');
-  let cart = [];
+const params = new URLSearchParams(window.location.search);
+const contextType = params.get('type'); // 'table' or 'room' or null
+const contextNum = params.get('num');
+let cart = [];
 
-  // Static fallback shown if Supabase isn't configured yet, or the fetch fails.
-  
+// Static fallback shown if Supabase isn't configured yet, or the fetch fails.
 
-  const root = document.getElementById('menu-root');
-  const statusEl = document.getElementById('status');
 
-  function slugify(text){
-    return text.toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '');
-  }
+const root = document.getElementById('menu-root');
+const statusEl = document.getElementById('status');
 
-  function render(categories){
+function slugify(text) {
+  return text.toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+function render(categories) {
   root.innerHTML = "";
 
   // Build the category jump-nav
@@ -24,7 +24,7 @@
     const slug = slugify(cat.category);
     const btn = document.createElement('button');
     btn.textContent = cat.category;
-    btn.onclick = () => document.getElementById(slug).scrollIntoView({behavior:'smooth', block:'start'});
+    btn.onclick = () => document.getElementById(slug).scrollIntoView({ behavior: 'smooth', block: 'start' });
     navBar.appendChild(btn);
   });
 
@@ -37,7 +37,7 @@
       <div class="category-header">
         <div>
           <h2>${cat.category}</h2>
-          <p class="count">${cat.items.length} item${cat.items.length===1?'':'s'}</p>
+          <p class="count">${cat.items.length} item${cat.items.length === 1 ? '' : 's'}</p>
         </div>
         <a class="back-to-top" onclick="document.getElementById('category-nav').scrollIntoView({behavior:'smooth', block:'start'})">↑ Back</a>
       </div>
@@ -50,7 +50,7 @@
       const orderingOn = item.is_available !== false;
       const inCart = cart.find(c => c.item_id === item.id);
       const qty = inCart ? inCart.qty : 0;
-      
+
       const priceBlock = orderingOn
         ? `<div class="item-price">
              ₹${item.price}
@@ -83,7 +83,7 @@
   });
 }
 
-function changeQty(id, delta, name, price){
+function changeQty(id, delta, name, price) {
   let existing = cart.find(c => c.item_id === id);
   if (!existing && delta > 0) {
     cart.push({ item_id: id, name, price, qty: 1 });
@@ -95,8 +95,8 @@ function changeQty(id, delta, name, price){
   refreshQtyDisplay(id);
   renderCartDropdown();
 }
-  
-function refreshQtyDisplay(id){
+
+function refreshQtyDisplay(id) {
   const el = document.getElementById(`qty-${id}`);
   if (!el) return;
   const item = cart.find(c => c.item_id === id);
@@ -109,11 +109,11 @@ function refreshQtyDisplay(id){
     : `<button onclick="changeQty('${id}', 1, '${name}', ${price})">+</button>`;
 }
 
-  
-function renderCartBar(){
+
+function renderCartBar() {
   const bar = document.getElementById('cart-bar');
-  const total = cart.reduce((s,c) => s + c.price*c.qty, 0);
-  const count = cart.reduce((s,c) => s + c.qty, 0);
+  const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
+  const count = cart.reduce((s, c) => s + c.qty, 0);
 
   if (!count) {
     bar.classList.remove('visible');
@@ -134,13 +134,13 @@ function renderCartBar(){
   renderCartDropdown();
 }
 
-function renderCartDropdown(){
+function renderCartDropdown() {
   const drop = document.getElementById('cart-dropdown');
   if (!cart.length) {
     drop.innerHTML = `<div class="drop-item" style="border:none; justify-content:center; color:#8a8570;">Cart is empty</div>`;
     return;
   }
-  const total = cart.reduce((s,c) => s + c.price*c.qty, 0);
+  const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
   drop.innerHTML = cart.map(c => `
     <div class="drop-item">
       <span>${c.name}</span>
@@ -160,12 +160,12 @@ function renderCartDropdown(){
     <div class="drop-close"><button class="close-btn" onclick="toggleCartDropdown()">Close</button></div>
   `;
 }
-  
-function toggleCartDropdown(){
+
+function toggleCartDropdown() {
   document.getElementById('cart-dropdown').classList.toggle('open');
 }
-  
-async function placeOrder(){
+
+async function placeOrder() {
   let type = contextType;
   let num = contextNum;
   type = 'table';
@@ -178,17 +178,19 @@ async function placeOrder(){
     if (!num) return;
   }*/
 
-  
+
   try {
     const orderRes = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
-      method:'POST',
-      headers:{ apikey:SUPABASE_ANON_KEY, Authorization:`Bearer ${SUPABASE_ANON_KEY}`,
-                'Content-Type':'application/json', Prefer:'return=representation' },
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json', Prefer: 'return=representation'
+      },
       body: JSON.stringify({
         vendor_id: VENDOR_ID,
         source_type: type,
-        table_number: type==='table' ? Number(num) : null,
-        room_number: type==='room' ? num : null
+        table_number: type === 'table' ? Number(num) : null,
+        room_number: type === 'room' ? num : null
       })
     });
 
@@ -198,8 +200,8 @@ async function placeOrder(){
 
     const items = cart.map(c => ({ order_id: order.id, item_id: c.item_id, item_name: c.name, price: c.price, quantity: c.qty }));
     const itemsRes = await fetch(`${SUPABASE_URL}/rest/v1/order_items`, {
-      method:'POST',
-      headers:{ apikey:SUPABASE_ANON_KEY, Authorization:`Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type':'application/json' },
+      method: 'POST',
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify(items)
     });
 
@@ -212,51 +214,53 @@ async function placeOrder(){
     alert("Couldn't place your order. Please try again — " + err.message);
   }
 }
-  
-  async function loadMenu(){
-    const configured = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 10;
 
-    if (contextType && contextNum) {
-      const b = document.getElementById('context-banner');
-      b.style.display = 'block';
-      b.textContent = contextType === 'table' ? `Ordering for Table ${contextNum}` : `Room service — Room ${contextNum}`;
-    }
+async function loadMenu() {
+  const configured = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 10;
 
-    if (!configured) {
-      statusEl.textContent = "Showing sample menu — connect Supabase to show live items.";
-      render(FALLBACK_MENU);
-      return;
-    }
-
-    try {
-      const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/menu_items?vendor_id=eq.${VENDOR_ID}&select=*,menu_categories(name,sort_order)&order=category_id`,
-        { headers: {
-            "apikey": SUPABASE_ANON_KEY,
-            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-        }}
-      );
-      if (!res.ok) throw new Error("Fetch failed: " + res.status);
-      const items = await res.json();
-      if (!items.length) throw new Error("No items returned");
-
-      // Group flat item list by category name
-      const grouped = {};
-      items.forEach(item => {
-        const catName = item.menu_categories?.name || "Menu";
-        if (!grouped[catName]) grouped[catName] = [];
-        grouped[catName].push(item);
-      });
-      const categories = Object.keys(grouped).map(name => ({ category: name, items: grouped[name] }));
-
-      statusEl.remove();
-      render(categories);
-    } catch (err) {
-      statusEl.textContent = "Live menu unavailable right now — showing sample menu.";
-      render(FALLBACK_MENU);
-      console.error(err);
-    }
+  if (contextType && contextNum) {
+    const b = document.getElementById('context-banner');
+    b.style.display = 'block';
+    b.textContent = contextType === 'table' ? `Ordering for Table ${contextNum}` : `Room service — Room ${contextNum}`;
   }
 
-  loadMenu();
+  if (!configured) {
+    statusEl.textContent = "Showing sample menu — connect Supabase to show live items.";
+    render(FALLBACK_MENU);
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/menu_items?vendor_id=eq.${VENDOR_ID}&select=*,menu_categories(name,sort_order)&order=category_id`,
+      {
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      }
+    );
+    if (!res.ok) throw new Error("Fetch failed: " + res.status);
+    const items = await res.json();
+    if (!items.length) throw new Error("No items returned");
+
+    // Group flat item list by category name
+    const grouped = {};
+    items.forEach(item => {
+      const catName = item.menu_categories?.name || "Menu";
+      if (!grouped[catName]) grouped[catName] = [];
+      grouped[catName].push(item);
+    });
+    const categories = Object.keys(grouped).map(name => ({ category: name, items: grouped[name] }));
+
+    statusEl.remove();
+    render(categories);
+  } catch (err) {
+    statusEl.textContent = "Live menu unavailable right now — showing sample menu.";
+    render(FALLBACK_MENU);
+    console.error(err);
+  }
+}
+
+loadMenu();
 

@@ -44,12 +44,15 @@ sb.auth.onAuthStateChange((event, session) => {
         $thirdLink.show();
     } else {
         loggedIn = true;
+        
         const fullName = session.user.user_metadata?.full_name
             || session.user.user_metadata?.name
 
-        const displayName = fullName
+        const rawName = fullName
             ? fullName.split(' ')[0]
             : session.user.email.split('@')[0];
+
+        const displayName = rawName.charAt(0).toUpperCase() + rawName.slice(1).toLowerCase();
 
         $('.topbar .username').text(displayName);
         $('.topbar').removeClass('hidden');
