@@ -11,7 +11,7 @@
   box-sizing: border-box;
 }
 
-body {
+.car {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
@@ -19,7 +19,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 60vh;
 }
 
 .card {
@@ -63,6 +63,7 @@ button {
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
+  margin-bottom: 25px;
 }
 
 button:disabled {

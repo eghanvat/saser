@@ -1,10 +1,26 @@
 const params = new URLSearchParams(window.location.search);
-const redirectTo = params.get('redirect') || '/kitchen.html';
+const referrer = document?.referrer ? document.referrer : false;
+const redirect = params.get('redirect');
 
+var redirectTo = "index.html";
+
+
+if (redirect || referrer) {
+  redirectTo = redirect ? redirect : referrer ? referrer : 'index.html'
+}
+
+if (window.google?.accounts?.id) {
+  google.accounts.id.initialize({
+    client_id: "252529151792-gpbslbg857o3l1eecsehrglc4vnk28db.apps.googleusercontent.com",
+    callback: handleCredentialResponse,
+    auto_select: false,
+  })
+  google.accounts.id.renderButton(document.getElementById('g_id_signin'), { theme: 'filled_blue', size: 'large', width: '284px' })
+}
 
 let currentEmail = '';
 
-el('send-btn').onclick = async () => {
+$('#send-btn').on('click', async () => {
   const email = el('email').value.trim();
   el('email-error').style.display = 'none';
   if (!email || !email.includes('@')) {
@@ -31,9 +47,9 @@ el('send-btn').onclick = async () => {
   el('sub').textContent = `Code sent to ${email}`;
   el('email').style.display = 'none';
   el('step-otp').style.display = 'block';
-};
+});
 
-el('verify-btn').onclick = async () => {
+$('#verify-btn').on('click', async () => {
   const token = el('otp-input').value.trim();
   el('otp-error').style.display = 'none';
   if (!token || token.length < 6) {
@@ -56,15 +72,14 @@ el('verify-btn').onclick = async () => {
     return;
   }
   window.location.href = redirectTo;
-};
+});
 
-el('back-link').onclick = () => {
+$('#back-link').on('click', () => {
   el('step-otp').style.display = 'none';
   el('email').style.display = 'block';
   el('sub').textContent = 'Enter your work email to get a code';
   el('otp-input').value = '';
-};
-s
+});
 
 async function handleCredentialResponse(response) {
   const { data, error } = await sb.auth.signInWithIdToken({
@@ -79,3 +94,6 @@ async function handleCredentialResponse(response) {
     window.location.href = redirectTo;
   }
 }
+
+window.handleCredentialResponse = handleCredentialResponse;
+

@@ -1,0 +1,250 @@
+:root {
+    --ink: #242119;
+    --paper: #EFEADA;
+    --paper-soft: #E6DFC9;
+    --brass: #AD803B;
+    --pine: #33463A;
+    --line: rgba(36, 33, 25, 0.14);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Work Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: inherit;
+}
+
+.wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px;
+}
+
+nav.wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 28px;
+    padding-bottom: 20px;
+}
+
+.brand img {
+    height: 60px;
+    display: block;
+}
+
+.nav-links {
+    display: flex;
+    gap: 24px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    font-size: 0.92rem;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+}
+
+header.page-head {
+    padding: 20px 0 30px;
+    border-bottom: 1px solid var(--line);
+}
+
+h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 2.1rem;
+    margin: 0 0 8px;
+}
+
+.sub {
+    color: #5c5748;
+    font-size: 0.98rem;
+    margin: 0;
+}
+
+.contact-card {
+    margin-top: 44px;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+.photo-frame {
+    width: 180px;
+    border: 1px solid var(--line);
+    background: var(--paper-soft);
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center 18%;
+    display: block;
+    transition: transform .25s ease;
+}
+
+.photo-frame:hover img {
+    transform: scale(1.04);
+}
+
+.photo-hint {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(36, 33, 25, 0.55);
+    color: var(--paper);
+    font-size: 0.7rem;
+    text-align: center;
+    padding: 5px 0;
+    opacity: 0;
+    transition: opacity .2s ease;
+}
+
+.photo-frame:hover .photo-hint {
+    opacity: 1;
+}
+
+.details h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.5rem;
+    margin: 6px 0 2px;
+}
+
+.role {
+    font-size: 0.92rem;
+    color: var(--brass);
+    font-weight: 600;
+    margin: 0 0 22px;
+}
+
+.detail-row {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-size: 0.82rem;
+    color: #8a8570;
+    width: 70px;
+    flex-shrink: 0;
+}
+
+.detail-value a {
+    font-size: 1.02rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 1px;
+}
+
+.detail-value a:hover {
+    color: var(--pine);
+    border-color: var(--pine);
+}
+
+.insta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 1.02rem;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 1px;
+}
+
+.insta-link:hover {
+    color: var(--pine);
+    border-color: var(--pine);
+}
+
+.insta-link svg {
+    flex-shrink: 0;
+}
+
+footer {
+    border-top: 1px solid var(--line);
+    margin-top: 56px;
+    padding: 26px 0 40px;
+    font-size: 0.84rem;
+    color: #6b6656;
+}
+
+/* ---- Lightbox ---- */
+.lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 18, 13, 0.88);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    cursor: zoom-out;
+}
+
+.lightbox.open {
+    display: flex;
+}
+
+.lightbox img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    color: var(--paper);
+    font-size: 1.6rem;
+    font-family: 'Work Sans', sans-serif;
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+}
+
+@media (max-width:560px) {
+    .contact-card {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+    }
+
+    .detail-row {
+        justify-content: center;
+    }
+
+    .photo-frame {
+        width: 220px;
+    }
+
+    .photo-frame img {
+        height: 270px;
+    }
+}

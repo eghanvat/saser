@@ -12,52 +12,62 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="../css/saser.css">
   <link rel="stylesheet" href="../css/login.css">
-
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase-client.js"></script>
+  <script src="../js/jquery.js"></script>
+  <script src="../js/saser.js" type="module"></script>
 
 
 </head>
 
 <body>
+  <nav class="wrap">
+    <div class="brand"><a href="/"><img src="../img/saser_logo.png" alt="Saser" style="height:64px; display:block;">
+    </div>
+    <div class="nav-links">
+      <a href="/menu/">Menu</a>
+      <a href="/contact/index.html">Contact</a>
+      <a href="/auth/login.html">Login</a>
+      <a class="insta-link" href="https://www.instagram.com/saser_leh" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.6" />
+          <circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="1.6" />
+          <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" />
+        </svg>
+      </a>
+    </div>
+    </div>
+  </nav>
 
-  <div class="card">
-    <h1>Login</h1>
-    <div id="loginContainer">
-      <!-- 
+  <div class="car">
+    <div class="card">
+      <h1>Login</h1>
+      <div id="loginContainer">
+        <!-- 
     <p class="sub" id="sub">Enter your work mobile number to get a code</p>-->
 
-      <!-- Fixed: Fixed mismatched single quote on style attribute -->
-      <div class="email">
-        <div id="emailLogin" style="display:block;">
-          <input type="email" id="email" placeholder="Email">
-          <div class="error" id="email-error" style="display:none;"></div>
-          <div class="erorr" id="sub" style="display: block;"></div>
-          <button id="send-btn">Login</button>
+        <!-- Fixed: Fixed mismatched single quote on style attribute -->
+        <div class="email">
+          <div id="emailLogin" style="display:block;">
+            <input type="email" id="email" placeholder="Email">
+            <div class="error" id="email-error" style="display:none;"></div>
+            <div class="erorr" id="sub" style="display: block;"></div>
+            <button id="send-btn">Login</button>
+          </div>
+
+          <!-- google btn -->
+          <div id="g_id_signin"></div>
+          <div class="g_signin2" data-type="standard"></div>
         </div>
 
-        <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_blue"
-          data-size="large" data-text="signin_with" data-width="284">
-          <!-- Set a specific pixel width to prevent it shifting shapes -->
+
+        <div id="mobileLogin" style="display:none;">
+          <input type="tel" id="mobile" placeholder="Mobile (10 digits)">
+          <div class="error" id="mobile-error" style="display:none;"></div>
+          <button onclick="sendOtpS()">Send OTP</button>
         </div>
 
-        <div id="g_id_onload" data-client_id="252529151792-gpbslbg857o3l1eecsehrglc4vnk28db.apps.googleusercontent.com"
-          data-callback="handleCredentialResponse" data-auto_prompt="false">
-        </div>
-
-        <div class="g_signin2" data-type="standard"></div>
-      </div>
-
-
-      <div id="mobileLogin" style="display:none;">
-        <input type="tel" id="mobile" placeholder="Mobile (10 digits)">
-        <div class="error" id="mobile-error" style="display:none;"></div>
-        <button onclick="sendOtpS()">Send OTP</button>
-      </div>
-
-      <!-- <div id="otpInput" style="display:none;">
+        <!-- <div id="otpInput" style="display:none;">
         <!-- Hidden container required by MSG91 when exposeMethods is active --
         <div id="ass"></div>
         <input type="text" id="otp-input" placeholder="Enter 6-digit OTP">
@@ -65,14 +75,15 @@
         <button onclick="verifyOtp()">Verify</button>
       </div> -->
 
-      <!-- <button onclick="toggleMobileLogin()">Login with Email</button> -->
-    </div>
+        <!-- <button onclick="toggleMobileLogin()">Login with Email</button> -->
+      </div>
 
-    <div id="step-otp" style="display:none;">
-      <input type="text" id="otp-input" placeholder="6-digit code" inputmode="numeric" maxlength="6">
-      <div class="error" id="otp-error" style="display:none;"></div>
-      <button id="verify-btn">Verify and log in</button>
-      <span class="back" id="back-link">Use a different email</span>
+      <div id="step-otp" style="display:none;">
+        <input type="text" id="otp-input" placeholder="6-digit code" inputmode="numeric" maxlength="6">
+        <div class="error" id="otp-error" style="display:none;"></div>
+        <button id="verify-btn">Verify and log in</button>
+        <span class="back" id="back-link">Use a different email</span>
+      </div>
     </div>
   </div>
 
@@ -132,7 +143,8 @@
 <script type="text/javascript" onload="initSendOTP(configuration);" src="https://verify.msg91.com/otp-provider.js"></script>
 
 -->
-  <script type="text/javascript" src="../js/login.js"></script>
+  <script type="module" src="../js/login.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 
 </html>

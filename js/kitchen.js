@@ -1,5 +1,5 @@
 let currentFilter = 'active';
-const root = document.getElementById('orders-root');
+const root = el('orders-root');
 
 document.querySelectorAll('#tabs button').forEach(btn => {
   btn.onclick = () => {
@@ -10,19 +10,11 @@ document.querySelectorAll('#tabs button').forEach(btn => {
   };
 });
 
-async function checkAuth() {
-  const { data: { session } } = await sb.auth.getSession();
-  if (!session) {
-    window.location.href = '/auth/login.html?redirect=' + encodeURIComponent(window.location.pathname);
-    return null;
-  }
-  return session;
-}
 
 async function init() {
   const session = await checkAuth();
   if (!session) return;
-  document.getElementById('staff-email').textContent = session.user.email;
+  el('staff-email').textContent = session.user.email;
   loadOrders();
   setInterval(loadOrders, 8000);
 }
