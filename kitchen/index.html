@@ -17,7 +17,7 @@
   <div class="brand">Saser — Kitchen</div>
   <div style="display:flex; align-items:center; gap:12px; font-size:0.85rem;">
     <span id="staff-email"></span>
-    <button onclick="supabase.auth.signOut().then(() => location.href='/auth/login.html')" style="background:none; border:1px solid var(--rust); color:var(--rust); padding:5px 12px; border-radius:4px; cursor:pointer;">Log out</button>
+    <button onclick="sb.auth.signOut().then(() => location.href='/auth/login.html')" style="background:none; border:1px solid var(--rust); color:var(--rust); padding:5px 12px; border-radius:4px; cursor:pointer;">Log out</button>
   </div>
 </nav>
 

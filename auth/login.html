@@ -24,27 +24,31 @@
 <body>
 
   <div class="card">
-    <h1>Staff login</h1>
+    <h1>Login</h1>
     <div id="loginContainer">
       <!-- 
     <p class="sub" id="sub">Enter your work mobile number to get a code</p>-->
 
       <!-- Fixed: Fixed mismatched single quote on style attribute -->
-      <div id="emailLogin" style="display:block;">
-        <input type="email" id="email" placeholder="Email">
-        <div class="error" id="email-error" style="display:none;"></div>
-        <button id="send-btn">Login</button>
-      </div>
+      <div class="email">
+        <div id="emailLogin" style="display:block;">
+          <input type="email" id="email" placeholder="Email">
+          <div class="error" id="email-error" style="display:none;"></div>
+          <div class="erorr" id="sub" style="display: block;"></div>
+          <button id="send-btn">Login</button>
+        </div>
 
-      <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_blue" data-size="large"
-        data-text="signin_with" data-width="284"> <!-- Set a specific pixel width to prevent it shifting shapes -->
-      </div>
+        <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="filled_blue"
+          data-size="large" data-text="signin_with" data-width="284">
+          <!-- Set a specific pixel width to prevent it shifting shapes -->
+        </div>
 
-      <div id="g_id_onload" data-client_id="252529151792-gpbslbg857o3l1eecsehrglc4vnk28db.apps.googleusercontent.com"
-        data-callback="handleCredentialResponse" data-auto_prompt="false">
-      </div>
+        <div id="g_id_onload" data-client_id="252529151792-gpbslbg857o3l1eecsehrglc4vnk28db.apps.googleusercontent.com"
+          data-callback="handleCredentialResponse" data-auto_prompt="false">
+        </div>
 
-      <div class="g_signin2" data-type="standard"></div>
+        <div class="g_signin2" data-type="standard"></div>
+      </div>
 
 
       <div id="mobileLogin" style="display:none;">
@@ -53,13 +57,13 @@
         <button onclick="sendOtpS()">Send OTP</button>
       </div>
 
-      <div id="otpInput" style="display:none;">
-        <!-- Hidden container required by MSG91 when exposeMethods is active -->
+      <!-- <div id="otpInput" style="display:none;">
+        <!-- Hidden container required by MSG91 when exposeMethods is active --
         <div id="ass"></div>
-        <input type="text" id="otp" placeholder="Enter 6-digit OTP">
+        <input type="text" id="otp-input" placeholder="Enter 6-digit OTP">
         <div class="error" id="otp-error" style="display:none;"></div>
         <button onclick="verifyOtp()">Verify</button>
-      </div>
+      </div> -->
 
       <!-- <button onclick="toggleMobileLogin()">Login with Email</button> -->
     </div>
@@ -72,17 +76,6 @@
     </div>
   </div>
 
-  <script>
-    // 4. Process the secure token after a user signs in
-    async function handleCredentialResponse(response) {
-      const { data, error } = await sb.auth.signInWithIdToken({
-        provider: 'google',
-        token: response.credential,
-      })
-      if (error) console.error(error)
-      else console.log('Logged in:', data.user)
-    }
-  </script>
   <!--
 <script type="text/javascript">
   var configuration = {
