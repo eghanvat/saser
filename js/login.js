@@ -9,14 +9,16 @@ if (redirect || referrer) {
   redirectTo = redirect ? redirect : referrer ? referrer : 'index.html'
 }
 
-if (window.google?.accounts?.id) {
+
+// Define this globally BEFORE the script tag parses
+window.onGoogleLibraryLoad = function () {
   google.accounts.id.initialize({
     client_id: "252529151792-gpbslbg857o3l1eecsehrglc4vnk28db.apps.googleusercontent.com",
     callback: handleCredentialResponse,
     auto_select: false,
   })
   google.accounts.id.renderButton(document.getElementById('g_id_signin'), { theme: 'filled_blue', size: 'large', width: '284px' })
-}
+};
 
 let currentEmail = '';
 

@@ -44,7 +44,10 @@ sb.auth.onAuthStateChange((event, session) => {
         $thirdLink.show();
     } else {
         loggedIn = true;
-        $('.topbar .username').text(session.user.email);
+        const displayName = session.user.user_metadata?.full_name
+            || session.user.user_metadata?.name
+            || session.user.email;
+        $('.topbar .username').text(displayName);
         $('.topbar').removeClass('hidden');
         $thirdLink.hide();
     }
