@@ -1,7 +1,7 @@
 const params = new URLSearchParams(window.location.search);
 const redirectTo = params.get('redirect') || '/kitchen.html';
 
-const el = id => document.getElementById(id);
+
 let currentEmail = '';
 
 el('send-btn').onclick = async () => {
