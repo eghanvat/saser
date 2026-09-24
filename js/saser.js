@@ -10,15 +10,17 @@ window.loggedIn = false;
 window.$ = $;
 
 //connections
-window.SUPABASE_URL = "https://rysxztcnnfxtuikymvyd.supabase.co";
-window.SUPABASE_ANON_KEY = "sb_publishable_9F7WBGfcVF9lYrEx9x7l_w_8hjhNNmq";
-window.VENDOR_ID = "d1100148-64b4-4d41-8930-af7029aa7726";
+export const SUPA = {
+    URL: "https://rysxztcnnfxtuikymvyd.supabase.co",
+    ANON_KEY: "sb_publishable_9F7WBGfcVF9lYrEx9x7l_w_8hjhNNmq",
+    VENDOR_ID: "d1100148-64b4-4d41-8930-af7029aa7726"
+}
+export const SB = createClient(SUPA.URL, SUPA.ANON_KEY);
 
-window.sb = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
 
 //sesions
 async function checkAuth() {
-    const { data: { session } } = await sb.auth.getSession();
+    const { data: { session } } = await SB.auth.getSession();
     if (!session) {
         //window.location.href = login + 'redirect=' + encodeURIComponent(window.location.pathname);
         return null;
@@ -27,15 +29,16 @@ async function checkAuth() {
 }
 
 function signOut() {
-    sb.auth.signOut().then(() => location.href = '/');
+    SB.auth.signOut().then(() => location.href = '/');
 }
 
 
 //logined bar
 $('.logoutBtn').on('click', signOut);
+
 const $thirdLink = $('.nav-links a:nth-child(4)');
 
-sb.auth.onAuthStateChange((event, session) => {
+SB.auth.onAuthStateChange((event, session) => {
     // The listener directly hands you the fresh session. 
     // No need to call checkAuth() or getSession() here!
     if (!session) {
@@ -44,7 +47,6 @@ sb.auth.onAuthStateChange((event, session) => {
         $thirdLink.show();
     } else {
         loggedIn = true;
-        
         const fullName = session.user.user_metadata?.full_name
             || session.user.user_metadata?.name
 
@@ -59,6 +61,7 @@ sb.auth.onAuthStateChange((event, session) => {
         $thirdLink.hide();
     }
 });
+
 
 //common functions across 
 window.checkAuth = checkAuth;

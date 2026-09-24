@@ -1,0 +1,46 @@
+:root {
+    --ink: #242119;
+    --paper: #EFEADA;
+    --paper-soft: #E6DFC9;
+    --brass: #AD803B;
+    --pine: #33463A;
+    --line: rgba(36, 33, 25, 0.14);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Work Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: inherit;
+}
+
+input {
+    width: 100%;
+    padding: 11px 12px;
+    font-size: 0.95rem;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: #fff;
+    margin-bottom: 12px;
+    font-family: 'Work Sans', sans-serif;
+}
+
+/** -- Buttons -- **/
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+html {
+    visibility: hidden;
+    opacity: 0;
+}

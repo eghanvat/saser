@@ -1,28 +1,3 @@
-:root {
-    --ink: #242119;
-    --paper: #EFEADA;
-    --paper-soft: #E6DFC9;
-    --brass: #AD803B;
-    --pine: #33463A;
-    --line: rgba(36, 33, 25, 0.14);
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: 'Work Sans', sans-serif;
-    -webkit-font-smoothing: antialiased;
-}
-
-a {
-    color: inherit;
-}
-
 .wrap {
     max-width: 1080px;
     margin: 0 auto;
@@ -296,10 +271,10 @@ footer {
 
 /* --- Logged In Bar --- */
 .topbar {
-    position: sticky;
+    position: fixed;
     top: 0;
     width: 100%;
-    height: 36px;
+    height: 2em;
     display: flex;
     align-items: center;
     justify-content: space-between;

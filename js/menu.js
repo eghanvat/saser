@@ -1,3 +1,4 @@
+import { SB, SUPA } from './saser.js'
 
 const params = new URLSearchParams(window.location.search);
 const contextType = params.get('type'); // 'table' or 'room' or null
@@ -96,6 +97,8 @@ function changeQty(id, delta, name, price) {
   renderCartDropdown();
 }
 
+window.changeQty = changeQty;
+
 function refreshQtyDisplay(id) {
   const el = document.getElementById(`qty-${id}`);
   if (!el) return;
@@ -126,10 +129,10 @@ function renderCartBar() {
   document.body.classList.add('has-cart');
   bar.innerHTML = `
     <span>${count} item(s) · ₹${total}</span>
-    <button class="order-btn" onclick="placeOrder()">Place order</button>
     <div class="btn-group">
       <button class="view-btn" onclick="toggleCartDropdown()">My Orders</button>
     </div>
+    <button class="order-btn">Place order</button>
     `;
   renderCartDropdown();
 }
@@ -156,14 +159,19 @@ function renderCartDropdown() {
       <span>Total</span>
       <span>₹${total}</span>
     </div>
-    <button class="order-btn" onclick="placeOrder()">Place order</button>
+    <button class="order-btn"">Place order</button>
     <div class="drop-close"><button class="close-btn" onclick="toggleCartDropdown()">Close</button></div>
   `;
 }
 
+window.renderCartDropdown = renderCartDropdown;
+window.toggleCartDropdown = toggleCartDropdown;
+
 function toggleCartDropdown() {
   document.getElementById('cart-dropdown').classList.toggle('open');
 }
+
+$(document).on("click", ".order-btn", placeOrder);
 
 async function placeOrder() {
   let type = contextType;
@@ -180,14 +188,14 @@ async function placeOrder() {
 
 
   try {
-    const orderRes = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
+    const orderRes = await fetch(`${SUPA.URL}/rest/v1/orders`, {
       method: 'POST',
       headers: {
-        apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        apikey: SUPA.ANON_KEY, Authorization: `Bearer ${SUPA.ANON_KEY}`,
         'Content-Type': 'application/json', Prefer: 'return=representation'
       },
       body: JSON.stringify({
-        vendor_id: VENDOR_ID,
+        vendor_id: SUPA.VENDOR_ID,
         source_type: type,
         table_number: type === 'table' ? Number(num) : null,
         room_number: type === 'room' ? num : null
@@ -199,9 +207,9 @@ async function placeOrder() {
     if (!order) throw new Error("No order returned from Supabase");
 
     const items = cart.map(c => ({ order_id: order.id, item_id: c.item_id, item_name: c.name, price: c.price, quantity: c.qty }));
-    const itemsRes = await fetch(`${SUPABASE_URL}/rest/v1/order_items`, {
+    const itemsRes = await fetch(`${SUPA.URL}/rest/v1/order_items`, {
       method: 'POST',
-      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, 'Content-Type': 'application/json' },
+      headers: { apikey: SUPA.ANON_KEY, Authorization: `Bearer ${SUPA.ANON_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify(items)
     });
 
@@ -216,7 +224,7 @@ async function placeOrder() {
 }
 
 async function loadMenu() {
-  const configured = SUPABASE_URL.startsWith("http") && SUPABASE_ANON_KEY.length > 10;
+  const configured = SUPA.URL.startsWith("http") && SUPA.ANON_KEY.length > 10;
 
   if (contextType && contextNum) {
     const b = document.getElementById('context-banner');
@@ -232,11 +240,11 @@ async function loadMenu() {
 
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/menu_items?vendor_id=eq.${VENDOR_ID}&select=*,menu_categories(name,sort_order)&order=category_id`,
+      `${SUPA.URL}/rest/v1/menu_items?vendor_id=eq.${SUPA.VENDOR_ID}&select=*,menu_categories(name,sort_order)&order=category_id`,
       {
         headers: {
-          "apikey": SUPABASE_ANON_KEY,
-          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+          "apikey": SUPA.ANON_KEY,
+          "Authorization": `Bearer ${SUPA.ANON_KEY}`
         }
       }
     );
