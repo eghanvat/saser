@@ -57,11 +57,11 @@ function render(categories) {
              ₹${item.price}
              <div class="qty-control" id="qty-${item.id}">
                ${qty > 0 ? `
-                 <button onclick="changeQty('${item.id}', -1)">−</button>
+                 <button onclick="changeQty('${item.id}', -1,'','', this)">−</button>
                  <span>${qty}</span>
-                 <button onclick="changeQty('${item.id}', 1, '${item.name}', ${item.price})">+</button>
+                 <button onclick="changeQty('${item.id}', 1, '${item.name}', ${item.price}, this)">+</button>
                ` : `
-                 <button onclick="changeQty('${item.id}', 1, '${item.name}', ${item.price})">+</button>
+                 <button onclick="changeQty('${item.id}', 1, '${item.name}', ${item.price}, this)">+</button>
                `}
              </div>
            </div>`
@@ -84,7 +84,10 @@ function render(categories) {
   });
 }
 
-function changeQty(id, delta, name, price) {
+function changeQty(id, delta, name, price, el) {
+  animateOrder(name, price, el);
+  console.log($(el).position());
+
   let existing = cart.find(c => c.item_id === id);
   if (!existing && delta > 0) {
     cart.push({ item_id: id, name, price, qty: 1 });
@@ -95,6 +98,43 @@ function changeQty(id, delta, name, price) {
   renderCartBar();
   refreshQtyDisplay(id);
   renderCartDropdown();
+}
+
+function animateOrder(name, price, el) {
+  var btnPosition = $(el).position();
+
+  // 2. Create the temporary div right on top of the button
+  var $animDiv = $('<div class="animDiv item">' + name + price + '</div>').css({
+    top: btnPosition.top + "px",
+  });
+
+
+  $(el).closest('div.item').effect('shake', {}, 500, function () {
+    $('.topbar').append($animDiv);
+    // 3. Animate it moving up (reducing 'top') and fading out
+    $animDiv.animate({
+      "top": "80px", // Moves 80px upwards
+    }, 1000, "swing", function () {
+      $animDiv.remove();
+    })
+  });
+
+
+  // //var btnPosition = $(el).position();
+
+  // // 2. Create the temporary div right on top of the button
+  // var $animDiv = $('<div class="animDiv item">' + name + price + '</div>').css({
+  //   top: btnPosition.top + "px",
+  // });
+
+  // $('.topbar').append($animDiv);
+
+  // // 3. Animate it moving up (reducing 'top') and fading out
+  // $animDiv.animate({
+  //   "top": "80px", // Moves 80px upwards
+  // }, 1000, "swing", function () {
+  //   $animDiv.remove();
+  // })
 }
 
 window.changeQty = changeQty;
