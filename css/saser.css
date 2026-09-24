@@ -337,3 +337,24 @@ footer {
 .topbar .logoutBtn:hover {
     background: #dc2626;
 }
+
+
+/** emojis **/
+.emj {
+  /* Scales perfectly with the surrounding font size */
+  height: 1.25em; 
+  width: 1.25em;
+  
+  /* Aligns the emoji vertically with the middle of the text */
+  vertical-align: -0.2em; 
+  
+  /* Ensures crisp scaling on high-resolution/Retina screens */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  
+  /* Prevents the emoji from stretching or distorting */
+  object-fit: contain; 
+  
+  /* Allows smooth sizing changes if font sizes change dynamically */
+  transition: all 0.2s ease-in-out;
+}

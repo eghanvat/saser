@@ -54,7 +54,7 @@ sb.auth.onAuthStateChange((event, session) => {
 
         const displayName = rawName.charAt(0).toUpperCase() + rawName.slice(1).toLowerCase();
 
-        $('.topbar .username').text(displayName);
+        $('.topbar .username .username').text(displayName);
         $('.topbar').removeClass('hidden');
         $thirdLink.hide();
     }
