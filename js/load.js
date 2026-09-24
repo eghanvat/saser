@@ -49,6 +49,7 @@ $.get("/part/head.html", function (data) {
 $.get('/part/nav.html', function (data) {
     $('body').prepend(data);
 })
+
 $.get("/part/loginbar.html", function (data) {
     $('body').prepend(data);
 })

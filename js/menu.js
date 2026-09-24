@@ -132,7 +132,9 @@ function renderCartBar() {
     <div class="btn-group">
       <button class="view-btn" onclick="toggleCartDropdown()">My Orders</button>
     </div>
-    <button class="order-btn">Place order</button>
+    <div class="btn-order">
+      <button class="order-btn">Place order</button>
+    </div>
     `;
   renderCartDropdown();
 }

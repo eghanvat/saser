@@ -56,7 +56,13 @@ SB.auth.onAuthStateChange((event, session) => {
 
         const displayName = rawName.charAt(0).toUpperCase() + rawName.slice(1).toLowerCase();
 
+        const avatarUrl = session.user?.user_metadata?.avatar_url || session.user?.user_metadata?.picture;
+
+        // Use avatarUrl in your image tag
+        console.log(avatarUrl);
+
         $('.topbar .username .username').text(displayName);
+        $('.topbar #profile img').attr('src', avatarUrl);
         $('.topbar').removeClass('hidden');
         $thirdLink.hide();
     }
