@@ -280,10 +280,12 @@ footer {
     width: 100%;
     height: 3em;
     padding: 10px 16px;
-    background: #1e293b;
+    background: var(--paper-d);
     color: #fff;
     z-index: 100;
     box-sizing: border-box;
+    border-bottom-left-radius: 24%;
+    border-bottom-right-radius: 24%;
 }
 
 .topbar.hidden {

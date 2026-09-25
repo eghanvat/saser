@@ -34,7 +34,7 @@ async function loadMenu() {
 
   try {
     const res = await fetch(
-      `${SUPA.URL}/rest/v11/menu_items?vendor_id=eq.${SUPA.VENDOR_ID}&select=*,menu_categories(name,sort_order)&order=category_id`,
+      `${SUPA.URL}/rest/v1/menu_items?vendor_id=eq.${SUPA.VENDOR_ID}&select=*,menu_categories(name,sort_order)&order=category_id`,
       {
         headers: {
           "apikey": SUPA.ANON_KEY,

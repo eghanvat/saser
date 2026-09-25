@@ -52,14 +52,56 @@
 }
 
 
+
 :root {
+    /* ==========================================================================
+         1. ORIGINAL THEME COLORS
+         ========================================================================== */
     --ink: #242119;
     --paper: #EFEADA;
     --paper-soft: #E6DFC9;
     --brass: #AD803B;
     --pine: #33463A;
     --line: rgba(36, 33, 25, 0.14);
+    --paper-d: #dcd3b59e;
+
+    /* ==========================================================================
+         2. COMPATIBLE EXTENSIONS
+         ========================================================================== */
+
+    /* Deep Tones & Shadows (Headings, dark UI, high contrast) */
+    --charcoal-warm: #332F26;
+    --oxblood: #4A2522;
+    --forest-deep: #1E2A21;
+    --espresso: #3D2E24;
+
+    /* Muted Mid-Tones (Secondary text, borders, icons) */
+    --moss: #556B52;
+    --clay: #8C6D58;
+    --ochre: #B8860B;
+    --sage: #8A9A86;
+
+    /* Warm Accents & Highlights (CTAs, links, badges, states) */
+    --gold-leaf: #D4A356;
+    --terracotta: #B35D46;
+    --amber: #C97D34;
+    --copper: #A0522D;
+    --gold-leaf-tint: #ba893ba2;
+    /* Light Backgrounds & Sheets (Cards, panels, inputs) */
+    --parchment: #F9F7F0;
+    --alabaster: #F0EAE1;
+    --sand: #DFD8C4;
+
+    /* ==========================================================================
+         3. ALPHA TINTS (Transparencies for hovers, selections, overlays)
+         ========================================================================== */
+    --ink-tint-hover: rgba(36, 33, 25, 0.05);
+    --ink-tint-focus: rgba(36, 33, 25, 0.08);
+    --brass-tint-select: rgba(173, 128, 59, 0.15);
+    --pine-tint-soft: rgba(51, 70, 58, 0.10);
+    --terracotta-tint: rgba(179, 93, 70, 0.12);
 }
+
 
 * {
     box-sizing: border-box;
