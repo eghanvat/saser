@@ -1,3 +1,57 @@
+/* ==========================================================================
+   1. GEIST SANS (For body text and headings)
+   ========================================================================== */
+@font-face {
+    font-family: 'Geist Sans';
+    src: url('./fonts/geist-sans/Geist-Variable.woff2') format('woff2-variations'),
+        url('./fonts/geist-sans/Geist-Variable.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Geist Sans';
+    src: url('./fonts/geist-sans/Geist-VariableItalic.woff2') format('woff2-variations'),
+        url('./fonts/gesit-sans/Geist-VariableItalic.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* ==========================================================================
+   2. GEIST MONO (For code and technical UI elements)
+   ========================================================================== */
+@font-face {
+    font-family: 'Geist Mono';
+    src: url('./fonts/geist-mono/GeistMono-Variable.woff2') format('woff2-variations'),
+        url('./fonts/geist-mono/GeistMono-Variable.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Geist Mono';
+    src: url('./fonts/geist-mono/GeistMono-VariableItalic.woff2') format('woff2-variations'),
+        url('./fonts/gesit-mono/GeistMono-VariableItalic.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* ==========================================================================
+   3. GEIST PIXEL (For display headings or retro styling)
+   ========================================================================== */
+@font-face {
+    font-family: 'Geist Pixel';
+    src: url('./fonts/geist-pixel/GeistPixel-Square.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+
 :root {
     --ink: #242119;
     --paper: #EFEADA;
@@ -11,13 +65,49 @@
     box-sizing: border-box;
 }
 
+/* Universal defaults */
 body {
+    font-family: 'Geist Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-feature-settings: "liga" 1, "calt" 1, "ss02" 1;
+    /* Enables Swiss geometry hooks */
+    -webkit-font-smoothing: antialiased;
     margin: 0;
     background: var(--paper);
     color: var(--ink);
-    font-family: 'Work Sans', sans-serif;
-    -webkit-font-smoothing: antialiased;
 }
+
+/* Code structures automatically get the Mono look */
+code,
+pre {
+    font-family: 'Geist Mono', monospace;
+    /* Vercel default code feature overrides: zero with a dot/slash, tabular numbers */
+    font-feature-settings: "liga" 0, "calt" 0, "zero" 1, "tnum" 1;
+}
+
+/* Pixel variant for headers, hero titles, or retro banners */
+.hero-title {
+    font-family: 'Geist Pixel', monospace;
+}
+
+/* Testing the Variable font weight ranges */
+h1 {
+    font-weight: 600;
+    font-size: 48px;
+}
+
+/* Triggers Black without a separate file */
+h2 {
+    font-weight: 500;
+    font-size: 48px;
+}
+
+/* Triggers Bold */
+p {
+    font-weight: 400;
+}
+
+/* Triggers Regular */
+
 
 a {
     color: inherit;
@@ -31,7 +121,7 @@ input {
     border-radius: 4px;
     background: #fff;
     margin-bottom: 12px;
-    font-family: 'Work Sans', sans-serif;
+    font-family: 'Geist Sans', sans-serif;
 }
 
 /** -- Buttons -- **/
@@ -43,4 +133,31 @@ button:disabled {
 html {
     visibility: hidden;
     opacity: 0;
+}
+
+/** Loader **/
+.center-load {
+    margin: 0 auto;
+    padding: 3em;
+
+    .msg-load {
+        max-width: fit-content;
+        margin-inline: auto;
+    }
+}
+
+.spinner {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    border: 3px solid var(--line);
+    border-top-color: var(--brass);
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

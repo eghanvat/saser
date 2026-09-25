@@ -8,6 +8,7 @@
 .wrap-top {
     margin-top: 3em;
 }
+
 nav.wrap {
     display: flex;
     align-items: center;
@@ -17,7 +18,7 @@ nav.wrap {
 }
 
 .brand {
-    font-family: 'Fraunces', serif;
+    font-family: 'Geist Sans', serif;
     font-weight: 600;
     font-size: 1.35rem;
     letter-spacing: 0.01em;
@@ -51,7 +52,7 @@ header.wrap {
 }
 
 h1 {
-    font-family: 'Fraunces', serif;
+    font-family: 'Geist Sans', serif;
     font-weight: 500;
     font-size: clamp(2.2rem, 4vw, 3.4rem);
     line-height: 1.08;
@@ -143,7 +144,7 @@ section.features {
 }
 
 .feature h3 {
-    font-family: 'Fraunces', serif;
+    font-family: 'Geist Sans', serif;
     font-weight: 500;
     font-size: 1.2rem;
     margin: 0 0 10px;

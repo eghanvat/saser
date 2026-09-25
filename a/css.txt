@@ -1,0 +1,851 @@
+Method	Center Axis	Parent Style Changes?	Best Use Case
+Grid	Both (X & Y)	Yes (applied to parent)	Modals, landing page heroes, full-screen centering
+Flexbox	Both (X & Y)	Yes (applied to parent)	Navigation components, card structures, dynamic layouts
+Fit-Content	Horizontal (X)	No (applied directly to child)	Text blocks or images nested inside article paragraphs
+• Normalize.css: A modular stylesheet that corrects cross-browser inconsistencies in default element styles while preserving useful built-in behaviors.
+• Modern-normalize: A lightweight, updated version of Normalize.css tailored specifically for modern evergreen browsers by stripping legacy code.
+• Preflight: The aggressive, component-flattening base reset built into Tailwind CSS that strips all default margins and font styles.
+• Andy Bell's Modern CSS Reset: A concise, copy-pasteable snippet focusing on modern layout requirements and accessibility preferences like reduced motion.
+• Ress: A hybrid reset that maintains basic browser structures while universally applying box-sizing fixes and clearing common form element variances.
+• Eric Meyer's CSS Reset: The classic, aggressive historical framework that forcefully wipes out all margins, paddings, and styles to create a zeroed-out canvas.
+• Sanitize.css: A co-developed alternative to Normalize that styles elements to match immediate, predictable developer expectations rather than browser defaults.
+sass -  variables, nested rules, mixins, inline imports, and inheritance
+[postCss, less, stylus, lightiningcss]
+
+🎨 The Two Core Syntaxes
+Sass supports two distinct syntaxes, which can be interchanged based on preference:
+• SCSS (Sassy CSS): Uses the .scss file extension. It is a strict superset of CSS syntax, meaning every valid CSS stylesheet is a valid SCSS file. It uses traditional curly braces {} and semicolons ;.
+• Indented Syntax (Sass): Uses the .sass file extension. It relies on indentation instead of curly braces and newlines instead of semicolons to define code blocks, offering a cleaner and quicker typing environment.
+🛠️ Core Directives and At-Rules
+• @use (Loads mixins, functions, and variables from other Sass stylesheets)
+• @forward (Loads a stylesheet and makes its functions/mixins available when the parent sheet is imported)
+• @import (Older method for linking files; largely replaced by @use)
+• @mixin (Defines reusable blocks of styles)
+• @include (Applies a defined @mixin block to a selector)
+• @function (Defines custom mathematical or logical calculation blocks)
+• @return (Outputs the final calculation value inside a custom function)
+• @extend (Inherits the styles of another selector or placeholder)
+• @error (Throws a compilation error with a custom message)
+• @warn (Displays a non-breaking terminal warning during compilation)
+• @debug (Prints the value of a variable or expression to the terminal for debugging)
+• @at-root (Emits styles at the root level of the document, breaking out of nested nesting layers)
+🎛️ Control Flow and Conditions
+• @if
+• @else if
+• @else
+• @each (Iterates through lists or maps)
+• @for (Runs a loop across a fixed numerical range)
+• @while (Runs a loop continuously while a condition evaluates to true)
+📥 Built-In Function Modules
+Sass provides native built-in utility functions categorized into core modules. When using modern Sass, these are called using the @use "sass:module" syntax.
+sass:color
+• color.adjust()
+• color.scale()
+• color.change()
+• color.complement()
+• color.invert()
+• color.mix()
+• color.grayscale()
+• color.red(), color.green(), color.blue()
+• color.hue(), color.saturation(), color.lightness()
+• color.alpha()
+sass:list
+• list.append()
+• list.index()
+• list.join()
+• list.length()
+• list.nth()
+• list.set-nth()
+• list.zip()
+sass:map
+• map.get()
+• map.set()
+• map.merge()
+• map.remove()
+• map.keys()
+• map.values()
+• map.has-key()
+sass:math
+• math.abs()
+• math.ceil(), math.floor(), math.round()
+• math.max(), math.min()
+• math.pow(), math.sqrt()
+• math.sin(), math.cos(), math.tan()
+• math.percentage()
+• math.div()
+• math.is-unitless(), math.compatible()
+sass:string
+• string.insert()
+• string.index()
+• string.length()
+• string.slice()
+• string.to-upper-case(), string.to-lower-case()
+• string.unique-id()
+sass:meta
+• meta.type-of()
+• meta.inspect()
+• meta.variable-exists(), meta.global-variable-exists()
+• meta.function-exists(), meta.mixin-exists()
+• meta.get-mixin(), meta.get-function()
+• meta.content-exists()
+🔑 Core Concepts and Operators
+• $ (Variable declaration symbol, e.g., $primary-color: #3498db;)
+• #{$variable} (Interpolation syntax used to inject variables into selectors or property names)
+• %placeholder (Silent selectors used strictly for inheritance with @extend; they do not compile to CSS directly)
+• & (Parent selector reference token used inside nested rules)
+• ==, != (Equality operators)
+• <, >, <=, >= (Relational operators)
+• +, -, *, / (Mathematical operators)
+• and, or, not (Boolean logical operators)
+
+tailwind shadcnui daisyui
+bootstrap
+bulma
+openprops
+chakra => react
+foundation -> enterprise
+materialize css -> google
+Semantic UI / Fomantic-UI -> human words.
+pico css
+pure css -> yahoo
+skeleton -> simple grid
+
+
+CSS Animation Properties
+• animation-name
+• animation-duration
+• animation-timing-function
+• animation-delay
+• animation-iteration-count
+• animation-direction
+• animation-fill-mode
+• animation-play-state
+• animation (shorthand)
+CSS Animation Timing Functions
+• linear
+• ease
+• ease-in
+• ease-out
+• ease-in-out
+• cubic-bezier(p1, p2, p3, p4)
+• steps(number, direction)
+• step-start
+• step-end
+
+• calc()
+• clamp()
+• min()
+• max()
+• abs()
+• sign()
+• mod()
+• rem()
+• round()
+• sin()
+• cos()
+• tan()
+• asin()
+• acos()
+• atan()
+• atan2()
+• pow()
+• sqrt()
+• hypot()
+• log()
+• exp()
+• attr()
+• var()
+• env()
+• url()
+• src()
+• linear-gradient()
+• radial-gradient()
+• conic-gradient()
+• repeating-linear-gradient()
+• repeating-radial-gradient()
+• repeating-conic-gradient()
+• image()
+• image-set()
+• cross-fade()
+• element()
+• paint()
+• matrix()
+• matrix3d()
+• translate()
+• translateX()
+• translateY()
+• translateZ()
+• translate3d()
+• scale()
+• scaleX()
+• scaleY()
+• scaleZ()
+• scale3d()
+• rotate()
+• rotateX()
+• rotateY()
+• rotateZ()
+• rotate3d()
+• skew()
+• skewX()
+• skewY()
+• perspective()
+• rgb()
+• rgba()
+• hsl()
+• hsla()
+• hwb()
+• lab()
+• lch()
+• oklab()
+• oklch()
+• color()
+• color-mix()
+• color-contrast()
+• device-cmyk()
+• light-dark()
+• contrast-color()
+• mix-color()
+• alpha()
+• symbols()
+• counters()
+• counter()
+• leader()
+• target-counter()
+• target-counters()
+• target-text()
+• anchor()
+• anchor-size()
+• scroll()
+• view()
+• fit-content()
+• minmax()
+• repeat()
+• subgrid()
+• path()
+• ray()
+• rect()
+• inset()
+• circle()
+• ellipse()
+• polygon()
+• blur()
+• brightness()
+• contrast()
+• drop-shadow()
+• grayscale()
+• hue-rotate()
+• invert()
+• opacity()
+• saturate()
+• sepia()
+• format()
+• tech()
+• local()
+
+• px
+• cm
+• mm
+• in
+• pt
+• pc
+• em
+• rem
+• ex
+• ch
+• cap
+• ic
+• lh
+• rlh
+• vw
+• vh
+• vmin
+• vmax
+• vi
+• vb
+• svw
+• svh
+• lvw
+• lvh
+• dvw
+• dvh
+• cqw
+• cqh
+• cqi
+• cqb
+• cqmin
+• cqmax
+• %
+• deg
+• rad
+• grad
+• turn
+• s
+• ms
+• Hz
+• kHz
+• dpi
+• dpcm
+• dppx
+• x
+• fr
+
+
+Text and Typography
+• font-family
+• font-size
+• font-weight
+• font-style
+• font-variant
+• font-stretch
+• line-height
+• text-align
+• text-align-last
+• text-decoration
+• text-decoration-line
+• text-decoration-color
+• text-decoration-style
+• text-decoration-thickness
+• text-underline-offset
+• text-transform
+• text-indent
+• text-shadow
+• text-overflow
+• letter-spacing
+• word-spacing
+• white-space
+• word-break
+• overflow-wrap
+• writing-mode
+• direction
+• unicode-bidi
+Box Model and Layout
+• width
+• height
+• min-width
+• max-width
+• min-height
+• max-height
+• margin
+• margin-top
+• margin-right
+• margin-bottom
+• margin-left
+• padding
+• padding-top
+• padding-right
+• padding-bottom
+• padding-left
+• box-sizing
+• display
+• position
+• top
+• right
+• bottom
+• left
+• z-index
+• float
+• clear
+• visibility
+• overflow
+• overflow-x
+• overflow-y
+• clip-path
+• resize
+Borders and Outlines
+• border
+• border-width
+• border-style
+• border-color
+• border-top
+• border-right
+• border-bottom
+• border-left
+• border-radius
+• border-image
+• border-collapse
+• border-spacing
+• outline
+• outline-width
+• outline-style
+• outline-color
+• outline-offset
+Backgrounds and Colors
+• color
+• background
+• background-color
+• background-image
+• background-repeat
+• background-attachment
+• background-position
+• background-size
+• background-origin
+• background-clip
+• background-blend-mode
+• box-shadow
+• opacity
+Transitions and Transforms
+• transition
+• transition-property
+• transition-duration
+• transition-timing-function
+• transition-delay
+• transform
+• transform-origin
+• transform-style
+• perspective
+• perspective-origin
+• backface-visibility
+Visual Effects and Filters
+• filter
+• backdrop-filter
+• mix-blend-mode
+• isolation
+• mask
+• mask-image
+• mask-mode
+• mask-repeat
+• mask-position
+• mask-size
+• mask-composite
+• mask-clip
+• mask-origin
+• mask-type
+Logical Properties
+• margin-block
+• margin-inline
+• padding-block
+• padding-inline
+• border-block
+• border-inline
+• inline-size
+• block-size
+• min-inline-size
+• min-block-size
+• max-inline-size
+• max-block-size
+• inset
+• inset-block
+• inset-inline
+Interactivity and UI
+• cursor
+• user-select
+• pointer-events
+• accent-color
+• caret-color
+• scroll-behavior
+• scroll-snap-type
+• scroll-snap-align
+• scroll-margin
+• scroll-padding
+• touch-action
+• appearance
+• content-visibility
+• contain
+Lists and Tables
+• list-style
+• list-style-type
+• list-style-position
+• list-style-image
+• caption-side
+• empty-cells
+• table-layout
+Generated Content
+• content
+• quotes
+• counter-reset
+• counter-increment
+• counter-set
+SVG and Printing
+• fill
+• stroke
+• stroke-width
+• stroke-dasharray
+• stroke-dashoffset
+• stroke-linecap
+• stroke-linejoin
+• page-break-before
+• page-break-after
+• page-break-inside
+• break-before
+• break-after
+• break-inside
+
+
+Global Values
+• inherit
+• initial
+• revert
+• revert-layer
+• unset
+Media Query Features
+• any-hover
+• any-pointer
+• aspect-ratio
+• color
+• color-gamut
+• color-index
+• display-mode
+• dynamic-range
+• forced-colors
+• grid
+• height
+• hover
+• inverted-colors
+• monochrome
+• orientation
+• overflow-block
+• overflow-inline
+• pointer
+• prefers-color-scheme
+• prefers-contrast
+• prefers-reduced-data
+• prefers-reduced-motion
+• prefers-reduced-transparency
+• resolution
+• scripting
+• update
+• video-dynamic-range
+• width
+Container Query Features
+• inline-size
+• size
+• width
+• height
+• aspect-ratio
+• orientation
+Color Keywords and System Colors
+• transparent
+• currentcolor
+• Canvas
+• CanvasText
+• LinkText
+• VisitedText
+• ActiveText
+• ButtonFace
+• ButtonText
+• ButtonBorder
+• Field
+• FieldText
+• Highlight
+• HighlightText
+• Mark
+• MarkText
+• GrayText
+Font Descriptors (For @font-face)
+• font-display
+• src
+• unicode-range
+• font-variant-alternates
+• font-variant-ligatures
+• font-variant-numeric
+• font-variant-east-asian
+• font-feature-settings
+• font-variation-settings
+• ascent-override
+• descent-override
+• line-gap-override
+• size-adjust
+Counter Style Descriptors (For @counter-style)
+• system
+• symbols
+• additive-symbols
+• negative
+• prefix
+• suffix
+• range
+• pad
+• fallback
+• speak-as
+Custom Property Descriptors (For @property)
+• syntax
+• inherits
+• initial-value
+Multi-Column Layout
+• columns
+• column-width
+• column-count
+• column-fill
+• column-rule
+• column-rule-width
+• column-rule-style
+• column-rule-color
+• column-span
+Scrollbars and Paged Media
+• scrollbar-color
+• scrollbar-width
+• size
+• marks
+• bleed
+Anchor Positioning (Item Properties)
+• anchor-name
+• position-anchor
+• position-area
+• position-try-options
+• position-try-order
+View Transitions
+• view-transition-name
+
+
+Mathematical and Coordinate Properties (Motion Path)
+• offset
+• offset-path
+• offset-distance
+• offset-position
+• offset-anchor
+• offset-rotate
+Individual Transform Properties
+• translate
+• rotate
+• scale
+Math Function Constants
+• e
+• pi
+Font Palette Descriptors (For @font-palette-values)
+• font-family
+• base-palette
+• override-colors
+Color-Profile Descriptors (For @color-profile)
+• src
+• rendering-intent
+Fragmented Layout (Regions and Pagination)
+• box-decoration-break
+• orphans
+• widows
+Text Rendering and Editing
+• text-rendering
+• text-justify
+• text-orientation
+• text-combine-upright
+• text-emphasis
+• text-emphasis-style
+• text-emphasis-color
+• text-emphasis-position
+• text-size-adjust
+• line-break
+• hyphens
+• hyphenate-character
+• hyphenate-limit-chars
+Visual Formatting Details
+• image-orientation
+• image-rendering
+• image-resolution
+• object-fit
+• object-position
+Table-Specific Properties
+• speak-header
+Speech and Auditory Properties (Aural CSS)
+• voice-volume
+• voice-balance
+• voice-rate
+• voice-pitch
+• voice-range
+• voice-stress
+• voice-duration
+• voice-family
+• speech-rate
+• voice-keyframe
+
+• @charset
+• @import
+• @namespace
+• @media
+• @supports
+• @document
+• @page
+• @font-face
+• @keyframes
+• @viewport
+• @counter-style
+• @font-feature-values
+• @font-palette-values
+• @layer
+• @property
+• @container
+• @position-try
+• @scope
+• @starting-style
+• @import-map
+
+Grid Container Properties
+• display: grid;
+• display: inline-grid;
+• grid-template-columns
+• grid-template-rows
+• grid-template-areas
+• grid-template (shorthand)
+• grid-column-gap
+• grid-row-gap
+• grid-gap (shorthand)
+• column-gap
+• row-gap
+• gap (shorthand)
+• justify-items
+• align-items
+• place-items (shorthand)
+• justify-content
+• align-content
+• place-content (shorthand)
+• grid-auto-columns
+• grid-auto-rows
+• grid-auto-flow
+• grid (shorthand)
+Grid Item Properties
+• grid-column-start
+• grid-column-end
+• grid-row-start
+• grid-row-end
+• grid-column (shorthand)
+• grid-row (shorthand)
+• grid-area
+• justify-self
+• align-self
+• place-self (shorthand)
+CSS Functions Used with Grid
+• repeat()
+• minmax()
+• fit-content()
+Grid Keywords and Units
+• fr
+• span
+• auto-fill
+• auto-fit
+• min-content
+• max-content
+• subgrid
+
+
+Flexbox Container Properties (Parent)
+• display: flex;
+• display: inline-flex;
+• flex-direction
+• flex-wrap
+• flex-flow (shorthand)
+• justify-content
+• align-items
+• align-content
+• gap
+• row-gap
+• column-gap
+Flexbox Item Properties (Children)
+• order
+• flex-grow
+• flex-shrink
+• flex-basis
+• flex (shorthand)
+• align-self
+Flexbox Keywords and Values
+• row
+• row-reverse
+• column
+• column-reverse
+• nowrap
+• wrap
+• wrap-reverse
+• flex-start
+• flex-end
+• center
+• space-between
+• space-around
+• space-evenly
+• stretch
+• baseline
+• auto
+
+• *
+• element
+• .class
+• #id
+• element, element
+• element element
+• element > element
+• element + element
+• element ~ element
+• [attribute]
+• [attribute="value"]
+• [attribute~="value"]
+• [attribute|="value"]
+• [attribute^="value"]
+• [attribute$="value"]
+• [attribute*="value"]
+• :active
+• :any-link
+• :autofill
+• :blank
+• :checked
+• :current
+• :default
+• :defined
+• :dir()
+• :disabled
+• :empty
+• :enabled
+• :enter
+• :first
+• :first-child
+• :first-of-type
+• :fullscreen
+• :future
+• :focus
+• :focus-visible
+• :focus-within
+• :has()
+• :host
+• :host()
+• :host-context()
+• :hover
+• :in-range
+• :indeterminate
+• :invalid
+• :is()
+• :lang()
+• :last-child
+• :last-of-type
+• :left
+• :link
+• :local-link
+• :modal
+• :not()
+• :nth-child()
+• :nth-last-child()
+• :nth-last-of-type()
+• :nth-of-type()
+• :only-child
+• :only-of-type
+• :optional
+• :out-of-range
+• :past
+• :paused
+• :picture-in-picture
+• :placeholder-shown
+• :playing
+• :read-only
+• :read-write
+• :required
+• :right
+• :root
+• :scope
+• :target
+• :target-within
+• :user-invalid
+• :user-valid
+• :valid
+• :visited
+• :where()
+• ::after
+• ::backdrop
+• ::before
+• ::cue
+• ::cue-region
+• ::first-letter
+• ::first-line
+• ::file-selector-button
+• ::grammar-error
+• ::marker
+• ::part()
+• ::placeholder
+• ::selection
+• ::slotted()
+• ::spelling-error
+• ::target-text
+• ::view-transition

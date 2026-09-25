@@ -1,0 +1,4 @@
+• Simple Key - Value Strings: localStorage, sessionStorage, window.name, history.state.
+• Heavy - Duty Structured / Binary Data: IndexedDB, Origin Private File System(OPFS).
+• Network & System Resources: Cache API, Cookies, File System Access API.
+• Environment - Specific Environments: Extension Storage(chrome.storage), Privacy Sandbox(Shared Storage).

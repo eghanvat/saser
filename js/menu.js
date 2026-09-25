@@ -9,10 +9,61 @@ let cart = [];
 
 
 const root = document.getElementById('menu-root');
-const statusEl = document.getElementById('status');
+const loading = $('#status');
 
 function slugify(text) {
   return text.toLowerCase().replace(/[^\w]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+/** Menu Loading */
+async function loadMenu() {
+
+  const configured = SUPA.URL.startsWith("http") && SUPA.ANON_KEY.length > 10;
+
+  if (contextType && contextNum) {
+    const b = document.getElementById('context-banner');
+    b.style.display = 'block';
+    b.textContent = contextType === 'table' ? `Ordering for Table ${contextNum}` : `Room service — Room ${contextNum}`;
+  }
+
+  if (!configured) {
+    statusEl.textContent = "Showing sample menu — connect Supabase to show live items.";
+    render(FALLBACK_MENU);
+    return;
+  }
+
+  try {
+    const res = await fetch(
+      `${SUPA.URL}/rest/v11/menu_items?vendor_id=eq.${SUPA.VENDOR_ID}&select=*,menu_categories(name,sort_order)&order=category_id`,
+      {
+        headers: {
+          "apikey": SUPA.ANON_KEY,
+          "Authorization": `Bearer ${SUPA.ANON_KEY}`
+        }
+      }
+    );
+    if (!res.ok) throw new Error("Fetch failed: " + res.status);
+
+    const items = await res.json();
+
+    if (!items.length) throw new Error("No items returned");
+
+    // Group flat item list by category name
+    const grouped = {};
+    items.forEach(item => {
+      const catName = item.menu_categories?.name || "Menu";
+      if (!grouped[catName]) grouped[catName] = [];
+      grouped[catName].push(item);
+    });
+    const categories = Object.keys(grouped).map(name => ({ category: name, items: grouped[name] }));
+
+    loading.remove();
+    render(categories);
+  } catch (err) {
+    loading.text("Live menu unavailable right now — showing sample menu.");
+    render(FALLBACK_MENU);
+    console.error(err);
+  }
 }
 
 function render(categories) {
@@ -262,53 +313,6 @@ async function placeOrder() {
   } catch (err) {
     console.error(err);
     alert("Couldn't place your order. Please try again — " + err.message);
-  }
-}
-
-async function loadMenu() {
-  const configured = SUPA.URL.startsWith("http") && SUPA.ANON_KEY.length > 10;
-
-  if (contextType && contextNum) {
-    const b = document.getElementById('context-banner');
-    b.style.display = 'block';
-    b.textContent = contextType === 'table' ? `Ordering for Table ${contextNum}` : `Room service — Room ${contextNum}`;
-  }
-
-  if (!configured) {
-    statusEl.textContent = "Showing sample menu — connect Supabase to show live items.";
-    render(FALLBACK_MENU);
-    return;
-  }
-
-  try {
-    const res = await fetch(
-      `${SUPA.URL}/rest/v1/menu_items?vendor_id=eq.${SUPA.VENDOR_ID}&select=*,menu_categories(name,sort_order)&order=category_id`,
-      {
-        headers: {
-          "apikey": SUPA.ANON_KEY,
-          "Authorization": `Bearer ${SUPA.ANON_KEY}`
-        }
-      }
-    );
-    if (!res.ok) throw new Error("Fetch failed: " + res.status);
-    const items = await res.json();
-    if (!items.length) throw new Error("No items returned");
-
-    // Group flat item list by category name
-    const grouped = {};
-    items.forEach(item => {
-      const catName = item.menu_categories?.name || "Menu";
-      if (!grouped[catName]) grouped[catName] = [];
-      grouped[catName].push(item);
-    });
-    const categories = Object.keys(grouped).map(name => ({ category: name, items: grouped[name] }));
-
-    statusEl.remove();
-    render(categories);
-  } catch (err) {
-    statusEl.textContent = "Live menu unavailable right now — showing sample menu.";
-    render(FALLBACK_MENU);
-    console.error(err);
   }
 }
 

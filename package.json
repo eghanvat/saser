@@ -20,5 +20,8 @@
   },
   "devDependencies": {
     "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "geist": "^1.7.2"
   }
 }

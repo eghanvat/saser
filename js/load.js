@@ -76,8 +76,6 @@ function loadPageHead() {
     }
 }
 
-
-
 function loadCss(csslist) {
     if (csslist) {
         if (Array.isArray(csslist)) {
