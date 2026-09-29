@@ -91,7 +91,7 @@ function render(categories) {
           <h2>${cat.category}</h2>
           <p class="count">${cat.items.length} item${cat.items.length === 1 ? '' : 's'}</p>
         </div>
-        <a class="back-to-top" onclick="document.getElementById('category-nav').scrollIntoView({behavior:'smooth', block:'start'})">↑ Back</a>
+        <a class="back-to-top" aria-haspopup="false" onclick="document.getElementById('category-nav').scrollIntoView({behavior:'smooth', block:'start'})">↑ Back</a>
       </div>
     `;
 
@@ -271,23 +271,25 @@ function shatter(clone, barB) {
 window.changeQty = changeQty;
 
 function refreshQtyDisplay(id) {
-  const el = document.getElementById(`qty-${id}`);
+  const el = $(`#qty-${id}`);
   if (!el) return;
   const item = cart.find(c => c.item_id === id);
   const qty = item ? item.qty : 0;
   // Re-fetch name/price from cart item if present, else leave button as +1 starter
   const name = item ? item.name : '';
   const price = item ? item.price : 0;
-  el.innerHTML = qty > 0
-    ? `<button onclick="changeQty('${id}', -1,'','',event)">−</button>
+  el.html(qty > 0
+    ? `<button onclick="changeQty('${id}', -1,'${name}',${price},event)">−</button>
       <span>${qty}</span><button onclick="changeQty('${id}', 1, '${name}', ${price}, event)">+</button>`
-    : `<button onclick="changeQty('${id}', 1, '${name}', ${price}, event)">+</button>`;
+    : `<button onclick="changeQty('${id}', 1, '${name}', ${price}, event)">+</button>`)
 }
 
 
 function renderCartBar() {
   const bar = $('#cart-bar');
+  console.log(cart);
   const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
+  console.log(total);
   const count = cart.reduce((s, c) => s + c.qty, 0);
 
   if (!count) {
@@ -322,7 +324,7 @@ function renderCartDropdown() {
     <div class="drop-item">
       <span>${c.name}</span>
       <div class="drop-qty">
-        <button onclick="changeQty('${c.item_id}', -1)">−</button>
+        <button onclick="changeQty('${c.item_id}', -1, '${c.name}', ${c.price})">−</button>
         <span>${c.qty}</span>
         <button onclick="changeQty('${c.item_id}', 1, '${c.name}', ${c.price})">+</button>
         <span class="drop-price">₹${c.price * c.qty}</span>
