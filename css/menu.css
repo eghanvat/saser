@@ -465,3 +465,57 @@ footer {
   padding: 20px;
   border-radius: 20px;
 }
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20%,
+  60% {
+    transform: translateX(-7px);
+  }
+
+  40%,
+  80% {
+    transform: translateX(7px);
+  }
+}
+
+.shake-element {
+  animation: shake 0.5s ease-in-out;
+}
+
+.item-clone {
+  position: absolute;
+  height: 50px;
+  background-color: var(--paper-soft);
+  margin: 0;
+  z-index: 9999;
+  transition: transform .7s ease-in-out;
+  display: none;
+  padding: 8px 16px;
+  border-radius: 15px;
+  border: 2px solid var(--line);
+}
+
+#shatter-target {
+  background: var(--paper-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Individual shard properties */
+.shard {
+  position: absolute;
+  background: var(--ochre);
+  /* Matches parent color */
+  pointer-events: none;
+  opacity: 1;
+  transform-origin: center center;
+  transition: transform 0.8s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.8s ease-out;
+}

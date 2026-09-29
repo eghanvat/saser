@@ -108,11 +108,11 @@ function render(categories) {
              ₹${item.price}
              <div class="qty-control" id="qty-${item.id}">
                ${qty > 0 ? `
-                 <button onclick="changeQty('${item.id}', -1,'','', this)">−</button>
+                 <button onclick="changeQty('${item.id}', -1,'','', event)">−</button>
                  <span>${qty}</span>
-                 <button onclick="changeQty('${item.id}', 1, '${item.name}', ${item.price}, this)">+</button>
+                 <button onclick="changeQty('${item.id}', 1, '${item.name}', ${item.price}, event)">+</button>
                ` : `
-                 <button onclick="changeQty('${item.id}', 1, '${item.name}', ${item.price}, this)">+</button>
+                 <button onclick="changeQty('${item.id}', 1, '${item.name}', ${item.price}, event)">+</button>
                `}
              </div>
            </div>`
@@ -135,10 +135,7 @@ function render(categories) {
   });
 }
 
-function changeQty(id, delta, name, price, el) {
-  animateOrder(name, price, el);
-  console.log($(el).position());
-
+function changeQty(id, delta, name, price, event) {
   let existing = cart.find(c => c.item_id === id);
   if (!existing && delta > 0) {
     cart.push({ item_id: id, name, price, qty: 1 });
@@ -146,48 +143,131 @@ function changeQty(id, delta, name, price, el) {
     existing.qty += delta;
     if (existing.qty <= 0) cart = cart.filter(c => c.item_id !== id);
   }
+
   renderCartBar();
+  animateOrder(id, delta, name, price, event);
   refreshQtyDisplay(id);
   renderCartDropdown();
+
 }
 
-function animateOrder(name, price, el) {
-  var btnPosition = $(el).position();
+function animateOrder(id, delta, name, price, event) {
+  var el = event.target;
+  var barB = $('#cart-bar').offset().top;
 
-  // 2. Create the temporary div right on top of the button
-  var $animDiv = $('<div class="animDiv item">' + name + price + '</div>').css({
-    top: btnPosition.top + "px",
+  var original = $(el).closest('div.item');
+  var clone = original.clone().addClass('item-clone');
+  clone.find('.item-price').remove();
+
+  let offset = original.offset();
+  let width = original.outerWidth();
+  let height = original.outerHeight();
+  let topD = offset.top;
+
+  clone.css({
+    'top': offset.top + 'px',
+    'left': offset.left + 'px',
+    'width': width + 'px',
+  }).appendTo('body');
+
+  if (delta <= 0) {
+    shatter(clone, barB);
+    return;
+  }
+  original.addClass('shake-element').on('animationend', function () {
+    $(this).removeClass('shake-element');
+
+    clone.css({
+      'display': 'flex',
+    });
+
+    setTimeout(function () {
+      clone.css({
+        'transform': `translateY(-${topD - barB}px)`
+      })
+    }, 10);
+
+    clone.one('transitionend', function () {
+      this.remove();
+    });
+  });
+}
+
+function shatter(clone, barB) {
+
+  clone.attr('id', 'shatter-target');
+
+  clone.css({
+    'top': barB + 'px',
   });
 
+  clone.css({
+    'display': 'block',
+  });
 
-  $(el).closest('div.item').effect('shake', {}, 500, function () {
-    $('.topbar').append($animDiv);
-    // 3. Animate it moving up (reducing 'top') and fading out
-    $animDiv.animate({
-      "top": "80px", // Moves 80px upwards
-    }, 1000, "swing", function () {
-      $animDiv.remove();
+  var h = $(window).height() / 2
+
+  setTimeout(function () {
+    clone.css({
+      'transform': `translateY(${h}px)`
     })
+  }, 10)
+
+  clone.one('transitionend', function () {
+    clone.trigger('click');
+  })
+
+  $('#shatter-target').on('click', function () {
+    let target = $(this);
+    let width = target.outerWidth();
+    let height = target.outerHeight();
+    let offset = target.offset();
+
+    // Define grid layout (e.g., 5 rows, 5 columns = 25 shards)
+    let rows = 5;
+    let cols = 5;
+    let shardW = width / cols;
+    let shardH = height / rows;
+
+    // 1. Generate the breaking pieces
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        let shard = $('<div class="shard"></div>');
+
+        // Position each piece exactly where it belongs inside the block
+        shard.css({
+          width: shardW + 'px',
+          height: shardH + 'px',
+          top: (offset.top + (r * shardH)) + 'px',
+          left: (offset.left + (c * shardW)) + 'px',
+        });
+
+        $('body').append(shard);
+
+        // 2. Explode the shard on the very next render frame
+        setTimeout(function () {
+          // Generate completely random explosion directions (X and Y trajectories)
+          let randX = (Math.random() - 0.5) * 400; // Scatter left or right up to 200px
+          let randY = (Math.random() - 0.5) * 400; // Scatter up or down up to 200px
+          let randRot = (Math.random() - 0.5) * 720; // Spin up to 360 degrees
+
+          shard.css({
+            'transform': `translate(${randX}px, ${randY}px) rotate(${randRot}deg) scale(0)`,
+            'opacity': '0'
+          });
+        }, 10);
+
+        // 3. Clean up the DOM by deleting the shards when done
+        shard.one('transitionend', function () {
+          $(this).remove();
+        });
+      }
+    }
+
+    // 4. Hide the original box completely as it breaks
+    target.remove();
   });
-
-
-  // //var btnPosition = $(el).position();
-
-  // // 2. Create the temporary div right on top of the button
-  // var $animDiv = $('<div class="animDiv item">' + name + price + '</div>').css({
-  //   top: btnPosition.top + "px",
-  // });
-
-  // $('.topbar').append($animDiv);
-
-  // // 3. Animate it moving up (reducing 'top') and fading out
-  // $animDiv.animate({
-  //   "top": "80px", // Moves 80px upwards
-  // }, 1000, "swing", function () {
-  //   $animDiv.remove();
-  // })
 }
-
 window.changeQty = changeQty;
 
 function refreshQtyDisplay(id) {
@@ -199,45 +279,46 @@ function refreshQtyDisplay(id) {
   const name = item ? item.name : '';
   const price = item ? item.price : 0;
   el.innerHTML = qty > 0
-    ? `<button onclick="changeQty('${id}', -1)">−</button><span>${qty}</span><button onclick="changeQty('${id}', 1, '${name}', ${price})">+</button>`
-    : `<button onclick="changeQty('${id}', 1, '${name}', ${price})">+</button>`;
+    ? `<button onclick="changeQty('${id}', -1,'','',event)">−</button>
+      <span>${qty}</span><button onclick="changeQty('${id}', 1, '${name}', ${price}, event)">+</button>`
+    : `<button onclick="changeQty('${id}', 1, '${name}', ${price}, event)">+</button>`;
 }
 
 
 function renderCartBar() {
-  const bar = document.getElementById('cart-bar');
+  const bar = $('#cart-bar');
   const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
   const count = cart.reduce((s, c) => s + c.qty, 0);
 
   if (!count) {
-    bar.classList.remove('visible');
-    document.body.classList.remove('has-cart');
-    document.getElementById('cart-dropdown').classList.remove('open');
+    bar.removeClass('visible');
+    $('body').removeClass('has-cart');
+    $('cart-dropdown').removeClass('open');
     return;
   }
 
-  bar.classList.add('visible');
-  document.body.classList.add('has-cart');
-  bar.innerHTML = `
-    <span>${count} item(s) · ₹${total}</span>
+  bar.addClass('visible');
+  $('body').addClass('has-cart');
+  bar.html(`
+    <span>${count} item · ₹${total}</span>
     <div class="btn-group">
       <button class="view-btn" onclick="toggleCartDropdown()">My Orders</button>
     </div>
     <div class="btn-order">
       <button class="order-btn">Place order</button>
     </div>
-    `;
+    `);
   renderCartDropdown();
 }
 
 function renderCartDropdown() {
-  const drop = document.getElementById('cart-dropdown');
+  const drop = $('#cart-dropdown');
   if (!cart.length) {
-    drop.innerHTML = `<div class="drop-item" style="border:none; justify-content:center; color:#8a8570;">Cart is empty</div>`;
+    drop.html(`<div class="drop-item" style="border:none; justify-content:center; color:#8a8570;">Cart is empty</div>`);
     return;
   }
   const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
-  drop.innerHTML = cart.map(c => `
+  drop.html(cart.map(c => `
     <div class="drop-item">
       <span>${c.name}</span>
       <div class="drop-qty">
@@ -254,14 +335,14 @@ function renderCartDropdown() {
     </div>
     <button class="order-btn"">Place order</button>
     <div class="drop-close"><button class="close-btn" onclick="toggleCartDropdown()">Close</button></div>
-  `;
+  `)
 }
 
 window.renderCartDropdown = renderCartDropdown;
 window.toggleCartDropdown = toggleCartDropdown;
 
 function toggleCartDropdown() {
-  document.getElementById('cart-dropdown').classList.toggle('open');
+  $('#cart-dropdown').toggleClass('open');
 }
 
 $(document).on("click", ".order-btn", placeOrder);
