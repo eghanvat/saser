@@ -145,7 +145,7 @@ function changeQty(id, delta, name, price, event) {
   }
 
   renderCartBar();
-  animateOrder(id, delta, name, price, event);
+  if (event) animateOrder(id, delta, name, price, event);
   refreshQtyDisplay(id);
   renderCartDropdown();
 
@@ -316,7 +316,9 @@ function renderCartBar() {
 function renderCartDropdown() {
   const drop = $('#cart-dropdown');
   if (!cart.length) {
-    drop.html(`<div class="drop-item" style="border:none; justify-content:center; color:#8a8570;">Cart is empty</div>`);
+    drop.html(`<div class="drop-item" style="border:none; justify-content:center; color:#8a8570; flex-direction:column">
+      <div>Cart is empty</div>
+      <div class="drop-close"><button class="close-btn" onclick="toggleCartDropdown()">close</div></div>`);
     return;
   }
   const total = cart.reduce((s, c) => s + c.price * c.qty, 0);

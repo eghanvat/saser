@@ -1,0 +1,17 @@
+.wrap {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 0 28px;
+}
+
+nav.wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 28px 20px;
+}
+
+h1.rooms {
+    color: #6b6656;
+    margin: 0 0 20px;
+}

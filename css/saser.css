@@ -359,3 +359,72 @@ footer {
     /* Allows smooth sizing changes if font sizes change dynamically */
     transition: all 0.2s ease-in-out;
 }
+
+
+.status-card {
+    text-align: center;
+    padding: 36px 20px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.status-card.cancelled {
+    border-color: var(--rust);
+}
+
+.spinner {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    border: 3px solid var(--line);
+    border-top-color: var(--brass);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.status-label {
+    font-family: 'Fraunces', serif;
+    font-size: 1.25rem;
+    margin: 0 0 6px;
+}
+
+.status-sub {
+    color: #6b6656;
+    font-size: 0.9rem;
+    margin: 0 0 20px;
+}
+
+.countdown {
+    font-family: 'Fraunces', serif;
+    font-size: 2.2rem;
+    letter-spacing: 1px;
+    margin: 0 0 24px;
+}
+
+.cancel-btn {
+    background: none;
+    border: 1px solid var(--rust);
+    color: var(--rust);
+    padding: 9px 22px;
+    border-radius: 4px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.88rem;
+    cursor: pointer;
+}
+
+.cancel-btn:hover {
+    background: var(--rust);
+    color: var(--paper);
+}
+
+.cancel-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

@@ -17,6 +17,10 @@ const section = {
     "contact": {
         "css": ['contact'],
     },
+    "rooms": {
+        "css": ['rooms'],
+        "js": ['rooms']
+    },
     "kitchen": {
         "css": ['kitchen'],
         "js": ['kitchen']
