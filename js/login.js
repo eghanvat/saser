@@ -100,9 +100,9 @@ async function handleCredentialResponse(response) {
 }
 
 window.handleCredentialResponse = handleCredentialResponse;
+let tokenClient;
 
 window.onGoogleLibraryLoad = function () {
-  console.log("glib called")
   google.accounts.id.initialize({
     client_id: "252529151792-gpbslbg857o3l1eecsehrglc4vnk28db.apps.googleusercontent.com",
     callback: handleCredentialResponse,

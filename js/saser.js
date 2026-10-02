@@ -49,7 +49,7 @@ export const nowDT = new Intl.DateTimeFormat('en-US', options).format(now);
 
 
 //logined bar
-$('.logoutBtn').on('click', signOut);
+$('#logoutBtn').on('click', signOut);
 
 const $thirdLink = $('.nav-links a:nth-child(4)');
 
@@ -62,6 +62,7 @@ SB.auth.onAuthStateChange((event, session) => {
         $thirdLink.show();
     } else {
         loggedIn = true;
+        console.log(session.user.user_metadata);
         const fullName = session.user.user_metadata?.full_name
             || session.user.user_metadata?.name
 
@@ -71,10 +72,13 @@ SB.auth.onAuthStateChange((event, session) => {
 
         const displayName = rawName.charAt(0).toUpperCase() + rawName.slice(1).toLowerCase();
 
-        const avatarUrl = session.user?.user_metadata?.avatar_url || session.user?.user_metadata?.picture;
+        var avatarUrl = session.user?.user_metadata?.avatar_url || session.user?.user_metadata?.picture;
 
-        // Use avatarUrl in your image tag
-        console.log(avatarUrl);
+        if (avatarUrl && avatarUrl.includes('googleusercontent')) {
+
+        } else {
+            avatarUrl = '/img/male-p.jpeg';
+        }
 
         $('.topbar .user .username').text(displayName);
         $('.topbar .profile').attr('src', avatarUrl);
