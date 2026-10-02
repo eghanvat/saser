@@ -61,12 +61,16 @@ SB.auth.onAuthStateChange((event, session) => {
         // Use avatarUrl in your image tag
         console.log(avatarUrl);
 
-        $('.topbar .username .username').text(displayName);
-        $('.topbar #profile img').attr('src', avatarUrl);
+        $('.topbar .user .username').text(displayName);
+        $('.topbar .profile').attr('src', avatarUrl);
         $('.topbar').removeClass('hidden');
         $thirdLink.hide();
     }
 });
+
+$('.topbar .user').click(function () {
+    $('.topbar').toggleClass('expand shrink');
+})
 
 
 //common functions across 

@@ -106,20 +106,16 @@
 
 * {
     box-sizing: border-box;
-
-    a,
-    button {
-        -webkit-user-select: none;
-        /* Safari */
-        -moz-user-select: none;
-        /* Firefox */
-        -ms-user-select: none;
-        /* IE10+ */
-        user-select: none;
-        /* Standard */
-        -webkit-touch-callout: none;
-        /* Prevents iOS context menu */
-    }
+    -webkit-user-select: none;
+    /* Safari */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* IE10+ */
+    user-select: none;
+    /* Standard */
+    -webkit-touch-callout: none;
+    /* Prevents iOS context menu */
 }
 
 /* Universal defaults */
@@ -129,6 +125,7 @@ body {
     /* Enables Swiss geometry hooks */
     -webkit-font-smoothing: antialiased;
     margin: 0;
+    padding: 0;
     background: var(--paper);
     color: var(--ink);
 }
@@ -182,6 +179,11 @@ input {
 }
 
 /** -- Buttons -- **/
+button {
+    border-radius: 10%;
+    cursor: pointer;
+}
+
 button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
