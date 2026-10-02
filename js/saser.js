@@ -32,6 +32,21 @@ function signOut() {
     SB.auth.signOut().then(() => location.href = '/');
 }
 
+const now = new Date();
+
+const options = {
+    month: 'long',   // "October"
+    day: '2-digit',  // "02"
+    year: 'numeric', // "2026"
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true     // Enables 12-hour format with AM/PM
+};
+
+export const nowDT = new Intl.DateTimeFormat('en-US', options).format(now);
+
+
 
 //logined bar
 $('.logoutBtn').on('click', signOut);

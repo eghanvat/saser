@@ -15,3 +15,9 @@ h1.rooms {
     color: #6b6656;
     margin: 0 0 20px;
 }
+
+#nowD,
+#nowT {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 600;
+}
