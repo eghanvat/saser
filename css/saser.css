@@ -307,18 +307,16 @@ footer {
     box-sizing: border-box;
     border-bottom-left-radius: 24%;
     border-bottom-right-radius: 24%;
-    transition: transform 0.9s ease-in-out, opacity 0.5s ease-in, filter 0.4s ease-in-out;
+    transition: transform 0.9s ease-in-out, filter 0.4s ease-in-out;
 }
 
 .expand {
     transform: translateY(0);
-    opacity: 1;
     filter: brightness(0.8);
 }
 
 .shrink {
     transform: translateY(calc((100% - 3em) * -1));
-    opacity: 1;
     filter: brightness(0.5);
 }
 
