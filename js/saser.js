@@ -56,17 +56,27 @@ const logoutLink = $('#logout');
 
 logoutLink.on('click', signOut)
 
+async function loadMyRoom() {
+    const { data, error } = await SB.rpc('my_room');
+    const room = data?.[0];
+    $('#rn').text(
+        error ? '' : room ? `Your room: ${room.room_number} (${room.floor} floor)` : 'No room assigned yet'
+    );
+}
+
 SB.auth.onAuthStateChange((event, session) => {
     // The listener directly hands you the fresh session. 
     // No need to call checkAuth() or getSession() here!
     if (!session) {
         loggedIn = false;
         $('.topbar').addClass('hidden');
+        $('#rn').text('');
         loginLink.show();
         logoutLink.hide();
     } else {
         loggedIn = true;
         window.session = session;
+        if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') setTimeout(loadMyRoom, 0);
 
         const fullName = session.user.user_metadata?.full_name
             || session.user.user_metadata?.name
