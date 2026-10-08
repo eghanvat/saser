@@ -41,7 +41,7 @@ $('#send-btn').on('click', async () => {
 
   const { error } = await SB.auth.signInWithOtp({
     email,
-    options: { shouldCreateUser: false }
+    options: { shouldCreateUser: true }
   });
 
   $('#send-btn').disabled = false;
