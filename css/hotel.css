@@ -1,0 +1,18 @@
+.staff {
+    input {
+        padding-right: 3%;
+    }
+
+    select {
+        width: 50%;
+        padding: 10px;
+        padding-right: 3%;
+    }
+
+    button {
+        background-color: var(--pine);
+        color: white;
+        border-radius: 10%;
+        padding: 10px;
+    }
+}

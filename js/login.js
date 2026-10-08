@@ -4,6 +4,20 @@ const params = new URLSearchParams(window.location.search);
 const referrer = document?.referrer ? document.referrer : false;
 const redirect = params.get('redirect');
 
+if (loggedIn) {
+  $('#login-card').hide();
+  $('#logout-card').show();
+  const fullName = session.user.user_metadata?.full_name
+    || session.user.user_metadata?.name
+
+  $('#log-username').text(fullName);
+  $('#logout-l').on('click', signOut);
+
+} else {
+  $('#login-card').show();
+  $('#logout-card').hide();
+}
+
 var redirectTo = "index.html";
 
 
@@ -94,7 +108,26 @@ async function handleCredentialResponse(response) {
     console.error(error);
   }
   else {
-    console.log('Logged in:', data.user)
+    console.log('Logged in:', data)
+    const res = await SB.functions.invoke('whoami');
+    console.log(res);   // log the WHOLE thing first
+    const { d, error } = res;
+    console.log(res.data);
+    if (res.data.type == 'owner') {
+      redirectTo = '/hotel/owner.html'
+    }
+    if (res.data.type == 'staff' && res.data.role == 'cook') {
+      redirectTo = '/kitchen'
+    }
+
+    if (error) {
+      console.error(error, await error.context?.text?.());
+    }
+    // data.type: 'owner' | 'staff' | 'customer'
+    // data.role: 'owner' | 'main' | 'admin' | 'staff' | 'customer'
+
+
+
     window.location.href = redirectTo;
   }
 }

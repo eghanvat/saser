@@ -32,6 +32,8 @@ function signOut() {
     SB.auth.signOut().then(() => location.href = '/');
 }
 
+window.signOut = signOut;
+
 const now = new Date();
 
 const options = {
@@ -48,10 +50,11 @@ export const nowDT = new Intl.DateTimeFormat('en-US', options).format(now);
 
 
 
-//logined bar
-$('#logoutBtn').on('click', signOut);
 
-const $thirdLink = $('.nav-links a:nth-child(4)');
+const loginLink = $('#login');
+const logoutLink = $('#logout');
+
+logoutLink.on('click', signOut)
 
 SB.auth.onAuthStateChange((event, session) => {
     // The listener directly hands you the fresh session. 
@@ -59,10 +62,12 @@ SB.auth.onAuthStateChange((event, session) => {
     if (!session) {
         loggedIn = false;
         $('.topbar').addClass('hidden');
-        $thirdLink.show();
+        loginLink.show();
+        logoutLink.hide();
     } else {
         loggedIn = true;
-        console.log(session.user.user_metadata);
+        window.session = session;
+
         const fullName = session.user.user_metadata?.full_name
             || session.user.user_metadata?.name
 
@@ -83,7 +88,8 @@ SB.auth.onAuthStateChange((event, session) => {
         $('.topbar .user .username').text(displayName);
         $('.topbar .profile').attr('src', avatarUrl);
         $('.topbar').removeClass('hidden');
-        $thirdLink.hide();
+        loginLink.hide();
+        logoutLink.show();
     }
 });
 

@@ -4,6 +4,12 @@
     padding: 0 28px;
 }
 
+.wrap-sm {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px;
+}
+
 /* ---- Nav ---- */
 .wrap-top {
     margin-top: 3em;
@@ -320,7 +326,7 @@ footer {
     filter: brightness(0.5);
 }
 
-.topbar .hidden {
+.hidden {
     display: none !important;
 }
 

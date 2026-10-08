@@ -2,28 +2,18 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kitchen — Saser</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="../css/saser.css">
-  <link rel="stylesheet" href="../css/kitchen.css">
-
-  <script src="../js/saser.js" type="module"></script>
-  <script src="../js/kitchen.js" type="module"></script>
+  <title>Saser Hotel Leh Ladhak - Hotel Owner </title>
+  <link rel="stylesheet" href="/css/load.css">
+  <script src="/js/jquery.js"></script>
+  <script src="/js/jquery-ui.min.js"></script>
+  <script src="/js/load.js"></script>
 </head>
 
 <body>
 
-  <div class="topbar">
-    <
-  </div>
   <nav class=" wrap">
     <div class="brand">Saser — Kitchen</div>
+    <button id="test">Beep</button>
     <div style="display:flex; align-items:center; gap:12px; font-size:0.85rem;">
       <span id="staff-email"></span>
       <button onclick="signOut()" class="logoutBtn">
@@ -37,10 +27,11 @@
 
     <div class="tabs" id="tabs">
       <button data-filter="active" class="active">Active</button>
-      <button data-filter="placed">Placed</button>
       <button data-filter="preparing">Preparing</button>
+      <button data-filter="placed">Preparing</button>
       <button data-filter="ready">Ready</button>
       <button data-filter="cancelled">Cancelled</button>
+
     </div>
 
     <div id="orders-root" class="grid">

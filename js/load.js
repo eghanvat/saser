@@ -25,6 +25,10 @@ const section = {
         "css": ['kitchen'],
         "js": ['kitchen']
     },
+    "hotel": {
+        "css": ['hotel'],
+        "js": ['hotel']
+    },
     "auth": [
         {
             "page": "login",
@@ -42,7 +46,6 @@ const section = {
 }
 
 const path = window.location.pathname.split('/');
-console.log(path)
 
 $.get("/part/head.html", function (data) {
     $("head").prepend(data);
