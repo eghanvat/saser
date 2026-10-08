@@ -24,9 +24,10 @@ async function init() {
 
 async function loadOrders() {
   try {
+    const token = window.session?.access_token || SUPA.ANON_KEY;
     const res = await fetch(
-      `${SUPA.URL}/rest/v1/orders?vendor_id=eq.${SUPA.VENDOR_ID}&select=*,order_items(*)&order=created_at.desc`,
-      { headers: { apikey: SUPA.ANON_KEY, Authorization: `Bearer ${SUPA.ANON_KEY}` } }
+      `${SUPA.URL}/rest/v1/orders?vendor_id=eq.${SUPA.VENDOR_ID}&select=*,order_items(*),order_customers(email,full_name)&order=created_at.desc`,
+      { headers: { apikey: SUPA.ANON_KEY, Authorization: `Bearer ${token}` } }
     );
     if (!res.ok) throw new Error(await res.text());
     let orders = await res.json();
@@ -48,6 +49,7 @@ async function loadOrders() {
     root.html(`<div class="empty">Couldn't load orders.</div>`);
   }
 }
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 function render(orders) {
   if (!orders.length) {
@@ -55,6 +57,8 @@ function render(orders) {
     return;
   }
   root.html(orders.map(o => {
+    const c = [].concat(o.order_customers || [])[0];
+    const who = c ? esc(c.full_name ? `${c.full_name} (${c.email})` : c.email) : 'not logged in';
     const loc = o.table_number ? `Table ${o.table_number}` : o.room_number ? `Room ${o.room_number}` : `Order #${o.id.slice(0, 8)}`;
     const time = new Date(o.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const items = o.order_items || [];
@@ -78,6 +82,7 @@ function render(orders) {
     return `
         <div class="order-card ${o.status}">
           <div class="order-head">
+          <div class="order-who">Ordered by: ${who}</div>
             <span class="order-loc">${loc}</span>
             <span class="order-time">${time}</span>
           </div>
