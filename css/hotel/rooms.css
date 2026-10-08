@@ -137,6 +137,15 @@ h1 {
     outline-offset: 2px;
 }
 
+.price-box {
+    width: 100px;
+    display: inline;
+}
+
+input {
+    padding: 5px 6px;
+}
+
 [data-status="available"] {
     --c: var(--available);
     --on: var(--on-available);
@@ -247,6 +256,12 @@ dialog p {
 
 #toast.show {
     opacity: 1;
+}
+
+.who {
+    span {
+        padding-left: 10px;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

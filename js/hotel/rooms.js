@@ -9,13 +9,16 @@ const STATUSES = [
 ];
 const LABEL = Object.fromEntries(STATUSES.map(s => [s.key, s.label]));
 const FLOOR_ORDER = ['Ground', 'First'];   // add 'Second', ... if you add floors
-const RECENT_HOURS = 3;
+const RECENT_HOURS = 3
 
-const $ = (s) => document.querySelector(s);
 const el = (tag, props = {}, ...kids) => {
-    const n = document.createElement(tag);
-    Object.assign(n, props);
-    kids.forEach(k => n.append(k));
+    const n = $('<' + tag + '>', props);
+    kids.forEach(k => {
+        // Only append if the child actually exists/contains value
+        if (k !== undefined && k !== null && k !== false) {
+            n.append(k);
+        }
+    });
     return n;
 };
 
@@ -32,11 +35,11 @@ const ago = (iso) => {
 
 /* ---------- board ---------- */
 function renderLegend() {
-    $('#legend').replaceChildren(...STATUSES.map(s => {
+    $('#legend').empty().append(...STATUSES.map(s => {
         const n = rooms.filter(r => r.status === s.key).length;
-        const chip = el('span', { className: 'chip' });
-        chip.dataset.status = s.key;
-        chip.append(el('i'), s.label + ' ', el('b', { textContent: n }));
+        const chip = el('span', { class: 'chip' });
+        chip.attr('data-status', s.key);
+        chip.append(el('i'), s.label + ' ', el('b', { text: n }));
         return chip;
     }));
 }
@@ -44,32 +47,32 @@ function renderLegend() {
 function renderFloors() {
     const box = $('#floors');
     if (!rooms.length) {
-        box.replaceChildren(el('div', { className: 'msg', textContent: 'No rooms found. Log in as the owner or staff of this hotel.' }));
+        box.empty().append(el('div', { class: 'msg', text: 'No rooms found. Log in as the owner or staff of this hotel.' }));
         return;
     }
     const byFloor = {};
     rooms.forEach(r => (byFloor[r.floor || 'Unassigned'] ??= []).push(r));
     const names = Object.keys(byFloor).sort((a, b) => floorRank(a) - floorRank(b) || a.localeCompare(b));
 
-    box.replaceChildren(...names.map(name => {
+    box.empty().append(...names.map(name => {
         const list = byFloor[name].sort((a, b) => a.room_number.localeCompare(b.room_number, undefined, { numeric: true }));
         const free = list.filter(r => r.status === 'available').length;
 
-        const head = el('div', { className: 'floor-head' },
-            el('h2', { textContent: floorTitle(name) }),
-            el('span', { textContent: `${free} of ${list.length} available` }));
+        const head = el('div', { class: 'floor-head' },
+            el('h2', { text: floorTitle(name) }),
+            el('span', { text: `${free} of ${list.length} available` }));
 
-        const grid = el('div', { className: 'grid' }, ...list.map(r => {
-            const b = el('button', { className: 'room', type: 'button' },
-                el('span', { className: 'no', textContent: r.room_number }),
-                el('span', { className: 'type', textContent: r.room_type || '' }));
-            b.dataset.status = r.status;
-            b.setAttribute('aria-label', `Room ${r.room_number}, ${r.room_type || 'room'}, ${LABEL[r.status] || r.status}`);
-            b.onclick = () => openSheet(r);
+        const grid = el('div', { class: 'grid' }, ...list.map(r => {
+            const b = el('button', { class: 'room', type: 'button' },
+                el('span', { class: 'no', text: r.room_number }),
+                el('span', { class: 'type', text: r.room_type || '' }));
+            b.attr('data-status', r.status);
+            b.attr('aria-label', `Room ${r.room_number}, ${r.room_type || 'room'}, ${LABEL[r.status] || r.status}`);
+            b.on('click', () => openSheet(r));
             return b;
         }));
 
-        return el('section', { className: 'floor' }, head, grid);
+        return el('section', { class: 'floor' }, head, grid);
     }));
 }
 
@@ -78,7 +81,7 @@ function render() { renderLegend(); renderFloors(); }
 let toastTimer;
 function toast(msg) {
     const t = $('#toast');
-    t.textContent = msg;
+    t.text(msg);
     if (!t.matches(':popover-open')) t.showPopover();   // shows above the open dialog
     t.classList.add('show');
     clearTimeout(toastTimer);
@@ -87,27 +90,26 @@ function toast(msg) {
 
 /* ---------- popup ---------- */
 const row = (title, sub, btnText, onClick, { disabled = false, out = false } = {}) => {
-    const b = el('button', { className: 'act' + (out ? ' out' : ''), type: 'button', textContent: btnText, disabled });
+    const b = el('button', { class: 'act' + (out ? ' out' : ''), type: 'button', text: btnText, disabled });
     b.onclick = onClick;
-    return el('div', { className: 'row' },
-        el('div', { className: 'who' }, el('b', { textContent: title }), el('span', { textContent: sub })), b);
+    return el('div', { class: 'row' },
+        el('div', { class: 'who' }, el('b', { text: title }), el('span', { text: sub })), b);
 };
-const note = (t) => el('div', { className: 'empty', textContent: t });
+const note = (t) => el('div', { class: 'empty', text: t });
 
 function paintHeader() {
     const r = selected;
-    $('#sheet-title').textContent = `Room ${r.room_number}`;
-    console.log(r.base_rate);
-    //$('.price-box').val(r.base_rate)
+    $('#sheet-title').text(`Room ${r.room_number}`);
+    $('.price-box').val(r.base_rate)
 
     const bits = [r.room_type, r.base_rate != null ? `₹${Number(r.base_rate)}` : null,
     r.max_occupancy ? `sleeps ${r.max_occupancy}` : null].filter(Boolean);
-    $('#sheet-sub').textContent = bits.join(', ');
+    $('#sheet-sub').text(bits.join(', '));
 
-    $('#sheet-opts').replaceChildren(...STATUSES.map(s => {
-        const b = el('button', { className: 'opt', type: 'button', textContent: s.label });
-        b.dataset.status = s.key;
-        b.setAttribute('aria-pressed', r.status === s.key);
+    $('#sheet-opts').empty().append(...STATUSES.map(s => {
+        const b = el('button', { class: 'opt', type: 'button', text: s.label });
+        b.attr('data-status', s.key);
+        b.attr('aria-pressed', r.status === s.key);
         b.onclick = () => setStatus(r, s.key);
         return b;
     }));
@@ -117,7 +119,7 @@ let paintTok = 0;
 async function paintLists() {
     const r = selected;
     const tok = ++paintTok;
-    const q = $('#q').value.trim();
+    const q = $('#q').val().trim();
     const [g, u] = await Promise.all([
         SB.rpc('room_guests', { p_room_id: r.id }),
         q.length >= 2 ? SB.rpc('search_users', { p_q: q })
@@ -126,14 +128,14 @@ async function paintLists() {
     if (!selected || selected.id !== r.id || tok !== paintTok) return;   // closed, changed room, or newer keystroke
 
     const guests = g.data || [];
-    $('#in-room').replaceChildren(...(g.error ? [note(g.error.message)]
+    $('#in-room').empty().append(...(g.error ? [note(g.error.message)]
         : guests.length ? guests.map(x => row(x.full_name, `checked in ${ago(x.check_in)}`, 'Check out', () => checkOut(x.guest_id), { out: true }))
             : [note('Nobody checked in.')]));
 
     const full = r.max_occupancy && guests.length >= r.max_occupancy;
     const users = u.data || [];
     const searching = q.length >= 2;
-    $('#recent').replaceChildren(...(u.error ? [note(u.error.message)]
+    $('#recent').empty().append(...(u.error ? [note(u.error.message)]
         : users.length ? users.map(x => row(
             x.full_name,
             [x.phone || x.email, x.last_sign_in_at ? `logged in ${ago(x.last_sign_in_at)}` : 'never logged in'].filter(Boolean).join(', '),
@@ -142,16 +144,16 @@ async function paintLists() {
             { disabled: full }))
             : [note(searching ? 'Nobody found.' : `No one has logged in during the last ${RECENT_HOURS} hours. Search above.`)]));
 
-    $('#newbox').replaceChildren(...(searching && !u.error && !users.length ? [newGuestBox(q, full)] : []));
+    $('#newbox').empty().append(...(searching && !u.error && !users.length ? [newGuestBox(q, full)] : []));
 }
 
 function newGuestBox(q, full) {
     const isEmail = q.includes('@');
     const email = el('input', { type: 'email', placeholder: 'Email', value: isEmail ? q : '', autocomplete: 'off' });
     const name = el('input', { type: 'text', placeholder: 'Name (optional)', value: isEmail ? '' : q, autocomplete: 'off' });
-    const btn = el('button', { className: 'act', type: 'button', textContent: full ? 'Room is full' : 'Save and add to room', disabled: !!full });
-    btn.onclick = () => addNew(email.value.trim(), name.value.trim());
-    return el('div', { className: 'newbox' }, note('Not found. Add as a new guest:'), email, name, btn);
+    const btn = el('button', { class: 'act', type: 'button', text: full ? 'Room is full' : 'Save and add to room', disabled: !!full });
+    btn.onclick = () => addNew(email.val().trim(), name.val().trim());
+    return el('div', { class: 'newbox' }, note('Not found. Add as a new guest:'), email, name, btn);
 }
 
 async function addNew(email, name) {
@@ -163,7 +165,7 @@ async function addNew(email, name) {
     const c = await SB.rpc('check_in_app_user', { p_room_id: selected.id, p_app_user_id: a.data });
     busy = false;
     if (c.error) return toast(c.error.message);
-    $('#q').value = '';
+    $('#q').val('');
     await afterChange(`Guest added to room ${selected.room_number}`);
 }
 
@@ -176,25 +178,25 @@ async function checkInApp(appUserId) {
 }
 
 let qTimer;
-$('#q').addEventListener('input', () => { clearTimeout(qTimer); qTimer = setTimeout(() => selected && paintLists(), 300); });
+$('#q').on('input', () => { clearTimeout(qTimer); qTimer = setTimeout(() => selected && paintLists(), 300); });
 
 function openSheet(r) {
     selected = r;
-    $('#q').value = '';
-    $('#newbox').replaceChildren();
+    $('#q').val('');
+    $('#newbox').empty().append();
     paintHeader();
-    $('#in-room').replaceChildren(note('Loading…'));
-    $('#recent').replaceChildren(note('Loading…'));
-    $('#sheet').showModal();
+    $('#in-room').empty().append(note('Loading…'));
+    $('#recent').empty().append(note('Loading…'));
+    $('#sheet')[0].showModal();
     paintLists();
 }
-const closeSheet = () => { selected = null; $('#sheet').close(); };
-$('#sheet-cancel').onclick = closeSheet;
-$('#sheet').addEventListener('close', () => { selected = null; });
-//$('#sheet').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeSheet(); });
+const closeSheet = () => { selected = null; $('#sheet')[0].close(); };
+$('#sheet-cancel').on('click', closeSheet)
+$('#sheet').on('close', () => { selected = null; });
+//$('#sheet').on('click', (e) => { if (e.target === e.currentTarget) closeSheet(); });
 
 async function afterChange(msg) {
-    if (msg.startsWith('Guest added')) $('#q').value = '';
+    if (msg.startsWith('Guest added')) $('#q').val('');
     await load();
     if (selected) { selected = rooms.find(x => x.id === selected.id) || selected; paintHeader(); await paintLists(); }
     toast(msg);
@@ -233,7 +235,7 @@ async function load() {
     const { data, error } = await SB.from('rooms')
         .select('id, room_number, room_type, floor, status, base_rate, max_occupancy');
     if (error) {
-        $('#floors').replaceChildren(el('div', { className: 'msg', textContent: `Couldn't load rooms. ${error.message}` }));
+        //s$('#floors').append(el('div', { class: 'msg', textContent: `Couldn't load rooms. ${error.message}` }));
         return;
     }
     rooms = data;
