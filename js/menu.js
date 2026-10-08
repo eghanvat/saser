@@ -366,19 +366,16 @@ async function placeOrder() {
 
 
   try {
-    const orderRes = await fetch(`${SUPA.URL}/rest/v1/orders`, {
+    const token = session?.access_token || SUPA.ANON_KEY;
+    var orderRes = await fetch(`${SUPA.URL}/rest/v1/orders`, {
       method: 'POST',
       headers: {
-        apikey: SUPA.ANON_KEY, Authorization: `Bearer ${SUPA.ANON_KEY}`,
+        apikey: SUPA.ANON_KEY, Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json', Prefer: 'return=representation'
       },
-      body: JSON.stringify({
-        vendor_id: SUPA.VENDOR_ID,
-        source_type: type,
-        table_number: type === 'table' ? Number(num) : null,
-        room_number: type === 'room' ? num : null
-      })
+      body: JSON.stringify({ vendor_id: SUPA.VENDOR_ID, source_type: 'table', table_number: 1, status: 'placed' })
     });
+
 
     if (!orderRes.ok) throw new Error(`Order insert failed: ${orderRes.status} ${await orderRes.text()}`);
     const [order] = await orderRes.json();
