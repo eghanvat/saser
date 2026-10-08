@@ -26,8 +26,8 @@ const section = {
         "js": ['kitchen']
     },
     "hotel": {
-        "css": ['hotel'],
-        "js": ['hotel']
+        "css": ['rooms'],
+        "js": ['owner']
     },
     "auth": [
         {

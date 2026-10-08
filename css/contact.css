@@ -222,3 +222,18 @@ footer {
         height: 270px;
     }
 }
+
+.alt {
+    color: green;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.altno {
+    width: 300px;
+    margin: 0 auto;
+    height: 120px;
+    background: wheat;
+    color: black;
+    padding: 10px;
+}

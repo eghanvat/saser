@@ -28,6 +28,7 @@
         <div class="detail-row">
           <span class="detail-label">Phone</span>
           <span class="detail-value"><a href="tel:+919797578181">+91 97975 78181</a></span>
+          <span class='alt'>alt</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">Email</span>
@@ -37,12 +38,7 @@
           <span class="detail-label">Instagram</span>
           <span class="detail-value">
             <a class="insta-link" href="https://www.instagram.com/sotnamdhundup" target="_blank" rel="noopener">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.6" />
-                <circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="1.6" />
-                <circle cx="17.4" cy="6.6" r="1.15" fill="currentColor" />
-              </svg>
-              @sotnamdhundup
+              sotnamdhundup
             </a>
           </span>
         </div>
@@ -57,7 +53,19 @@
   <footer class="wrap">
     <span>Saser</span>
   </footer>
-
+  <div class="lightbox" id="altnobox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox(event)">&times;</button>
+    <div class="altno">
+      <div class="detail-row">
+        <span class="detail-label">Pramod</span>
+        <spam class="detail-value"><a href="tel:+919906035666">+91 99060 35666</a></spam>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Lobzan</span>
+        <spam class="detail-value"><a href="tel:+918082181659">+91 80821 81659</a></spam>
+      </div>
+    </div>
+  </div>
   <div class="lightbox" id="lightbox" onclick="closeLightbox()">
     <button class="lightbox-close" onclick="closeLightbox(event)">&times;</button>
     <img src="/img/sonam.jpg" alt="Sonam Tundup — full photo">
@@ -69,11 +77,15 @@
     }
     function closeLightbox(e) {
       if (e) e.stopPropagation();
-      document.getElementById('lightbox').classList.remove('open');
+      $('.lightbox').removeClass('open');
     }
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') closeLightbox();
     });
+
+    $('.alt').click(function () {
+      $('#altnobox').addClass('open');
+    })
   </script>
 
 </body>
