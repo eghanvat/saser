@@ -232,7 +232,7 @@ dialog p {
 }
 
 .cancel {
-    margin - top: 12px;
+    margin-top: 12px;
     width: 100%;
     background: none;
     color: var(--muted);
@@ -278,4 +278,8 @@ dialog p {
     .room:active {
         transform: none;
     }
+}
+
+#details-card {
+    display: none;
 }

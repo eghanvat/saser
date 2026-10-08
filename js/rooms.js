@@ -34,8 +34,8 @@ const SHOW = ['available', 'cleaning', 'other'];
 async function showAvailable() {
     let box = document.getElementById('details-card')
     const { data, error } = await SB.rpc('public_rooms')
-        //.select('room_number, status')
-        //.in('status', SHOW);
+    //.select('room_number, status')
+    //.in('status', SHOW);
     if (error) return (box.textContent = error.message);
 
 
@@ -64,5 +64,9 @@ async function showAvailable() {
     //     : 'No rooms available';
 }
 
+$('#details').click(function () {
+    $('#details-card').show();
+})
+
 showAvailable();
-setInterval(showAvailable, 30000);       // refresh every 15 s
+setInterval(showAvailable, 30000);       // refresh every 30 s
