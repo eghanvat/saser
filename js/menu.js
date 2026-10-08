@@ -284,22 +284,21 @@ function refreshQtyDisplay(id) {
     : `<button onclick="changeQty('${id}', 1, '${name}', ${price}, event)">+</button>`)
 }
 
+$('#cart-bar').hide();
 
 function renderCartBar() {
   const bar = $('#cart-bar');
-  console.log(cart);
   const total = cart.reduce((s, c) => s + c.price * c.qty, 0);
-  console.log(total);
   const count = cart.reduce((s, c) => s + c.qty, 0);
 
   if (!count) {
-    bar.removeClass('visible');
+    bar.hide();
     $('body').removeClass('has-cart');
     $('cart-dropdown').removeClass('open');
     return;
   }
 
-  bar.addClass('visible');
+  bar.show();
   $('body').addClass('has-cart');
   bar.html(`
     <span>${count} item · ₹${total}</span>
@@ -307,7 +306,6 @@ function renderCartBar() {
       <button class="view-btn" onclick="toggleCartDropdown()">My Orders</button>
     </div>
     <div class="btn-order">
-      <button class="order-btn">Place order</button>
     </div>
     `);
   renderCartDropdown();

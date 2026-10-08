@@ -71,6 +71,7 @@ SB.auth.onAuthStateChange((event, session) => {
         loggedIn = false;
         $('.topbar').addClass('hidden');
         $('#rn').text('');
+        $('#arooms, #acon').show();
         loginLink.show();
         logoutLink.hide();
     } else {
@@ -98,6 +99,7 @@ SB.auth.onAuthStateChange((event, session) => {
         $('.topbar .user .username').text(displayName);
         $('.topbar .profile').attr('src', avatarUrl);
         $('.topbar').removeClass('hidden');
+        $('#arooms, #acon, #aostatus').hide();
         loginLink.hide();
         logoutLink.show();
     }

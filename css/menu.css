@@ -295,9 +295,10 @@ html {
 /**Cart Bar **/
 
 #cart-bar {
-  display: none;
+  display: flex;
+  align-items: center;
   position: fixed;
-  top: 3em;
+  top: 5em;
   height: 3em;
   background: var(--pine);
   color: var(--paper);
@@ -306,39 +307,37 @@ html {
   padding: 10px 20px;
   z-index: 50;
   font-size: 0.9rem;
-  width: 100%;
+  width: 95%;
   border-radius: 1em;
+  max-width: 704px;
 }
 
-#cart-bar.visible {
+
+/* #cart-bar.visible {
   display: grid;
   grid-template-columns: 1fr auto 0fr;
   align-items: center;
   max-width: 704px;
   padding: 0 28px;
   margin-top: 20px
-}
-
-@media (max-width:760px) {
-  #cart-bar.visible {
-    max-width: 88%;
-  }
-}
+} */
 
 #cart-bar>span {
-  justify-self: start;
+  /* Pushes everything else away from the left side */
+  margin-right: auto;
 }
 
 #cart-bar .btn-group {
-  justify-self: center;
+  /* Combined auto margins perfectly center this element */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #cart-bar .btn-order {
-  justify-self: end;
-  display: none;
+  /* Pushes itself all the way to the right side */
+  margin-left: auto;
+  width: 1em;
 }
-
-
 
 #cart-bar .view-btn {
   background: var(--brass);
@@ -361,11 +360,6 @@ html {
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
-}
-
-
-#cart-bar .order-btn:hover {
-  background: #c1893f;
 }
 
 #cart-dropdown {
@@ -447,75 +441,191 @@ body.has-cart {
   background: #c1893f;
 }
 
-footer {
-  border-top: 1px solid var(--line);
-  margin-top: 56px;
-  padding: 26px 0 40px;
-  font-size: 0.84rem;
-  color: #6b6656;
-}
+@media (max-width:760px) {
 
-.animDiv {
-  position: relative;
-  margin: 0 auto;
-  background-color: var(--ink);
-  width: 300px;
-  height: 25px;
-  color: var(--pine);
-  padding: 20px;
-  border-radius: 20px;
-}
-
-@keyframes shake {
-
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-
-  20%,
-  60% {
-    transform: translateX(-7px);
-  }
-
-  40%,
-  80% {
-    transform: translateX(7px);
+  #cart-bar {
+    display: flex;
+    align-items: center;
+    width: 80%;
   }
 }
 
-.shake-element {
-  animation: shake 0.5s ease-in-out;
-}
+  #cart-bar .view-btn {
+    background: var(--brass);
+    border: none;
+    color: var(--paper);
+    padding: 4px 14px;
+    border-radius: 4px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
 
-.item-clone {
-  position: absolute;
-  height: 50px;
-  background-color: var(--paper-soft);
-  margin: 0;
-  z-index: 9999;
-  transition: transform .7s ease-in-out;
-  display: none;
-  padding: 8px 16px;
-  border-radius: 15px;
-  border: 2px solid var(--line);
-}
+  #cart-bar .order-btn {
+    background: var(--brass);
+    border: none;
+    color: var(--paper);
+    padding: 4px 16px;
+    border-radius: 4px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
 
-#shatter-target {
-  background: var(--paper-soft);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
 
-/* Individual shard properties */
-.shard {
-  position: absolute;
-  background: var(--ochre);
-  /* Matches parent color */
-  pointer-events: none;
-  opacity: 1;
-  transform-origin: center center;
-  transition: transform 0.8s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.8s ease-out;
-}
+  #cart-bar .order-btn:hover {
+    background: #c1893f;
+  }
+
+  #cart-dropdown {
+    display: none;
+    position: fixed;
+    top: 7em;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    min-width: 350px;
+    max-width: 450px;
+    z-index: 51;
+    padding: 14px;
+  }
+
+  #cart-dropdown.open {
+    display: block;
+  }
+
+  #cart-dropdown .drop-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 0.88rem;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  #cart-dropdown .drop-item:last-child {
+    border-bottom: none;
+  }
+
+  /* push page content down so the fixed bar doesn't cover the nav/heading */
+  body.has-cart {
+    padding-top: 56px;
+  }
+
+  .drop-price {
+    min-width: 44px;
+    text-align: right;
+    font-size: 0.85rem;
+    margin-left: 6px;
+  }
+
+  .qty-control {
+    margin-top: 9px;
+  }
+
+  .drop-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 10px 0;
+    border-top: 1px solid var(--line);
+    margin-top: 4px;
+  }
+
+  #cart-dropdown .order-btn {
+    width: 100%;
+    background: var(--brass);
+    border: none;
+    color: var(--paper);
+    padding: 10px 0;
+    border-radius: 4px;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+
+  #cart-dropdown .order-btn:hover {
+    background: #c1893f;
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    margin-top: 56px;
+    padding: 26px 0 40px;
+    font-size: 0.84rem;
+    color: #6b6656;
+  }
+
+  .animDiv {
+    position: relative;
+    margin: 0 auto;
+    background-color: var(--ink);
+    width: 300px;
+    height: 25px;
+    color: var(--pine);
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  @keyframes shake {
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    20%,
+    60% {
+      transform: translateX(-7px);
+    }
+
+    40%,
+    80% {
+      transform: translateX(7px);
+    }
+  }
+
+  .shake-element {
+    animation: shake 0.5s ease-in-out;
+  }
+
+  .item-clone {
+    position: absolute;
+    height: 50px;
+    background-color: var(--paper-soft);
+    margin: 0;
+    z-index: 9999;
+    transition: transform .7s ease-in-out;
+    display: none;
+    padding: 8px 16px;
+    border-radius: 15px;
+    border: 2px solid var(--line);
+  }
+
+  #shatter-target {
+    background: var(--paper-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  /* Individual shard properties */
+  .shard {
+    position: absolute;
+    background: var(--ochre);
+    /* Matches parent color */
+    pointer-events: none;
+    opacity: 1;
+    transform-origin: center center;
+    transition: transform 0.8s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.8s ease-out;
+  }
