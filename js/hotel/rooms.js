@@ -82,16 +82,16 @@ let toastTimer;
 function toast(msg) {
     const t = $('#toast');
     t.text(msg);
-    if (!t.matches(':popover-open')) t.showPopover();   // shows above the open dialog
-    t.classList.add('show');
+    if (!t[0].matches(':popover-open')) t[0].showPopover();   // shows above the open dialog
+    t.addClass('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => { t.classList.remove('show'); t.hidePopover(); }, 3000);
+    toastTimer = setTimeout(() => { t.removeClass('show'); t[0].hidePopover(); }, 3000);
 }
 
 /* ---------- popup ---------- */
 const row = (title, sub, btnText, onClick, { disabled = false, out = false } = {}) => {
     const b = el('button', { class: 'act' + (out ? ' out' : ''), type: 'button', text: btnText, disabled });
-    b.onclick = onClick;
+    b.on('click', onClick);
     return el('div', { class: 'row' },
         el('div', { class: 'who' }, el('b', { text: title }), el('span', { text: sub })), b);
 };
@@ -110,7 +110,7 @@ function paintHeader() {
         const b = el('button', { class: 'opt', type: 'button', text: s.label });
         b.attr('data-status', s.key);
         b.attr('aria-pressed', r.status === s.key);
-        b.onclick = () => setStatus(r, s.key);
+        b.on('click', () => setStatus(r, s.key));
         return b;
     }));
 }
@@ -152,7 +152,7 @@ function newGuestBox(q, full) {
     const email = el('input', { type: 'email', placeholder: 'Email', value: isEmail ? q : '', autocomplete: 'off' });
     const name = el('input', { type: 'text', placeholder: 'Name (optional)', value: isEmail ? '' : q, autocomplete: 'off' });
     const btn = el('button', { class: 'act', type: 'button', text: full ? 'Room is full' : 'Save and add to room', disabled: !!full });
-    btn.onclick = () => addNew(email.val().trim(), name.val().trim());
+    btn.on('click', () => addNew(email.val().trim(), name.val().trim()));
     return el('div', { class: 'newbox' }, note('Not found. Add as a new guest:'), email, name, btn);
 }
 
