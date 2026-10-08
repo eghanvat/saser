@@ -269,4 +269,15 @@ export async function enableAlerts(supabase) {
   );
   say(error ? '6: save failed: ' + error.message : 'OK: push enabled');
 }
+
+function testBeep() {
+  const c = new (window.AudioContext || window.webkitAudioContext)();
+  c.resume().then(() => {
+    const o = c.createOscillator(); o.type = 'square'; o.frequency.value = 800;
+    o.connect(c.destination); o.start(); setTimeout(() => o.stop(), 1000);
+    console.log('ctx state:', c.state);
+  });
+}
+
+$('#test').on('click', testBeep)
 init();
