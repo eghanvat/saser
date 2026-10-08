@@ -1,0 +1,264 @@
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #12171c;
+        --card: #1b232b;
+        --ink: #e8edf2;
+        --muted: #9aa8b6;
+        --line: #2c3743;
+    }
+}
+
+
+h1 {
+    margin: 0 auto;
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+.chip i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--c);
+    display: inline-block;
+}
+
+.chip b {
+    font-weight: 700;
+}
+
+.floor {
+    margin-bottom: 26px;
+}
+
+.floor-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
+.floor-head h2 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.floor-head span {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: 10px;
+}
+
+.room {
+    --c: var(--other);
+    --on: var(--on-other);
+    background: var(--c);
+    color: var(--on);
+    border: 0;
+    border-radius: 12px;
+    min-height: 84px;
+    padding: 10px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font: inherit;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.room .no {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.room .type {
+    font-size: 13px;
+    opacity: .92;
+}
+
+.room:active {
+    transform: scale(.97);
+}
+
+.room:focus-visible,
+.opt:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
+}
+
+.act {
+    flex: none;
+    border: 0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--available);
+    color: var(--on-available);
+}
+
+.act.out {
+    background: var(--occupied);
+    color: var(--on-occupied);
+}
+
+.act:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.act:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
+}
+
+[data-status="available"] {
+    --c: var(--available);
+    --on: var(--on-available);
+}
+
+[data-status="occupied"] {
+    --c: var(--occupied);
+    --on: var(--on-occupied);
+}
+
+[data-status="cleaning"] {
+    --c: var(--cleaning);
+    --on: var(--on-cleaning);
+}
+
+[data-status="maintenance"] {
+    --c: var(--maintenance);
+    --on: var(--on-maintenance);
+}
+
+[data-status="other"] {
+    --c: var(--other);
+    --on: var(--on-other);
+}
+
+dialog {
+    border: 0;
+    border-radius: 16px;
+    padding: 18px;
+    width: min(500px, 100vw);
+    background: var(--card);
+    color: var(--ink);
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, .5);
+}
+
+dialog h3 {
+    margin: 0 0 2px;
+    font-size: 20px;
+}
+
+dialog p {
+    margin: 0 0 14px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.opts {
+    display: grid;
+    gap: 8px;
+}
+
+.opt {
+    background: var(--c);
+    color: var(--on);
+    border: 0;
+    border-radius: 10px;
+    padding: 14px;
+    font: inherit;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.opt[aria-pressed="true"] {
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
+}
+
+.cancel {
+    margin-top: 12px;
+    width: 100%;
+    background: none;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.msg {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+#toast {
+    position: fixed;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--bg);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    max-width: 90vw;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+}
+
+#toast.show {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+
+    .room:active {
+        transform: none;
+    }
+}
+
+#details-card {
+    display: none;
+}

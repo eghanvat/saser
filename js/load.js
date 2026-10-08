@@ -25,10 +25,18 @@ const section = {
         "css": ['kitchen'],
         "js": ['kitchen']
     },
-    "hotel": {
-        "css": ['rooms'],
-        "js": ['owner']
-    },
+    "hotel": [
+        {
+            "page": "rooms",
+            "css": ['hotel/rooms'],
+            "js": {
+                'int': [],
+                'ext': [
+                    ['/js/hotel/rooms.js', '', 'module']
+                ]
+            }
+        }
+    ],
     "auth": [
         {
             "page": "login",
