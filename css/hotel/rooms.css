@@ -106,7 +106,7 @@ h1 {
 
 .room:focus-visible,
 .opt:focus-visible {
-    outline: 3px solid var(--ink);
+    outline: 3px solid red;
     outline-offset: 2px;
 }
 
@@ -161,9 +161,9 @@ input {
     --on: var(--on-cleaning);
 }
 
-[data-status="maintenance"] {
-    --c: var(--maintenance);
-    --on: var(--on-maintenance);
+[data-status="closed"] {
+    --c: var(--closed);
+    --on: var(--on-closed);
 }
 
 [data-status="other"] {
@@ -176,7 +176,7 @@ dialog {
     border-radius: 16px;
     padding: 18px;
     width: min(500px, 100vw);
-    background: var(--card);
+    background: var(--alabaster);
     color: var(--ink);
 }
 
@@ -195,27 +195,27 @@ dialog p {
     font-size: 14px;
 }
 
-.opts {
-    display: grid;
-    gap: 8px;
-}
+.opts {}
+
+
 
 .opt {
     background: var(--c);
     color: var(--on);
     border: 0;
     border-radius: 10px;
-    padding: 14px;
+    padding: 4px;
     font: inherit;
     font-weight: 600;
-    text-align: left;
+    text-align: center;
     cursor: pointer;
-    display: flex;
-    justify-content: space-between;
+    width: 30%;
+    margin-right: 3.33%;
+    margin-bottom: 10px;
 }
 
 .opt[aria-pressed="true"] {
-    outline: 3px solid var(--ink);
+    outline: 3px solid var(--paper);
     outline-offset: 2px;
 }
 
@@ -276,4 +276,17 @@ dialog p {
 
 #details-card {
     display: none;
+}
+
+/** sheet title */
+
+.title {
+    background: var(--c);
+    border-radius: 12px;
+    padding: 12px 16px;
+
+    p,
+    h3 {
+        color: var(--on);
+    }
 }

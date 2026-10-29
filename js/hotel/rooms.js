@@ -4,7 +4,7 @@ const STATUSES = [
     { key: 'available', label: 'Available' },
     { key: 'occupied', label: 'Occupied' },
     { key: 'cleaning', label: 'Cleaning' },
-    { key: 'maintenance', label: 'Maintenance' },
+    { key: 'closed', label: 'Closed' },
     { key: 'other', label: 'Other' },
 ];
 const LABEL = Object.fromEntries(STATUSES.map(s => [s.key, s.label]));
@@ -28,6 +28,7 @@ let busy = false;
 
 const floorRank = (f) => { const i = FLOOR_ORDER.indexOf(f); return i === -1 ? 99 : i; };
 const floorTitle = (f) => (f === 'Unassigned' ? 'No floor set' : `${f} floor`);
+
 const ago = (iso) => {
     const m = Math.max(0, Math.round((Date.now() - new Date(iso)) / 60000));
     return m < 1 ? 'just now' : m < 60 ? `${m} min ago` : `${Math.floor(m / 60)} h ${m % 60} min ago`;
@@ -79,6 +80,7 @@ function renderFloors() {
 function render() { renderLegend(); renderFloors(); }
 
 let toastTimer;
+
 function toast(msg) {
     const t = $('#toast');
     t.text(msg);
@@ -99,11 +101,13 @@ const note = (t) => el('div', { class: 'empty', text: t });
 
 function paintHeader() {
     const r = selected;
+    $('.title').attr('data-status', r.status);
     $('#sheet-title').text(`Room ${r.room_number}`);
     $('.price-box').val(r.base_rate)
 
     const bits = [r.room_type, r.base_rate != null ? `₹${Number(r.base_rate)}` : null,
-    r.max_occupancy ? `sleeps ${r.max_occupancy}` : null].filter(Boolean);
+    r.max_occupancy ? `sleeps ${r.max_occupancy}` : null,
+    r.max_extra_beds ? `extra ${r.max_extra_beds}` : null].filter(Boolean);
     $('#sheet-sub').text(bits.join(', '));
 
     $('#sheet-opts').empty().append(...STATUSES.map(s => {
@@ -233,7 +237,7 @@ async function setStatus(r, status) {
 
 async function load() {
     const { data, error } = await SB.from('rooms')
-        .select('id, room_number, room_type, floor, status, base_rate, max_occupancy');
+        .select('id, room_number, room_type, floor, status, base_rate, max_occupancy, max_extra_beds');
     if (error) {
         //s$('#floors').append(el('div', { class: 'msg', textContent: `Couldn't load rooms. ${error.message}` }));
         return;

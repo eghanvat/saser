@@ -5,7 +5,7 @@ const STATUSES = [
     { key: 'available', label: 'Available' },
     { key: 'occupied', label: 'Occupied' },
     { key: 'cleaning', label: 'Cleaning' },
-    { key: 'maintenance', label: 'Maintenance' },
+    { key: 'closed', label: 'Closed' },
     { key: 'other', label: 'Other' },
 ];
 const LABEL = Object.fromEntries(STATUSES.map(s => [s.key, s.label]));
@@ -114,7 +114,7 @@ async function setStatus(r, status) {
 
 async function load() {
     const { data, error } = await SB.from('rooms')
-        .select('id, room_number, room_type, floor, status, base_rate, max_occupancy');
+        .select('id, room_number, room_type, floor, status, base_rate, max_occupancy, max_extra_beds');
     if (error) {
         $('#floors').replaceChildren(el('div', { className: 'msg', textContent: `Couldn't load rooms. ${error.message}` }));
         return;

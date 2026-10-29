@@ -113,8 +113,8 @@
     --on-occupied: #ffffff;
     --cleaning: #e3a82b;
     --on-cleaning: #2b1d00;
-    --maintenance: #586474;
-    --on-maintenance: #ffffff;
+    --closed: #586474;
+    --on-closed: #ffffff;
     --other: #7a4fb5;
     --on-other: #ffffff;
 }

@@ -69,6 +69,12 @@ $.get("/part/loginbar.html", function (data) {
     $('body').prepend(data);
 })
 
+if (path && path[1] == 'hotel') {
+    $.get("/part/owner.html", function (data) {
+        $('#main').prepend(data);
+    })
+}
+
 function loadPageHead() {
     var sec = Object.keys(section).find(sec => path[1] == sec);
 
