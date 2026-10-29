@@ -219,6 +219,10 @@ dialog p {
     outline-offset: 2px;
 }
 
+.big {
+    width: 50%;
+}
+
 .cancel {
     margin-top: 12px;
     width: 100%;
@@ -229,6 +233,19 @@ dialog p {
     padding: 12px;
     font: inherit;
     cursor: pointer;
+}
+
+button.action {
+    margin-top: 12px;
+    width: 30%;
+    background: var(--paper);
+    color: var(--on-available);
+    border: 0;
+    border-radius: 10px;
+    padding: 12px;
+    font: inherit;
+    cursor: pointer;
+    float: right;
 }
 
 .msg {
@@ -289,4 +306,16 @@ dialog p {
     h3 {
         color: var(--on);
     }
+}
+
+.in-room {
+    display: none;
+}
+
+.add-guest {
+    display: none;
+}
+
+.room-status {
+    display: none;
 }

@@ -109,15 +109,25 @@ $('.topbar .user').click(function () {
     $('.topbar').toggleClass('expand shrink');
 })
 
-function loading(flag){
-    if(flag){
+function loading(flag) {
+    if (flag) {
         $('#loading').removeClass('hidden');
-    }else{
+    } else {
         $('#loading').addClass('hidden');
     }
 }
+
+async function guard() {
+    const { data: { session } } = await SB.auth.getSession();
+    if (!session) return deny('login.html');
+    return session;
+}
+
+function deny(url) { location.replace(url); return null; }
 
 //common functions across 
 window.checkAuth = checkAuth;
 window.signOut = signOut;
 window.loading = loading;
+window.guard = guard;
+window.deny = deny;

@@ -14,6 +14,13 @@ const section = {
             "js": ['order-status']
         }
     ],
+    "user": [
+        {
+            "page": "profile",
+            "css": ['profile'],
+            "js": ['/js/user/profile.js']
+        }
+    ],
     "contact": {
         "css": ['contact'],
     },
@@ -33,6 +40,16 @@ const section = {
                 'int': [],
                 'ext': [
                     ['/js/hotel/rooms.js', '', 'module']
+                ]
+            }
+        },
+        {
+            "page": "guests",
+            "css": ['hotel/guests'],
+            "js": {
+                'int': [],
+                'ext': [
+                    ['/js/hotel/guests.js', '', 'module']
                 ]
             }
         }

@@ -1,0 +1,16 @@
+.guest {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    padding: 1px;
+    background-color: var(--gold-leaf);
+    border-radius: 10px;
+    margin-bottom: 10px;
+
+    p {
+        background-color: #f0f0f0;
+        padding: 2px;
+        border-radius: 10px;
+    }
+}

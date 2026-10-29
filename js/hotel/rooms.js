@@ -101,6 +101,26 @@ const note = (t) => el('div', { class: 'empty', text: t });
 
 function paintHeader() {
     const r = selected;
+    $('.in-room, .add-guest, .room-status').hide();
+
+    if (r.status !== 'occupied' && r.status !== 'available') {
+        $('#sheet .room-status').show();
+    }
+
+    if (r.status === 'occupied') {
+        $('#sheet .action').text('Check Out').show();
+        $('#sheet .in-room').show();
+        $('.check-out').on('click', checkOut.bind(null, r.id));
+    } else {
+        $('#sheet .action').hide();
+        $('#sheet .in-room').hide();
+    }
+
+    if (r.status === 'available') {
+        $('#sheet .action').text('Add guest').show();
+        $('#sheet .action').on('click', () => { $('#sheet .add-guest').show(); });
+    }
+
     $('.title').attr('data-status', r.status);
     $('#sheet-title').text(`Room ${r.room_number}`);
     $('.price-box').val(r.base_rate)
@@ -133,19 +153,22 @@ async function paintLists() {
 
     const guests = g.data || [];
     $('#in-room').empty().append(...(g.error ? [note(g.error.message)]
-        : guests.length ? guests.map(x => row(x.full_name, `checked in ${ago(x.check_in)}`, 'Check out', () => checkOut(x.guest_id), { out: true }))
+        : guests.length ? guests.map(x => el('div', { class: 'user' },
+            el('button', { class: 'opt big', text: x.full_name || x.email || x.phone, 'data-status': x.app_user_id ? 'checked_in' : 'available' })))
             : [note('Nobody checked in.')]));
 
     const full = r.max_occupancy && guests.length >= r.max_occupancy;
     const users = u.data || [];
     const searching = q.length >= 2;
     $('#recent').empty().append(...(u.error ? [note(u.error.message)]
-        : users.length ? users.map(x => row(
-            x.full_name,
-            [x.phone || x.email, x.last_sign_in_at ? `logged in ${ago(x.last_sign_in_at)}` : 'never logged in'].filter(Boolean).join(', '),
-            full ? 'Full' : 'Add',
-            () => (x.app_user_id ? checkInApp(x.app_user_id) : checkIn(x.user_id)),
-            { disabled: full }))
+        : users.length ? users.map(x => el('div', { class: 'user' },
+            el('button', { class: 'opt big', text: x.full_name || x.email || x.phone, 'data-status': x.app_user_id ? 'checked_in' : 'available' }),
+            //el('span', { text: x.app_user_id ? 'Checked in' : 'Add to room' }),
+            //el('span', { class: 'sub', text: x.email || x.phone || '' }),
+            el('span', { class: 'sub', text: x.last_sign_in_at ? `-- ${ago(x.last_sign_in_at)}` : '' }),
+            el('button', { class: 'act', type: 'button', text: 'Add', disabled: false }).on('click', () => x.app_user_id ? checkInApp(x.app_user_id) : addNew(x.email, x.full_name || null))
+        ))
+
             : [note(searching ? 'Nobody found.' : `No one has logged in during the last ${RECENT_HOURS} hours. Search above.`)]));
 
     $('#newbox').empty().append(...(searching && !u.error && !users.length ? [newGuestBox(q, full)] : []));
