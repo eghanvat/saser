@@ -38,6 +38,18 @@ async function init(user) {
         $('#manage').show();
     }
 
+    if (role.type === 'staff') {
+        if (role.staffRole === 'admin') {
+            $('#manage').show();
+        }
+        if (role.staffRole === 'cook') {
+            $('#kitchen').show();
+        }
+        if (role.staffRole === 'help') {
+            $('#help').show();
+        }
+    }
+
 
 }
 
