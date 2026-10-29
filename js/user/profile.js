@@ -34,8 +34,11 @@ async function init(user) {
     $('#p-name').text(fullName || 'User');
     $('#p-role').text(role.type || 'Customer');
 
-    if (role.type === 'owner') {
+    console.log(role.type);
+
+    if (role.type == 'owner') {
         $('#manage').show();
+        $('#kitchen').show();
     }
 
     if (role.type === 'staff') {
