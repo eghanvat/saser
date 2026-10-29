@@ -17,8 +17,8 @@ const section = {
     "user": [
         {
             "page": "profile",
-            "css": ['profile'],
-            "js": ['/js/user/profile.js']
+            "css": ['user/profile'],
+            "js": ['user/profile']
         }
     ],
     "contact": {
@@ -52,7 +52,13 @@ const section = {
                     ['/js/hotel/guests.js', '', 'module']
                 ]
             }
+        },
+        {
+            "page": "staff",
+            "css": ['hotel/guests'],
+            "js": ['hotel/staff'],
         }
+
     ],
     "auth": [
         {

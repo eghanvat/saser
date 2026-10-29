@@ -1,0 +1,21 @@
+.pic {
+    width: 80%;
+    margin: 0 auto;
+}
+
+#p-img {
+    height: 80%;
+    width: 80%;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    border-color: red;
+    border-width: 10px;
+    margin: 0 1em;
+}
+
+#p-name,
+#p-role {
+    margin: 0 auto;
+    text-align: center;
+}

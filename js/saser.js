@@ -1,4 +1,4 @@
-// Import Supabase directly from the CDN
+// Import SB directly from the CDN
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 
@@ -125,9 +125,43 @@ async function guard() {
 
 function deny(url) { location.replace(url); return null; }
 
+async function saveGoogleAvatarOnce() {
+    const { data: { user } } = await SB.auth.getUser();
+    if (!user) return;
+
+    const { data: row } = await SB
+        .from('app_users').select('avatar_path')
+        .eq('auth_user_id', user.id).maybeSingle();
+    if (!row || row.avatar_path) return;          // no row yet, or already saved
+
+    const url = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+    if (!url) return;                             // not a Google login / no photo
+
+    try {
+        // Google serves small thumbs by default; ask for a bigger one
+        const big = url.replace(/=s\d+-c$/, '=s400-c');
+        const res = await fetch(big);
+        if (!res.ok) throw new Error('fetch ' + res.status);
+        const blob = await res.blob();
+
+        const path = `${user.id}/avatar.jpg`;
+        const { error: upErr } = await SB.storage
+            .from('profile')
+            .upload(path, blob, { contentType: blob.type || 'image/jpeg', upsert: false });
+        if (upErr && upErr.statusCode !== '409') throw upErr;   // 409 = already exists
+
+        await SB.from('app_users')
+            .update({ avatar_path: path }).eq('auth_user_id', user.id);
+    } catch (e) {
+        console.error('avatar save failed', e);       // never block login on this
+    }
+}
+
 //common functions across 
 window.checkAuth = checkAuth;
 window.signOut = signOut;
 window.loading = loading;
 window.guard = guard;
 window.deny = deny;
+
+saveGoogleAvatarOnce().catch(e => console.error('avatar save failed', e));
