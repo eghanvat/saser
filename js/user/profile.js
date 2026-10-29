@@ -55,11 +55,11 @@ async function init(user) {
 
 async function getUserRole(userId) {
     const [{ data: hotel }, { data: st }] = await Promise.all([
-        SB.from('hotels').select('id').eq('owner_id', userId).limit(1).maybeSingle(),
+        SB.from('hotels').select('hotel_id').eq('owner_id', userId).limit(1).maybeSingle(),
         SB.from('staff').select('hotel_id, role').eq('id', userId).limit(1).maybeSingle(),
     ]);
 
-    if (hotel) return { type: 'owner', hotelId: hotel.id };
+    if (hotel) return { type: 'owner', hotelId: hotel.hotel_id };
     if (st) return { type: 'staff', hotelId: st.hotel_id, staffRole: st.role }; // admin | cook | help
     return { type: 'customer', hotelId: null };
 }

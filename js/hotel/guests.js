@@ -15,7 +15,7 @@ async function init(user) {
     let info = {};
 
     const [{ data: hotel }, { data: st }, error] = await Promise.all([
-        SB.from('hotels').select('id').eq('owner_id', uid).maybeSingle(),
+        SB.from('hotels').select('hotel_id').eq('owner_id', uid).maybeSingle(),
         SB.from('staff').select('hotel_id, role').eq('id', uid).maybeSingle(),
     ]);
 

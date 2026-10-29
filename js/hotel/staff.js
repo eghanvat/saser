@@ -13,13 +13,13 @@ async function init(user) {
     let info = {};
 
     const [{ data: hotel }, error] = await Promise.all([
-        SB.from('hotels').select('id').eq('owner_id', uid).maybeSingle(),
+        SB.from('hotels').select('hotel_id').eq('owner_id', uid).maybeSingle(),
     ]);
 
     if (error) {
         console.error(error);
     } else {
-        if (hotel) info = { hotelId: hotel.id, role: 'owner' }
+        if (hotel) info = { hotelId: hotel.hotel_id, role: 'owner' }
         loadGuests(info);
     }
 }
