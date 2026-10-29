@@ -11,15 +11,18 @@
 <body>
     <div id="main"></div>
     <div id="today-guest" class="wrap-sm"></div>
-    <div class="staff">
-        <input type="email" placeholder="Email" />
-        <input type="text" placeholder="Phone" />
+    <div class="wrap-sm" id="c-staff">
+        <input type="text" placeholder="Name" id="name" />
+        <input type="text" id="role" disabled />
+        <input type="email" placeholder="Email" id="email" />
+        <ul id="resultsList" class="results-list"></ul>
+        <input type="text" placeholder="Phone" id="phone" />
         <select id="type">
-            <option>Cook</option>
-            <option>Help</option>
-            <option>Admin</option>
+            <option value="admin">Admin</option>
+            <option value="cook" s>Cook</option>
+            <option value="help">Help</option>
         </select>
-        <button>Add</button>
+        <button id="addBtn" class="btn">Add</button>
     </div>
 </body>
 

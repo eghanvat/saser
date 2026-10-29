@@ -55,7 +55,7 @@ const section = {
         },
         {
             "page": "staff",
-            "css": ['hotel/guests'],
+            "css": ['hotel/staff'],
             "js": ['hotel/staff'],
         }
 
