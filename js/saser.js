@@ -109,7 +109,15 @@ $('.topbar .user').click(function () {
     $('.topbar').toggleClass('expand shrink');
 })
 
+function loading(flag){
+    if(flag){
+        $('#loading').removeClass('hidden');
+    }else{
+        $('#loading').addClass('hidden');
+    }
+}
 
 //common functions across 
 window.checkAuth = checkAuth;
 window.signOut = signOut;
+window.loading = loading;

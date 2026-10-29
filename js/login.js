@@ -4,6 +4,8 @@ const params = new URLSearchParams(window.location.search);
 const referrer = document?.referrer ? document.referrer : false;
 const redirect = params.get('redirect');
 
+loading(true);
+
 if (loggedIn) {
   $('#login-card').hide();
   $('#logout-card').show();
@@ -145,6 +147,7 @@ window.onGoogleLibraryLoad = function () {
     theme: 'outline', size: 'large', width:
       '284px'
   })
+  loading(false);
 };
 
 const googleScript = document.createElement("script");
