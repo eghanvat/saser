@@ -17,3 +17,79 @@ nav.wrap {
     font-family: 'Courier New', Courier, monospace;
     font-weight: 600;
 }
+
+
+.mb-8 {
+    margin-bottom: 8px;
+}
+
+
+#details-card {
+    border: 0px;
+}
+
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+p.available {
+    color: green;
+    padding: 8px;
+    width: 100%;
+    border-radius: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    position: relative;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.Standard {
+    background-color: var(--paper-d);
+}
+
+.Deluxe {
+    background-color: var(--gold-leaf);
+}
+
+.book,
+.status {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 2%;
+    background-color: var(--ochre);
+    color: var(--bg);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+
+    a {
+        color: var(--bg);
+        text-decoration: none;
+    }
+}
+
+.status {
+    background-color: var(--available);
+    right: 80px;
+}
+
+p.available:hover {
+    background-color: #c0ffc0;
+
+    .status {
+        display: block;
+    }
+
+    .book {
+        display: block;
+    }
+}

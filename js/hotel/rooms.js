@@ -108,7 +108,7 @@ function paintHeader() {
     }
 
     if (r.status === 'occupied') {
-        $('#sheet .action').text('Check Out').show();
+        $('#sheet .action').text('Check Out').addClass('check-out').show();
         $('#sheet .in-room').show();
         $('.check-out').on('click', checkOut.bind(null, r.id));
     } else {

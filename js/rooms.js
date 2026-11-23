@@ -31,23 +31,36 @@ setInterval(updateClock, 1000);
 
 const SHOW = ['available', 'cleaning', 'other'];
 
+$('#details').click(function () {
+    $('#details-card').toggleClass('show hide');
+    $('html, body').animate({
+        scrollTop: $('#details-card').offset().top
+    }, 800);
+});
+
 async function showAvailable() {
-    let box = document.getElementById('details-card')
+    let box = $('#details-card');
     const { data, error } = await SB.rpc('public_rooms')
     //.select('room_number, status')
     //.in('status', SHOW);
     if (error) return (box.textContent = error.message);
 
 
-    //console.log(data); // maintenance, cleaning, occupied are excluded
+    console.log(data); // maintenance, cleaning, occupied are excluded
 
     const rooms = data
         .filter(r => SHOW.includes(r.status))
         .sort((a, b) => a.room_number.localeCompare(b.room_number, undefined, { numeric: true }));
 
-    box.replaceChildren(...rooms.map(r => {
-        const p = document.createElement('p');
-        p.textContent = `Room ${r.room_number}: ${r.room_type}, ₹${Number(r.base_rate)} per night, sleeps ${r.max_occupancy} (${r.status})`;
+    box.empty().append(...rooms.map(r => {
+        const p = $('<p></p>').addClass(r.status + ' ' + r.room_type);
+
+
+        p.text(`Room ${r.room_number}: ${r.room_type}, 
+            ₹${Number(r.base_rate)} per night, sleeps ${r.max_occupancy}, floor:  ${r.floor}`);
+        p.append(`<text class="status">${r.status}</text>`);
+        p.append(`<text class="book"><a href="/rooms/booking.html?room=${r.room_number}">click to book</a></text>`);
+
         return p;
     }));
 
@@ -64,9 +77,6 @@ async function showAvailable() {
     //     : 'No rooms available';
 }
 
-$('#details').click(function () {
-    $('#details-card').show();
-})
 
 showAvailable();
-setInterval(showAvailable, 30000);       // refresh every 30 s
+setInterval(showAvailable, 120000);       // refresh every 30 s
